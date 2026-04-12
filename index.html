@@ -2,10 +2,178 @@
 <html lang="uk" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="theme-color" content="#0a0e1a">
-<meta name="description" content="Українець інвестує — калькулятор складних відсотків, портфель, AI-радник">
-<link rel="manifest" href="#" id="pwa-manifest">
+
+<!-- ===== PRIMARY SEO ===== -->
+<title>Українець інвестує — Калькулятор складних відсотків | ОВДП, Депозит, ETF, Крипта 🇺🇦</title>
+<meta name="description" content="Безкоштовний калькулятор складних відсотків для українців. Порівняй ОВДП, банківські депозити, ETF, криптовалюту та Inzur. Дізнайся куди вкласти гроші в Україні 2024. AI-радник, портфель, тест інвестора.">
+<meta name="keywords" content="калькулятор складних відсотків, ОВДП калькулятор, куди вкласти гроші Україна, інвестиції Україна 2024, депозит калькулятор, ETF Україна, складний відсоток онлайн, Inzur, криптовалюта інвестиції, S&P500 Україна, інвестиційний калькулятор, ОВДП дохідність, банківський депозит відсотки, інфляція Україна, портфель інвестора, пасивний дохід Україна, як накопичити гроші, фінансова незалежність, відсотки на депозит, вклад в банк Україна, облігації держпозики">
+<meta name="author" content="Українець інвестує">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="language" content="Ukrainian">
+<meta name="revisit-after" content="7 days">
+<meta name="rating" content="general">
+<meta name="category" content="Finance, Investment, Calculator">
+<meta name="classification" content="Finance">
+<meta name="coverage" content="Ukraine">
+<meta name="target" content="all">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+
+<!-- ===== OPEN GRAPH (Facebook, Telegram, LinkedIn) ===== -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Українець інвестує">
+<meta property="og:title" content="Українець інвестує — Калькулятор складних відсотків 🇺🇦">
+<meta property="og:description" content="Порівняй ОВДП, депозити, ETF та крипту. Безкоштовний інвестиційний калькулятор для українців з AI-радником та відстеженням портфеля.">
+<meta property="og:url" content="https://invest.mytimebox.app/">
+<meta property="og:image" content="https://invest.mytimebox.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Українець інвестує — калькулятор інвестицій">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:locale:alternate" content="ru_UA">
+
+<!-- ===== TWITTER CARD ===== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ukrainets_invest">
+<meta name="twitter:creator" content="@ukrainets_invest">
+<meta name="twitter:title" content="Українець інвестує — Калькулятор складних відсотків 🇺🇦">
+<meta name="twitter:description" content="Порівняй ОВДП, депозити, ETF та крипту. Безкоштовний інвестиційний калькулятор для українців.">
+<meta name="twitter:image" content="https://invest.mytimebox.app/og-image.png">
+<meta name="twitter:image:alt" content="Українець інвестує">
+
+<!-- ===== GEO & LANGUAGE ===== -->
+<meta name="geo.region" content="UA">
+<meta name="geo.country" content="Ukraine">
+<meta name="geo.placename" content="Ukraine">
+<meta name="ICBM" content="48.3794, 31.1656">
+<link rel="alternate" hreflang="uk" href="https://invest.mytimebox.app/">
+<link rel="alternate" hreflang="x-default" href="https://invest.mytimebox.app/">
+
+<!-- ===== CANONICAL ===== -->
+<link rel="canonical" href="https://invest.mytimebox.app/">
+
+<!-- ===== PWA & ICONS ===== -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇺🇦</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Укр Інвест">
+<meta name="application-name" content="Українець інвестує">
+<meta name="msapplication-TileColor" content="#0a0e1a">
+<meta name="msapplication-config" content="browserconfig.xml">
+
+<!-- ===== STRUCTURED DATA (JSON-LD) ===== -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://invest.mytimebox.app/#webapp",
+      "name": "Українець інвестує",
+      "description": "Безкоштовний калькулятор складних відсотків для українських інвесторів. Порівняй ОВДП, депозити, ETF, криптовалюту.",
+      "url": "https://invest.mytimebox.app/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript",
+      "inLanguage": "uk-UA",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "UAH"
+      },
+      "featureList": [
+        "Калькулятор складних відсотків",
+        "Порівняння ОВДП та депозитів",
+        "ETF та криптовалютний калькулятор",
+        "AI-радник з інвестицій",
+        "Відстеження інвестиційного портфеля",
+        "Тест профілю інвестора",
+        "Курси валют НБУ онлайн",
+        "Фінансовий словник"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://invest.mytimebox.app/#website",
+      "url": "https://invest.mytimebox.app/",
+      "name": "Українець інвестує",
+      "description": "Інвестиційний калькулятор для українців",
+      "inLanguage": "uk-UA",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://invest.mytimebox.app/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Куди вкласти гроші в Україні 2024?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Найнадійніші варіанти для українців: ОВДП (17-18% річних, без ПДФО), банківські депозити (18-20%, але з податками), ETF фонди (S&P500, ~10% у $), Inzur платформа (22%+), криптовалюта USDT стейкінг (8-12%)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Що таке ОВДП і як їх купити?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ОВДП — облігації внутрішньої державної позики. Гарантовані державою, звільнені від ПДФО та ВЗ. Купити можна через Дію, Ощадбанк, Сенс банк або брокерів. Мінімальна сума від 1000 грн."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Що таке складний відсоток?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Складний відсоток — нарахування відсотків не тільки на початкову суму, але й на вже нараховані відсотки. Це ефект снігової кулі, який дозволяє капіталу зростати в геометричній прогресії."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Чи безпечно інвестувати в Україні під час війни?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ОВДП гарантовані державою і є найнадійнішим варіантом. Депозити захищені ФГВФО до 600 000 грн. ETF та крипта зберігаються за кордоном і не залежать від ситуації в Україні."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Яка різниця між ОВДП і депозитом?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Головна різниця: ОВДП звільнені від ПДФО 18% та ВЗ 5%, а депозит — ні. При однаковій ставці ОВДП вигідніші на 23% від доходу. Депозити зручніші для відкриття через банківський додаток."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Головна", "item": "https://invest.mytimebox.app/"},
+        {"@type": "ListItem", "position": 2, "name": "Калькулятор", "item": "https://invest.mytimebox.app/#calc"},
+        {"@type": "ListItem", "position": 3, "name": "Портфель", "item": "https://invest.mytimebox.app/#portfolio"}
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- ===== PERFORMANCE ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://bank.gov.ua">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800&family=Manrope:wght@300;400;500;600&display=swap" as="style">
 <title>Українець інвестує</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
