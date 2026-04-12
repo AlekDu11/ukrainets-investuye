@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://ukrainets-investuye.netlify.app/sitemap.xml
+
+# Block unimportant paths
+Disallow: /private/
+Disallow: /admin/

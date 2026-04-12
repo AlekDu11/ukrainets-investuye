@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0e1a">
+<meta name="description" content="Українець інвестує — калькулятор складних відсотків, портфель, AI-радник">
+<link rel="manifest" href="#" id="pwa-manifest">
+<title>Українець інвестує</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e1a;--surface:#111827;--s2:#162032;--s3:#1e2d45;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --gold:#f5c842;--gold2:#e8a020;--gold3:rgba(245,200,66,0.12);
+  --blue:#3b7ef8;--blue2:#1a56db;
+  --green:#22c55e;--green2:#16a34a;
+  --red:#ef4444;--red2:#dc2626;
+  --purple:#7c3aed;--purple2:#a78bfa;
+  --text:#f1f5f9;--muted:#64748b;--muted2:#94a3b8;
+}
+[data-theme="light"]{
+  --bg:#f0f4ff;--surface:#ffffff;--s2:#e8eef8;--s3:#dce6f5;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --text:#0f172a;--muted:#64748b;--muted2:#475569;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 70% 50% at 5% 5%,rgba(59,126,248,0.1) 0%,transparent 55%),
+  radial-gradient(ellipse 50% 60% at 95% 85%,rgba(245,200,66,0.07) 0%,transparent 50%),
+  radial-gradient(ellipse 40% 40% at 55% 25%,rgba(124,58,237,0.06) 0%,transparent 50%);
+  pointer-events:none;z-index:0;transition:opacity .3s}
+[data-theme="light"] body::before{opacity:.3}
+.wrap{position:relative;z-index:1}
+
+/* HEADER */
+header{padding:14px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);position:sticky;top:0;z-index:200;background:rgba(10,14,26,0.92);gap:12px;flex-wrap:wrap}
+[data-theme="light"] header{background:rgba(240,244,255,0.92)}
+.logo{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;letter-spacing:-.5px;line-height:1.2;flex-shrink:0}
+.logo span{color:var(--gold)}
+.logo small{display:block;font-size:8px;font-weight:400;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+.header-right{display:flex;align-items:center;gap:8px}
+.nav-tabs{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:3px;flex-wrap:wrap}
+.nav-tab{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;border:none;background:none;font-family:'Manrope',sans-serif;white-space:nowrap}
+.nav-tab.active{background:var(--gold);color:#000}
+.nav-tab:hover:not(.active){color:var(--text)}
+.btn-icon{width:34px;height:34px;border-radius:9px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .2s;flex-shrink:0}
+.btn-icon:hover{border-color:var(--border2)}
+
+/* BADGE TOAST */
+.badge-toast{position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border-radius:16px;padding:14px 20px;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;z-index:9999;transform:translateY(100px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 12px 32px rgba(245,200,66,.4)}
+.badge-toast.show{transform:translateY(0);opacity:1}
+
+/* HERO */
+.hero{text-align:center;padding:50px 32px 36px}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(245,200,66,0.1);border:1px solid rgba(245,200,66,0.25);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+h1{font-family:'Unbounded',sans-serif;font-size:clamp(24px,4vw,52px);font-weight:800;line-height:1.1;letter-spacing:-2px;margin-bottom:14px}
+h1 .g{color:var(--gold)} h1 .b{color:var(--blue)}
+.hero-sub{font-size:14px;color:var(--muted);max-width:500px;margin:0 auto;line-height:1.65}
+
+/* PAGES */
+.page{display:none;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* CURRENCY BAR */
+.currency-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 32px;display:flex;gap:24px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.currency-bar::-webkit-scrollbar{display:none}
+.cb-item{display:flex;align-items:center;gap:8px;white-space:nowrap;flex-shrink:0}
+.cb-label{font-size:11px;color:var(--muted);font-weight:600}
+.cb-val{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--gold)}
+.cb-change{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px}
+.cb-up{background:rgba(34,197,94,.15);color:var(--green)}
+.cb-down{background:rgba(239,68,68,.12);color:var(--red)}
+.cb-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.cb-time{font-size:10px;color:var(--muted);margin-left:auto;flex-shrink:0}
+
+/* INSTRUMENT CARDS */
+.instruments{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;max-width:1200px;margin:0 auto 40px;padding:0 32px}
+.icard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.icard::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
+.icard.ovdp::before{background:radial-gradient(ellipse at top left,rgba(245,200,66,.09),transparent 60%)}
+.icard.deposit::before{background:radial-gradient(ellipse at top left,rgba(59,126,248,.09),transparent 60%)}
+.icard.inzur::before{background:radial-gradient(ellipse at top left,rgba(34,197,94,.09),transparent 60%)}
+.icard.etf::before{background:radial-gradient(ellipse at top left,rgba(124,58,237,.09),transparent 60%)}
+.icard.crypto::before{background:radial-gradient(ellipse at top left,rgba(245,158,11,.09),transparent 60%)}
+.icard.spx::before{background:radial-gradient(ellipse at top left,rgba(59,126,248,.09),transparent 60%)}
+.icard:hover{transform:translateY(-3px);border-color:var(--border2)}
+.icard:hover::before{opacity:1}
+.icard.active.ovdp{border-color:var(--gold);box-shadow:0 0 24px rgba(245,200,66,.18)}
+.icard.active.deposit{border-color:var(--blue);box-shadow:0 0 24px rgba(59,126,248,.18)}
+.icard.active.inzur{border-color:var(--green);box-shadow:0 0 24px rgba(34,197,94,.18)}
+.icard.active.etf{border-color:var(--purple);box-shadow:0 0 24px rgba(124,58,237,.18)}
+.icard.active.crypto{border-color:#f59e0b;box-shadow:0 0 24px rgba(245,158,11,.18)}
+.icard.active.spx{border-color:var(--blue);box-shadow:0 0 24px rgba(59,126,248,.18)}
+.ic-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:10px}
+.icard.ovdp .ic-icon{background:rgba(245,200,66,.15)}
+.icard.deposit .ic-icon{background:rgba(59,126,248,.15)}
+.icard.inzur .ic-icon{background:rgba(34,197,94,.15)}
+.icard.etf .ic-icon{background:rgba(124,58,237,.15)}
+.icard.crypto .ic-icon{background:rgba(245,158,11,.15)}
+.icard.spx .ic-icon{background:rgba(59,126,248,.15)}
+.ic-title{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;margin-bottom:3px}
+.ic-desc{font-size:10px;color:var(--muted);line-height:1.4;margin-bottom:10px}
+.ic-rate{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;letter-spacing:-1px}
+.icard.ovdp .ic-rate{color:var(--gold)}
+.icard.deposit .ic-rate{color:var(--blue)}
+.icard.inzur .ic-rate{color:var(--green)}
+.icard.etf .ic-rate{color:var(--purple2)}
+.icard.crypto .ic-rate{color:#f59e0b}
+.icard.spx .ic-rate{color:var(--blue)}
+.ic-rl{font-size:9px;color:var(--muted);margin-top:1px}
+.ic-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.tag{font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.ts{background:rgba(34,197,94,.15);color:var(--green)}
+.tg{background:rgba(245,200,66,.15);color:var(--gold)}
+.tb{background:rgba(59,126,248,.15);color:var(--blue)}
+.tp{background:rgba(124,58,237,.15);color:var(--purple2)}
+.tr{background:rgba(239,68,68,.12);color:#f87171}
+.to{background:rgba(245,158,11,.15);color:#f59e0b}
+
+/* CALC */
+.csect{max-width:1200px;margin:0 auto;padding:0 32px 50px}
+.slabel{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px}
+.ptitle{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:20px;letter-spacing:-.3px}
+
+/* FORM */
+.field{margin-bottom:15px}
+label.fl{display:block;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+input[type=number],input[type=text],input[type=password],select,textarea{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--text);font-size:14px;font-family:'Manrope',sans-serif;font-weight:600;outline:none;transition:border-color .2s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--border2)}
+select option{background:var(--surface)}
+textarea{resize:vertical;min-height:80px;font-weight:400;font-size:13px}
+.years-row{display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:start}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--s2);border-radius:100px;outline:none;margin-top:6px;cursor:pointer;border:none;padding:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--gold);cursor:pointer;box-shadow:0 0 8px rgba(245,200,66,.4)}
+.slider-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:2px}
+.toggle-row{display:flex;align-items:center;gap:9px;background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:9px 13px;cursor:pointer;transition:border-color .2s;margin-bottom:10px}
+.toggle-row:hover{border-color:var(--border2)}
+.tog-box{width:17px;height:17px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:10px}
+.toggle-row.on .tog-box{background:var(--gold);border-color:var(--gold);color:#000}
+.tog-label{font-size:12px;font-weight:500}
+.scen-tabs{display:flex;gap:5px;margin-bottom:12px}
+.scen-tab{flex:1;padding:7px;border-radius:7px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--s2);color:var(--muted);transition:all .2s;text-align:center}
+.scen-tab.active-opt{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.08)}
+.scen-tab.active-real{border-color:var(--gold);color:var(--gold);background:rgba(245,200,66,.08)}
+.scen-tab.active-pes{border-color:var(--red);color:var(--red);background:rgba(239,68,68,.08)}
+.btn-calc{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:11px;font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;color:#000;cursor:pointer;transition:all .25s;margin-top:5px}
+.btn-calc:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(245,200,66,.3)}
+.btn-sec{width:100%;padding:11px;background:var(--s2);border:1px solid var(--border);border-radius:11px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:var(--muted2);cursor:pointer;transition:all .2s;margin-top:6px}
+.btn-sec:hover{border-color:var(--border2);color:var(--text)}
+
+/* RESULTS */
+.results{display:none;margin-top:14px;animation:fadeIn .4s ease}
+.results.show{display:block}
+.r-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.r-row:last-child{border-bottom:none}
+.r-label{font-size:11px;color:var(--muted);font-weight:500}
+.r-val{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;color:var(--gold)}
+.r-val.g{color:var(--green)}.r-val.r{color:var(--red)}.r-val.big{font-size:17px}.r-val.muted{color:var(--muted2)}
+.loss-box{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:11px;padding:13px 15px;margin-top:12px}
+.loss-title{font-size:10px;font-weight:700;color:#f87171;letter-spacing:.5px;text-transform:uppercase;margin-bottom:7px}
+.loss-val{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:800;color:var(--red)}
+.loss-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.usd-badge{background:rgba(59,126,248,.08);border:1px solid rgba(59,126,248,.2);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:7px}
+.eur-badge{background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:5px}
+.usd-label{font-size:10px;color:var(--blue)}.usd-val{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--blue)}
+.eur-label{font-size:10px;color:var(--purple2)}.eur-val{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--purple2)}
+.tax-box{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:9px;padding:11px 13px;margin-top:9px;display:none}
+.tax-box.show{display:block}
+.tax-title{font-size:10px;font-weight:700;color:var(--purple2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:7px}
+.share-row{display:flex;gap:7px;margin-top:12px}
+.btn-share{flex:1;padding:9px;border-radius:9px;font-size:10px;font-weight:700;font-family:'Manrope',sans-serif;cursor:pointer;border:1px solid var(--border);background:var(--s2);color:var(--muted2);transition:all .2s}
+.btn-share:hover{border-color:var(--border2);color:var(--text)}
+.btn-share.copied{border-color:var(--green);color:var(--green)}
+
+/* COMPARISON */
+.comp-item{margin-bottom:13px}
+.comp-hdr{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px}
+.comp-name{font-weight:600}.comp-v{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700}
+.cbar{height:6px;background:var(--s2);border-radius:100px;overflow:hidden}
+.cfill{height:100%;border-radius:100px;transition:width .9s cubic-bezier(.34,1.56,.64,1)}
+.fg{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.fb{background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.fgr{background:linear-gradient(90deg,var(--green2),var(--green))}
+.fr{background:linear-gradient(90deg,var(--red2),var(--red))}
+.fp{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.fo{background:linear-gradient(90deg,#d97706,#f59e0b)}
+
+/* SVG CHART */
+.chart-wrap{margin-top:16px}
+.chart-svg{width:100%;height:160px;display:block}
+.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.cl-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted2)}
+.cl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* PIE */
+.pie-wrap{display:flex;align-items:center;gap:18px;margin-top:10px}
+.pie-legend{display:flex;flex-direction:column;gap:8px}
+.pl-item{display:flex;align-items:center;gap:7px;font-size:11px}
+.pl-sq{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.pl-label{color:var(--muted)}
+.pl-val{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;margin-left:auto}
+
+/* YEAR TABLE */
+.ytable{width:100%;border-collapse:collapse;font-size:11px}
+.ytable th{text-align:left;padding:7px 9px;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.ytable td{padding:7px 9px;border-bottom:1px solid rgba(255,255,255,.03)}
+.ytable tr:hover td{background:rgba(255,255,255,.02)}
+.yn{font-weight:700;color:var(--muted2)}
+.yv{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;color:var(--gold)}
+.yg{color:var(--green);font-weight:600}.yr{color:var(--red);font-weight:600}
+.divider{height:1px;background:var(--border);margin:16px 0}
+
+/* ===== PORTFOLIO PAGE ===== */
+.port-wrap{max-width:1200px;margin:0 auto;padding:0 32px 50px}
+.port-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.add-asset-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.asset-list{display:flex;flex-direction:column;gap:8px;margin-top:14px;max-height:320px;overflow-y:auto}
+.asset-item{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.asset-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.asset-info{flex:1}
+.asset-name{font-size:12px;font-weight:700}
+.asset-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.asset-val{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--gold)}
+.asset-del{width:24px;height:24px;border-radius:6px;background:rgba(239,68,68,.1);border:none;color:var(--red);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.port-total{background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(59,126,248,.1));border:1px solid rgba(245,200,66,.2);border-radius:14px;padding:20px;margin-top:14px}
+.port-total-label{font-size:11px;color:var(--muted);margin-bottom:6px}
+.port-total-val{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:800;color:var(--gold)}
+.port-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.pb-item{background:var(--s2);border-radius:10px;padding:12px;text-align:center}
+.pb-val{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800}
+.pb-label{font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+
+/* ===== TEST PAGE ===== */
+.test-wrap{max-width:700px;margin:0 auto;padding:0 32px 50px}
+.test-progress{height:4px;background:var(--s2);border-radius:100px;margin-bottom:28px;overflow:hidden}
+.test-prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--blue));border-radius:100px;transition:width .5s ease}
+.test-q{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:700;line-height:1.4;margin-bottom:22px;letter-spacing:-.3px}
+.test-opts{display:flex;flex-direction:column;gap:10px}
+.test-opt{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:15px 18px;cursor:pointer;transition:all .25s;font-size:13px;font-weight:500;text-align:left}
+.test-opt:hover{border-color:var(--gold);background:rgba(245,200,66,.05);transform:translateX(4px)}
+.test-opt.selected{border-color:var(--gold);background:rgba(245,200,66,.1);color:var(--gold);font-weight:700}
+.test-nav{display:flex;justify-content:space-between;margin-top:22px;gap:10px}
+.test-result{text-align:center;animation:fadeIn .5s ease}
+.result-emoji{font-size:64px;margin-bottom:16px}
+.result-type{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px}
+.result-desc{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:24px;max-width:500px;margin-left:auto;margin-right:auto}
+.result-alloc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.ra-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.ra-pct{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
+.ra-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+/* ===== AI CHAT PAGE ===== */
+.ai-wrap{max-width:800px;margin:0 auto;padding:0 32px 50px}
+.api-setup{background:var(--surface);border:1px solid rgba(245,200,66,.2);border-radius:16px;padding:20px;margin-bottom:20px}
+.api-setup-title{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--gold);margin-bottom:10px}
+.api-row{display:flex;gap:8px}
+.chat-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;height:420px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:12px;scroll-behavior:smooth}
+.msg{max-width:80%;animation:fadeIn .3s ease}
+.msg-user{align-self:flex-end;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border-radius:16px 16px 4px 16px;padding:11px 15px;font-size:13px;line-height:1.5}
+.msg-ai{align-self:flex-start;background:var(--s2);border:1px solid var(--border);border-radius:16px 16px 16px 4px;padding:11px 15px;font-size:13px;line-height:1.6;color:var(--text)}
+.msg-ai .msg-sender{font-size:9px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.chat-input-row{display:flex;gap:8px}
+.chat-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:11px 14px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;outline:none;resize:none;transition:border-color .2s;height:48px}
+.chat-input:focus{border-color:var(--border2)}
+.btn-send{padding:11px 20px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:11px;font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;color:#000;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-send:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(245,200,66,.3)}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.sug-btn{background:var(--s2);border:1px solid var(--border);border-radius:20px;padding:6px 13px;font-size:11px;font-weight:500;color:var(--muted2);cursor:pointer;transition:all .2s}
+.sug-btn:hover{border-color:var(--gold);color:var(--gold)}
+.typing{display:flex;gap:4px;padding:4px 0}
+.typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bounce .8s infinite}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+/* ===== DICTIONARY PAGE ===== */
+.dict-wrap{max-width:900px;margin:0 auto;padding:0 32px 50px}
+.dict-search{margin-bottom:20px}
+.dict-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.dict-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;transition:border-color .2s}
+.dict-item:hover{border-color:var(--border2)}
+.dict-term{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--gold);margin-bottom:7px}
+.dict-def{font-size:12px;color:var(--muted2);line-height:1.6}
+.dict-cat{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px;display:inline-block;margin-top:8px}
+
+/* ===== BADGES PAGE ===== */
+.badges-wrap{max-width:900px;margin:0 auto;padding:0 32px 50px}
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.badge-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;transition:all .3s}
+.badge-card.earned{border-color:var(--gold);background:rgba(245,200,66,.05)}
+.badge-card.locked{opacity:.45;filter:grayscale(.6)}
+.badge-emoji{font-size:36px;margin-bottom:10px}
+.badge-name{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;margin-bottom:5px}
+.badge-desc{font-size:10px;color:var(--muted);line-height:1.5}
+.badge-earned-label{font-size:9px;color:var(--gold);font-weight:700;margin-top:7px;text-transform:uppercase;letter-spacing:.5px}
+
+/* ===== GOAL PAGE ===== */
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1200px;margin:0 auto;padding:0 32px 50px}
+.gcard{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px}
+.gcard-title{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:16px}
+.presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.preset{padding:5px 12px;border-radius:7px;font-size:10px;font-weight:600;background:var(--s2);border:1px solid var(--border);color:var(--muted2);cursor:pointer;transition:all .2s}
+.preset:hover,.preset.sel{border-color:var(--gold);color:var(--gold);background:rgba(245,200,66,.08)}
+.goal-result{background:var(--s2);border-radius:11px;padding:15px;margin-top:12px;display:none}
+.goal-result.show{display:block}
+.goal-big{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:800;color:var(--gold);margin-bottom:4px}
+.goal-sub{font-size:11px;color:var(--muted);line-height:1.6}
+.progress-wrap{margin-top:12px}
+.prog-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px}
+.prog-bar{height:7px;background:var(--bg);border-radius:100px;overflow:hidden}
+.prog-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--gold),var(--green));transition:width 1s ease}
+.countdown-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cd-item{background:var(--s2);border-radius:9px;padding:11px;text-align:center}
+.cd-val{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:800;color:var(--gold)}
+.cd-label{font-size:9px;color:var(--muted);margin-top:1px;text-transform:uppercase;letter-spacing:.5px}
+
+/* COMPARE / REVERSE */
+.c2grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1200px;margin:0 auto;padding:0 32px 50px}
+.winner-box{background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);border-radius:11px;padding:13px;margin-top:12px;display:none}
+.winner-box.show{display:block}
+.win-label{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.win-text{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700}
+.rev-wrap{max-width:600px;margin:0 auto;padding:0 32px 50px}
+.rev-result{background:var(--s2);border-radius:13px;padding:18px;margin-top:14px;display:none}
+.rev-result.show{display:block}
+.rev-big{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:800;color:var(--gold);margin-bottom:5px}
+.rev-sub{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* INFO */
+.info-sect{max-width:1200px;margin:0 auto;padding:0 32px 60px}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.iinfo{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
+.ii-icon{font-size:22px;margin-bottom:10px}
+.ii-title{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;margin-bottom:7px;letter-spacing:-.2px}
+.ii-text{font-size:11px;color:var(--muted);line-height:1.6}
+.pc{margin-top:9px;display:flex;flex-direction:column;gap:4px}
+.pro{display:flex;gap:6px;font-size:10px;font-weight:500;color:var(--green)}
+.con{display:flex;gap:6px;font-size:10px;font-weight:500;color:#f87171}
+.disclaimer{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:13px 16px;font-size:11px;color:#f87171;margin-top:20px;line-height:1.65}
+
+footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;font-size:10px;color:var(--muted)}
+
+@media(max-width:900px){
+  .instruments,.csect,.info-sect,.goal-grid,.c2grid,.rev-wrap,.port-wrap,.test-wrap,.ai-wrap,.dict-wrap,.badges-wrap{padding-left:14px;padding-right:14px}
+  .instruments,.cgrid,.goal-grid,.c2grid,.info-grid,.port-grid,.add-asset-form{grid-template-columns:1fr}
+  header{padding:10px 14px}
+  .nav-tabs{gap:1px}
+  .nav-tab{padding:5px 8px;font-size:9px}
+  h1{letter-spacing:-1px}
+  .years-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- BADGE TOAST -->
+<div class="badge-toast" id="badge-toast">🏅 Новий бейдж!</div>
+
+<header>
+  <div class="logo">Українець<span>інвестує</span><small>🇺🇦 калькулятор складних %</small></div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('calc',this)">🧮 Калькулятор</button>
+    <button class="nav-tab" onclick="showPage('portfolio',this)">📊 Портфель</button>
+    <button class="nav-tab" onclick="showPage('test',this)">🎯 Тест</button>
+    <button class="nav-tab" onclick="showPage('ai',this)">🤖 AI-радник</button>
+    <button class="nav-tab" onclick="showPage('goal',this)">🎯 Мета</button>
+    <button class="nav-tab" onclick="showPage('compare',this)">⚖️ Порівняти</button>
+    <button class="nav-tab" onclick="showPage('reverse',this)">🔄 Зворотній</button>
+    <button class="nav-tab" onclick="showPage('dict',this)">📚 Словник</button>
+    <button class="nav-tab" onclick="showPage('badges',this)">🏅 Бейджі</button>
+    <button class="nav-tab" onclick="showPage('info',this)">ℹ️ Гід</button>
+  </nav>
+  <div class="header-right">
+    <div class="btn-icon" onclick="toggleTheme()" title="Тема" id="theme-btn">🌙</div>
+    <div class="btn-icon" onclick="installPWA()" title="Встановити додаток" id="pwa-btn" style="display:none">📱</div>
+  </div>
+</header>
+
+<!-- CURRENCY BAR -->
+<div class="currency-bar" id="currency-bar">
+  <div class="cb-item"><span class="cb-label">USD/UAH</span><span class="cb-val" id="cb-usd">—</span></div>
+  <div class="cb-sep"></div>
+  <div class="cb-item"><span class="cb-label">EUR/UAH</span><span class="cb-val" id="cb-eur">—</span></div>
+  <div class="cb-sep"></div>
+  <div class="cb-item"><span class="cb-label">GBP/UAH</span><span class="cb-val" id="cb-gbp">—</span></div>
+  <div class="cb-sep"></div>
+  <div class="cb-item"><span class="cb-label">BTC</span><span class="cb-val" id="cb-btc">—</span></div>
+  <div class="cb-sep"></div>
+  <div class="cb-item"><span class="cb-label">ETH</span><span class="cb-val" id="cb-eth">—</span></div>
+  <div class="cb-sep"></div>
+  <div class="cb-item"><span class="cb-label">SPX</span><span class="cb-val" id="cb-spx">—</span></div>
+  <div class="cb-sep"></div>
+  <span class="cb-time" id="cb-time">Оновлення...</span>
+</div>
+
+<!-- ======== PAGE: CALCULATOR ======== -->
+<div id="page-calc" class="page active">
+  <section class="hero">
+    <div class="hero-tag">💰 Куди вкласти гроші в Україні</div>
+    <h1>Порахуй свій<br><span class="g">капітал через</span><br><span class="b">складний %</span></h1>
+    <p class="hero-sub">ОВДП, депозити, ETF, крипта — порівняй реальну дохідність з урахуванням інфляції та курсу долара</p>
+  </section>
+
+  <div class="instruments">
+    <div class="icard ovdp active" onclick="selectInstr('ovdp')">
+      <div class="ic-icon">🏦</div><div class="ic-title">ОВДП</div>
+      <div class="ic-desc">Облігації держпозики. Без ПДФО.</div>
+      <div class="ic-rate">17.5%</div><div class="ic-rl">річних • гарантія держави</div>
+      <div class="ic-tags"><span class="tag ts">Надійно</span><span class="tag tg">Без ПДФО</span></div>
+    </div>
+    <div class="icard deposit" onclick="selectInstr('deposit')">
+      <div class="ic-icon">🏛️</div><div class="ic-title">Депозит</div>
+      <div class="ic-desc">Вклад у банк. ФГВФО до 600к грн.</div>
+      <div class="ic-rate">18%</div><div class="ic-rl">річних • топ-банки 2024</div>
+      <div class="ic-tags"><span class="tag ts">ФГВФО</span><span class="tag tr">ПДФО+ВЗ</span></div>
+    </div>
+    <div class="icard inzur" onclick="selectInstr('inzur')">
+      <div class="ic-icon">📈</div><div class="ic-title">Inzur</div>
+      <div class="ic-desc">Інвестиційна платформа.</div>
+      <div class="ic-rate">22%</div><div class="ic-rl">прогноз річних</div>
+      <div class="ic-tags"><span class="tag tr">Ризик</span><span class="tag tg">Довгостроково</span></div>
+    </div>
+    <div class="icard etf" onclick="selectInstr('etf')">
+      <div class="ic-icon">🌍</div><div class="ic-title">ETF фонди</div>
+      <div class="ic-desc">VOO, SPY, QQQ — світові індекси.</div>
+      <div class="ic-rate">10%</div><div class="ic-rl">річних у $ • S&P500 avg</div>
+      <div class="ic-tags"><span class="tag tb">USD</span><span class="tag tp">Диверсифікація</span></div>
+    </div>
+    <div class="icard crypto" onclick="selectInstr('crypto')">
+      <div class="ic-icon">₿</div><div class="ic-title">Крипто / USDT</div>
+      <div class="ic-desc">BTC, ETH, USDT стейкінг, грід-боти.</div>
+      <div class="ic-rate">25%</div><div class="ic-rl">прогноз • висока волатильність</div>
+      <div class="ic-tags"><span class="tag to">Крипта</span><span class="tag tr">Ризик</span></div>
+    </div>
+    <div class="icard spx" onclick="selectInstr('spx')">
+      <div class="ic-icon">📊</div><div class="ic-title">SPX500 / Акції</div>
+      <div class="ic-desc">S&P500, NVIDIA, Apple, Google.</div>
+      <div class="ic-rate">12%</div><div class="ic-rl">річних у $ • середня дохідність</div>
+      <div class="ic-tags"><span class="tag tb">USD</span><span class="tag tp">Акції</span></div>
+    </div>
+  </div>
+
+  <div class="csect">
+    <div class="slabel">⚡ Калькулятор</div>
+    <div class="cgrid">
+      <div class="panel">
+        <div class="ptitle">Параметри інвестиції</div>
+        <div class="field">
+          <label class="fl">Сума вкладення (грн)</label>
+          <input type="number" id="amount" value="100000" min="1000" step="1000">
+        </div>
+        <div class="field">
+          <label class="fl">Строк: <span id="yv" style="color:var(--gold)">5 років</span></label>
+          <div class="years-row">
+            <div>
+              <input type="range" id="years-sl" min="1" max="30" value="5" oninput="syncYears('sl')">
+              <div class="slider-labels"><span>1р</span><span>5р</span><span>10р</span><span>20р</span><span>30р</span></div>
+            </div>
+            <input type="number" id="years-n" value="5" min="1" max="30" oninput="syncYears('n')">
+          </div>
+        </div>
+        <div class="field">
+          <label class="fl">Інструмент</label>
+          <select id="instrument" onchange="onInstrChange()">
+            <option value="ovdp">🏦 ОВДП</option>
+            <option value="deposit">🏛️ Банківський депозит</option>
+            <option value="inzur">📈 Inzur</option>
+            <option value="etf">🌍 ETF фонди (S&P500)</option>
+            <option value="crypto">₿ Крипто / USDT стейкінг</option>
+            <option value="spx">📊 SPX500 / Акції США</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="fl">Річна ставка (%)</label>
+          <input type="number" id="rate" value="17.5" step="0.5" min="0.1" max="500">
+        </div>
+        <div class="field">
+          <label class="fl">Сценарій</label>
+          <div class="scen-tabs">
+            <div class="scen-tab active-opt" onclick="setScen('opt',this)">😊 Оптиміст</div>
+            <div class="scen-tab" onclick="setScen('real',this)">😐 Реаліст</div>
+            <div class="scen-tab" onclick="setScen('pes',this)">😰 Песиміст</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="fl">Нарахування %</label>
+          <select id="compound">
+            <option value="12">Щомісяця</option>
+            <option value="4">Щокварталу</option>
+            <option value="2">Двічі на рік</option>
+            <option value="1" selected>Щороку</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="fl">Щомісячне поповнення (грн)</label>
+          <input type="number" id="monthly" value="0" min="0" step="500">
+        </div>
+        <div class="divider"></div>
+        <div class="toggle-row on" id="reinvest-tog" onclick="toggleOpt('reinvest-tog','reinvest')">
+          <div class="tog-box">✓</div><span class="tog-label">Складний % (реінвестиція)</span>
+        </div>
+        <div class="toggle-row" id="infl-tog" onclick="toggleOpt('infl-tog','infl')">
+          <div class="tog-box"></div><span class="tog-label">Врахувати інфляцію</span>
+        </div>
+        <div id="infl-field" style="display:none;margin-bottom:12px">
+          <label class="fl" style="margin-top:6px">Рівень інфляції (%/рік)</label>
+          <input type="number" id="infl-rate" value="12" step="0.5" min="0" max="100">
+        </div>
+        <div class="toggle-row" id="usd-tog" onclick="toggleOpt('usd-tog','usd-on')">
+          <div class="tog-box"></div><span class="tog-label">Показати в USD / EUR</span>
+        </div>
+        <div id="usd-field" style="display:none;margin-bottom:12px">
+          <label class="fl" style="margin-top:6px">Курс USD (грн/$)</label>
+          <input type="number" id="usd-rate" value="41" step="1" min="1">
+          <label class="fl" style="margin-top:6px">Курс EUR (грн/€)</label>
+          <input type="number" id="eur-rate" value="44" step="1" min="1">
+          <label class="fl" style="margin-top:6px">Знецінення грн (%/рік)</label>
+          <input type="number" id="usd-depr" value="5" step="1" min="0" max="50">
+        </div>
+        <div class="toggle-row" id="tax-tog" onclick="toggleOpt('tax-tog','tax-on')">
+          <div class="tog-box"></div><span class="tog-label">Врахувати ПДФО 18%+ВЗ 5%</span>
+        </div>
+        <button class="btn-calc" onclick="calculate()">ПОРАХУВАТИ →</button>
+        <div class="results" id="results">
+          <div class="divider"></div>
+          <div class="r-row"><span class="r-label">Початкова сума</span><span class="r-val" id="r-init">—</span></div>
+          <div class="r-row"><span class="r-label">Загальний внесок</span><span class="r-val muted" id="r-cont">—</span></div>
+          <div class="r-row"><span class="r-label">Прибуток від %</span><span class="r-val g" id="r-int">—</span></div>
+          <div id="tax-row" class="r-row" style="display:none"><span class="r-label">Податки (ПДФО+ВЗ)</span><span class="r-val r" id="r-tax">—</span></div>
+          <div class="r-row"><span class="r-label">💰 Підсумкова сума</span><span class="r-val big" id="r-total">—</span></div>
+          <div id="real-row" class="r-row" style="display:none"><span class="r-label">Реальна вартість (після інфляції)</span><span class="r-val" id="r-real">—</span></div>
+          <div class="r-row"><span class="r-label">Зароблено понад вкладене</span><span class="r-val g" id="r-profit-hrn">—</span></div>
+          <div id="forex-block" style="display:none">
+            <div class="usd-badge"><span class="usd-label">💵 USD еквівалент (прогноз)</span><span class="usd-val" id="r-usd">—</span></div>
+            <div class="eur-badge"><span class="eur-label">💶 EUR еквівалент (прогноз)</span><span class="eur-val" id="r-eur">—</span></div>
+          </div>
+          <div class="tax-box" id="tax-box">
+            <div class="tax-title">🧾 Деталі оподаткування</div>
+            <div class="r-row" style="padding:5px 0"><span class="r-label">Дохід до податків</span><span class="r-val" id="tx-gross">—</span></div>
+            <div class="r-row" style="padding:5px 0"><span class="r-label">ПДФО 18%</span><span class="r-val r" id="tx-pdfo">—</span></div>
+            <div class="r-row" style="padding:5px 0;border:none"><span class="r-label">ВЗ 5%</span><span class="r-val r" id="tx-vz">—</span></div>
+          </div>
+          <div class="loss-box" id="loss-box" style="display:none">
+            <div class="loss-title">💸 Якщо б тримав в готівці — втратив би</div>
+            <div class="loss-val" id="r-loss">—</div>
+            <div class="loss-sub" id="r-loss-sub"></div>
+          </div>
+          <div class="share-row">
+            <button class="btn-share" onclick="copyLink()">🔗 Поділитись</button>
+            <button class="btn-share" onclick="copyResult()">📋 Копіювати</button>
+            <button class="btn-share" onclick="addToPortfolio()">📊 В портфель</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="ptitle">Аналіз та порівняння</div>
+        <div class="slabel" style="margin-bottom:10px">Порівняння за <span id="comp-yrs">5</span> р.</div>
+        <div class="comp-item"><div class="comp-hdr"><span class="comp-name">🏦 ОВДП 17.5%</span><span class="comp-v" id="c-ovdp">—</span></div><div class="cbar"><div class="cfill fg" id="bar-ovdp" style="width:0%"></div></div></div>
+        <div class="comp-item"><div class="comp-hdr"><span class="comp-name">🏛️ Депозит 18%</span><span class="comp-v" id="c-dep">—</span></div><div class="cbar"><div class="cfill fb" id="bar-dep" style="width:0%"></div></div></div>
+        <div class="comp-item"><div class="comp-hdr"><span class="comp-name">📈 Inzur 22%</span><span class="comp-v" id="c-inzur">—</span></div><div class="cbar"><div class="cfill fgr" id="bar-inzur" style="width:0%"></div></div></div>
+        <div class="comp-item"><div class="comp-hdr"><span class="comp-name">🌍 ETF 10% $</span><span class="comp-v" id="c-etf">—</span></div><div class="cbar"><div class="cfill fp" id="bar-etf" style="width:0%"></div></div></div>
+        <div class="comp-item"><div class="comp-hdr"><span class="comp-name">₿ Крипто 25%</span><span class="comp-v" id="c-crypto">—</span></div><div class="cbar"><div class="cfill fo" id="bar-crypto" style="width:0%"></div></div></div>
+        <div class="comp-item"><div class="comp-hdr"><span class="comp-name">💸 Готівка 0%</span><span class="comp-v" id="c-cash">—</span></div><div class="cbar"><div class="cfill fr" id="bar-cash" style="width:5%"></div></div></div>
+        <div id="infl-comp" class="comp-item" style="display:none"><div class="comp-hdr"><span class="comp-name">📉 Реальна (з інфл.)</span><span class="comp-v" id="c-real">—</span></div><div class="cbar"><div class="cfill fp" id="bar-real" style="width:0%"></div></div></div>
+        <div class="divider"></div>
+        <div class="slabel" style="margin-bottom:8px">📊 Ріст капіталу по роках</div>
+        <div class="chart-wrap">
+          <svg class="chart-svg" id="linechart" viewBox="0 0 500 140" preserveAspectRatio="none"></svg>
+          <div class="chart-legend" id="chart-legend"></div>
+        </div>
+        <div class="divider"></div>
+        <div class="slabel" style="margin-bottom:8px">🥧 Структура капіталу</div>
+        <div class="pie-wrap">
+          <svg id="pie-svg" width="100" height="100" viewBox="0 0 100 100"></svg>
+          <div class="pie-legend" id="pie-legend"></div>
+        </div>
+        <div class="divider"></div>
+        <div class="slabel" style="margin-bottom:8px">📅 Таблиця по роках</div>
+        <div style="overflow-x:auto">
+          <table class="ytable">
+            <thead><tr><th>Рік</th><th>Внесено</th><th>% дохід</th><th>Разом</th><th>vs Готівка</th></tr></thead>
+            <tbody id="ytbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: PORTFOLIO ======== -->
+<div id="page-portfolio" class="page">
+  <section class="hero">
+    <div class="hero-tag">📊 Мій портфель</div>
+    <h1>Відстежуй свої<br><span class="g">інвестиції</span></h1>
+    <p class="hero-sub">Додай свої активи і дивись загальну картину в режимі реального часу</p>
+  </section>
+  <div class="port-wrap">
+    <div class="port-grid">
+      <div class="panel">
+        <div class="ptitle">➕ Додати актив</div>
+        <div class="add-asset-form">
+          <div class="field"><label class="fl">Назва активу</label>
+            <select id="pa-type">
+              <option value="ovdp">🏦 ОВДП</option>
+              <option value="deposit">🏛️ Депозит</option>
+              <option value="inzur">📈 Inzur</option>
+              <option value="etf">🌍 ETF</option>
+              <option value="crypto">₿ Крипта</option>
+              <option value="spx">📊 Акції SPX</option>
+              <option value="gold">🥇 Золото</option>
+              <option value="cash">💵 Готівка USD</option>
+              <option value="other">📌 Інше</option>
+            </select>
+          </div>
+          <div class="field"><label class="fl">Сума (грн)</label><input type="number" id="pa-amount" value="50000" step="1000"></div>
+          <div class="field"><label class="fl">Ставка (%/рік)</label><input type="number" id="pa-rate" value="17.5" step="0.5"></div>
+          <div class="field"><label class="fl">Дата вкладення</label><input type="date" id="pa-date" style="background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;outline:none;width:100%"></div>
+        </div>
+        <button class="btn-calc" onclick="addAsset()">ДОДАТИ АКТИВ →</button>
+        <div class="divider"></div>
+        <div class="ptitle" style="font-size:12px">Мої активи</div>
+        <div class="asset-list" id="asset-list">
+          <div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">Поки немає активів. Додай перший! 👆</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ptitle">Загальна картина</div>
+        <div class="port-total">
+          <div class="port-total-label">💰 Загальна вартість портфелю</div>
+          <div class="port-total-val" id="port-total-val">0 ₴</div>
+        </div>
+        <div class="port-breakdown">
+          <div class="pb-item"><div class="pb-val" id="pb-invested" style="color:var(--blue)">0 ₴</div><div class="pb-label">Вкладено</div></div>
+          <div class="pb-item"><div class="pb-val" id="pb-profit" style="color:var(--green)">0 ₴</div><div class="pb-label">Прибуток</div></div>
+          <div class="pb-item"><div class="pb-val" id="pb-pct" style="color:var(--gold)">0%</div><div class="pb-label">Дохідність</div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="slabel" style="margin-bottom:10px">Розподіл по активах</div>
+        <div id="port-breakdown-bars"></div>
+        <div class="divider"></div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn-sec" onclick="exportPortfolio()">📤 Експорт JSON</button>
+          <button class="btn-sec" onclick="importPortfolio()">📥 Імпорт JSON</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: TEST ======== -->
+<div id="page-test" class="page">
+  <section class="hero">
+    <div class="hero-tag">🎯 Тест інвестора</div>
+    <h1>Який ти<br><span class="g">інвестор?</span></h1>
+    <p class="hero-sub">10 питань — і ти дізнаєшся свій профіль ризику та оптимальну стратегію</p>
+  </section>
+  <div class="test-wrap">
+    <div id="test-screen">
+      <div class="test-progress"><div class="test-prog-fill" id="test-prog" style="width:10%"></div></div>
+      <div class="test-q" id="test-q">Завантаження...</div>
+      <div class="test-opts" id="test-opts"></div>
+      <div class="test-nav">
+        <button class="btn-sec" style="width:auto;padding:10px 20px" onclick="testPrev()">← Назад</button>
+        <span id="test-counter" style="color:var(--muted);font-size:12px;align-self:center">1 / 10</span>
+        <button class="btn-calc" style="width:auto;padding:10px 24px" onclick="testNext()">Далі →</button>
+      </div>
+    </div>
+    <div id="test-result-screen" style="display:none">
+      <div class="test-result">
+        <div class="result-emoji" id="res-emoji">🤔</div>
+        <div class="result-type" id="res-type">—</div>
+        <div class="result-desc" id="res-desc">—</div>
+        <div class="result-alloc" id="res-alloc"></div>
+        <button class="btn-calc" onclick="restartTest()">🔄 Пройти ще раз</button>
+        <button class="btn-sec" style="margin-top:8px" onclick="showPage('calc',null)">🧮 До калькулятора</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: AI ======== -->
+<div id="page-ai" class="page">
+  <section class="hero">
+    <div class="hero-tag">🤖 AI-радник</div>
+    <h1>Запитай<br><span class="g">AI про</span><br><span class="b">інвестиції</span></h1>
+    <p class="hero-sub">Підключи Gemini API і отримуй персональні поради щодо інвестицій в Україні</p>
+  </section>
+  <div class="ai-wrap">
+    <div class="api-setup">
+      <div class="api-setup-title">🔑 Налаштування Gemini API</div>
+      <div class="api-row">
+        <input type="password" id="gemini-key" placeholder="Вставте ваш Gemini API ключ (AIzaSy...)" style="flex:1">
+        <button class="btn-calc" style="width:auto;padding:11px 18px;white-space:nowrap" onclick="saveApiKey()">Зберегти</button>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:8px">Отримати безкоштовно: <a href="https://aistudio.google.com" target="_blank" style="color:var(--gold)">aistudio.google.com</a> → Get API Key</div>
+      <div id="api-status" style="font-size:11px;margin-top:6px;color:var(--muted)">Ключ не введено</div>
+    </div>
+    <div class="chat-suggestions">
+      <div class="sug-btn" onclick="sendSuggestion(this)">Куди вкласти 100к грн?</div>
+      <div class="sug-btn" onclick="sendSuggestion(this)">ОВДП vs депозит — що краще?</div>
+      <div class="sug-btn" onclick="sendSuggestion(this)">Як почати інвестувати з нуля?</div>
+      <div class="sug-btn" onclick="sendSuggestion(this)">Чи безпечна крипта?</div>
+      <div class="sug-btn" onclick="sendSuggestion(this)">Як купити ETF в Україні?</div>
+      <div class="sug-btn" onclick="sendSuggestion(this)">Що таке складний відсоток?</div>
+    </div>
+    <div class="chat-box" id="chat-box">
+      <div class="msg msg-ai">
+        <div class="msg-sender">🤖 AI-радник</div>
+        Привіт! Я твій персональний AI-радник з інвестицій в Україні 🇺🇦<br><br>
+        Введи свій Gemini API ключ вгорі щоб активувати повноцінний AI.<br>
+        Або постав питання — я спробую допомогти на основі своїх знань!
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <textarea class="chat-input" id="chat-input" placeholder="Запитай про інвестиції..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"></textarea>
+      <button class="btn-send" onclick="sendMessage()">Надіслати</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: GOAL ======== -->
+<div id="page-goal" class="page">
+  <section class="hero">
+    <div class="hero-tag">🎯 Фінансова мета</div>
+    <h1>Коли досягну<br><span class="g">своєї мрії?</span></h1>
+    <p class="hero-sub">Введи мету і побач точну дату коли матимеш потрібну суму</p>
+  </section>
+  <div class="goal-grid">
+    <div class="gcard">
+      <div class="gcard-title">🏆 Моя фінансова мета</div>
+      <div class="presets">
+        <div class="preset" onclick="setGoalPreset(2000000,'🚗 Авто',this)">🚗 Авто</div>
+        <div class="preset" onclick="setGoalPreset(6000000,'🏠 Квартира',this)">🏠 Квартира</div>
+        <div class="preset" onclick="setGoalPreset(400000,'✈️ Відпустка',this)">✈️ Відпустка</div>
+        <div class="preset" onclick="setGoalPreset(1000000,'💎 Мільйон',this)">💎 1 000 000 ₴</div>
+        <div class="preset" onclick="setGoalPreset(5000000,'👑 5 млн',this)">👑 5 000 000 ₴</div>
+      </div>
+      <div class="field"><label class="fl">Назва мети</label><input type="text" id="goal-label-txt" value="Моя мета" style="background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--text);font-size:13px;font-family:'Manrope',sans-serif;outline:none;width:100%"></div>
+      <div class="field"><label class="fl">Сума мети (грн)</label><input type="number" id="goal-amount" value="1000000" min="1000" step="10000"></div>
+      <div class="field"><label class="fl">Вже накопичено (грн)</label><input type="number" id="goal-have" value="100000" min="0" step="1000"></div>
+      <div class="field"><label class="fl">Щомісячний внесок (грн)</label><input type="number" id="goal-monthly" value="5000" min="0" step="500"></div>
+      <div class="field"><label class="fl">Інструмент</label>
+        <select id="goal-instr"><option value="17.5">🏦 ОВДП (17.5%)</option><option value="18">🏛️ Депозит (18%)</option><option value="22">📈 Inzur (22%)</option><option value="10">🌍 ETF (10% $)</option><option value="25">₿ Крипто (25%)</option></select>
+      </div>
+      <button class="btn-calc" onclick="calcGoal()">ПОРАХУВАТИ МЕТУ →</button>
+      <div class="goal-result" id="goal-result">
+        <div class="goal-big" id="goal-big">—</div>
+        <div class="goal-sub" id="goal-sub">—</div>
+        <div class="progress-wrap"><div class="prog-label"><span>Прогрес зараз</span><span id="prog-pct">0%</span></div><div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div></div>
+        <div class="countdown-grid">
+          <div class="cd-item"><div class="cd-val" id="cd-y">—</div><div class="cd-label">Років</div></div>
+          <div class="cd-item"><div class="cd-val" id="cd-m">—</div><div class="cd-label">Місяців</div></div>
+          <div class="cd-item"><div class="cd-val" id="cd-d">—</div><div class="cd-label">Тижнів</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="gcard">
+      <div class="gcard-title">📉 Скільки втрачаю тримаючи в готівці</div>
+      <div class="field"><label class="fl">Сума в готівці (грн)</label><input type="number" id="cash-amount" value="100000" step="5000"></div>
+      <div class="field"><label class="fl">Рівень інфляції (%/рік)</label><input type="number" id="cash-infl" value="12" step="0.5" min="0"></div>
+      <div class="field"><label class="fl">Горизонт (років)</label><input type="number" id="cash-years" value="5" min="1" max="30"></div>
+      <button class="btn-calc" onclick="calcCashLoss()">ПОРАХУВАТИ ВТРАТИ →</button>
+      <div class="goal-result" id="cash-result">
+        <div class="loss-title">💸 Реальна вартість через <span id="cl-yrs">5</span> р.</div>
+        <div class="loss-val" id="cl-val">—</div>
+        <div class="goal-sub" id="cl-sub" style="margin-top:7px">—</div>
+        <div class="countdown-grid" style="margin-top:10px">
+          <div class="cd-item"><div class="cd-val" id="cl-lost" style="color:var(--red)">—</div><div class="cd-label">Втрачено ₴</div></div>
+          <div class="cd-item"><div class="cd-val" id="cl-pct" style="color:var(--red)">—</div><div class="cd-label">Знецінення</div></div>
+          <div class="cd-item"><div class="cd-val" id="cl-pwr" style="color:var(--gold)">—</div><div class="cd-label">Купів. спром.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: COMPARE ======== -->
+<div id="page-compare" class="page">
+  <section class="hero"><div class="hero-tag">⚖️ Порівняти 2 стратегії</div><h1>Яка стратегія<br><span class="g">вигідніша?</span></h1></section>
+  <div class="c2grid">
+    <div class="panel">
+      <div class="ptitle" style="color:var(--gold)">Стратегія А</div>
+      <div class="field"><label class="fl">Сума (грн)</label><input type="number" id="ca-amount" value="100000" step="5000"></div>
+      <div class="field"><label class="fl">Строк (років)</label><input type="number" id="ca-years" value="5" min="1" max="30"></div>
+      <div class="field"><label class="fl">Ставка (%)</label><input type="number" id="ca-rate" value="17.5" step="0.5"></div>
+      <div class="field"><label class="fl">Щомісяця (грн)</label><input type="number" id="ca-monthly" value="0" step="500"></div>
+      <div style="background:var(--s2);border-radius:11px;padding:14px;margin-top:6px;min-height:70px" id="ca-res"><div style="color:var(--muted);font-size:12px">Натисни "Порівняти"</div></div>
+    </div>
+    <div class="panel">
+      <div class="ptitle" style="color:var(--blue)">Стратегія Б</div>
+      <div class="field"><label class="fl">Сума (грн)</label><input type="number" id="cb-amount" value="100000" step="5000"></div>
+      <div class="field"><label class="fl">Строк (років)</label><input type="number" id="cb-years" value="5" min="1" max="30"></div>
+      <div class="field"><label class="fl">Ставка (%)</label><input type="number" id="cb-rate" value="22" step="0.5"></div>
+      <div class="field"><label class="fl">Щомісяця (грн)</label><input type="number" id="cb-monthly" value="0" step="500"></div>
+      <div style="background:var(--s2);border-radius:11px;padding:14px;margin-top:6px;min-height:70px" id="cb-res"><div style="color:var(--muted);font-size:12px">Натисни "Порівняти"</div></div>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px">
+    <button class="btn-calc" onclick="compareTwo()">⚖️ ПОРІВНЯТИ →</button>
+    <div class="winner-box" id="winner-box"><div class="win-label">🏆 Переможець</div><div class="win-text" id="winner-text">—</div></div>
+  </div>
+</div>
+
+<!-- ======== PAGE: REVERSE ======== -->
+<div id="page-reverse" class="page">
+  <section class="hero"><div class="hero-tag">🔄 Зворотній калькулятор</div><h1>Скільки<br><span class="g">вкладати</span><br><span class="b">щомісяця?</span></h1></section>
+  <div class="rev-wrap">
+    <div class="panel">
+      <div class="ptitle">Зворотній розрахунок</div>
+      <div class="field"><label class="fl">Хочу накопичити (грн)</label><input type="number" id="rv-target" value="1000000" step="10000"></div>
+      <div class="field"><label class="fl">Вже є (грн)</label><input type="number" id="rv-have" value="0" step="5000"></div>
+      <div class="field"><label class="fl">За скільки років</label><input type="number" id="rv-years" value="10" min="1" max="40"></div>
+      <div class="field"><label class="fl">Річна ставка (%)</label><input type="number" id="rv-rate" value="17.5" step="0.5"></div>
+      <button class="btn-calc" onclick="calcReverse()">ПОРАХУВАТИ →</button>
+      <div class="rev-result" id="rev-result">
+        <div class="rev-big" id="rv-monthly">—</div>
+        <div class="rev-sub" id="rv-sub">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: DICTIONARY ======== -->
+<div id="page-dict" class="page">
+  <section class="hero"><div class="hero-tag">📚 Фінансовий словник</div><h1>Всі терміни<br><span class="g">простими</span><br><span class="b">словами</span></h1></section>
+  <div class="dict-wrap">
+    <div class="dict-search field"><input type="text" id="dict-search" placeholder="🔍 Пошук терміну..." oninput="filterDict()" style="font-size:14px;font-weight:400"></div>
+    <div class="dict-grid" id="dict-grid"></div>
+  </div>
+</div>
+
+<!-- ======== PAGE: BADGES ======== -->
+<div id="page-badges" class="page">
+  <section class="hero"><div class="hero-tag">🏅 Досягнення</div><h1>Твої<br><span class="g">бейджі</span></h1><p class="hero-sub">Заробляй бейджі користуючись калькулятором та керуючи своїм портфелем</p></section>
+  <div class="badges-wrap">
+    <div class="badges-grid" id="badges-grid"></div>
+  </div>
+</div>
+
+<!-- ======== PAGE: INFO ======== -->
+<div id="page-info" class="page">
+  <section class="hero"><div class="hero-tag">📚 Гід інвестора</div><h1>Що і як<br><span class="g">обрати?</span></h1></section>
+  <div class="info-sect">
+    <div class="info-grid">
+      <div class="iinfo"><div class="ii-icon">🏦</div><div class="ii-title">ОВДП</div><div class="ii-text">Облігації держпозики. Купуються через Дія, Ощадбанк, Сенс. <strong>Без ПДФО та ВЗ!</strong></div><div class="pc"><div class="pro">✓ Гарантія держави</div><div class="pro">✓ Без ПДФО та ВЗ</div><div class="pro">✓ Від 1000 грн</div><div class="con">✗ Ризик дефолту</div></div></div>
+      <div class="iinfo"><div class="ii-icon">🏛️</div><div class="ii-title">Депозит</div><div class="ii-text">Топ банки: Monobank, ПУМБ, Ощад. ФГВФО до 600к грн. <strong>ПДФО 18%+ВЗ 5% з доходу!</strong></div><div class="pc"><div class="pro">✓ Простота відкриття</div><div class="pro">✓ ФГВФО 600к грн</div><div class="con">✗ ПДФО+ВЗ = 23%</div><div class="con">✗ Штраф за дострокове</div></div></div>
+      <div class="iinfo"><div class="ii-icon">🌍</div><div class="ii-title">ETF фонди</div><div class="ii-text">VOO (S&P500), QQQ (Nasdaq) через Interactive Brokers. Середня ~10% річних у $.</div><div class="pc"><div class="pro">✓ Диверсифікація 500+ акцій</div><div class="pro">✓ Захист від знецінення грн</div><div class="pro">✓ Ліквідно</div><div class="con">✗ Потрібен IB рахунок</div><div class="con">✗ Ризик ринку</div></div></div>
+      <div class="iinfo"><div class="ii-icon">₿</div><div class="ii-title">Крипта</div><div class="ii-text">BTC, ETH — довгострокові. USDT стейкінг (8-12%). Грід-боти — автоматична торгівля.</div><div class="pc"><div class="pro">✓ Потенційно висока дохідність</div><div class="pro">✓ USDT стабільний</div><div class="con">✗ Висока волатильність</div><div class="con">✗ Регуляторний ризик</div></div></div>
+      <div class="iinfo"><div class="ii-icon">📊</div><div class="ii-title">SPX500 / Акції</div><div class="ii-text">S&P500 індекс або окремі акції (NVIDIA, Apple, Google). Через IB або eToro.</div><div class="pc"><div class="pro">✓ Глобальна диверсифікація</div><div class="pro">✓ Дивіденди</div><div class="con">✗ Ризик ринку</div><div class="con">✗ Потрібні знання</div></div></div>
+      <div class="iinfo"><div class="ii-icon">📈</div><div class="ii-title">Inzur</div><div class="ii-text">Інвестиційна платформа з диверсифікованим підходом. Вищий потенціал.</div><div class="pc"><div class="pro">✓ Вища дохідність (22%+)</div><div class="pro">✓ Зручний додаток</div><div class="con">✗ Ризик платформи</div><div class="con">✗ Немає гарантій</div></div></div>
+    </div>
+    <div class="disclaimer">⚠️ <strong>Дисклеймер:</strong> Це лише освітній інструмент. Не є фінансовою порадою. Всі ставки орієнтовні. Минула дохідність не гарантує майбутніх результатів. Консультуйтесь з ліцензованим фінансовим радником.</div>
+  </div>
+</div>
+
+</div>
+<footer>🇺🇦 Українець інвестує v2.0 — Калькулятор складних відсотків · 2024</footer>
+
+<script>
+// ===== STATE =====
+const RATES={ovdp:17.5,deposit:18,inzur:22,etf:10,crypto:25,spx:12};
+const SCEN={opt:0,real:-3,pes:-7};
+let curScen='opt',reinvestOn=true,inflOn=false,usdOn=false,taxOn=false;
+let deferredPrompt=null;
+let geminiKey=localStorage.getItem('gemini_key')||'';
+let chatHistory=[];
+let testAnswers=[];
+let testCurrent=0;
+let portfolio=JSON.parse(localStorage.getItem('portfolio')||'[]');
+let earnedBadges=JSON.parse(localStorage.getItem('badges')||'[]');
+
+// ===== THEME =====
+const savedTheme=localStorage.getItem('theme')||'dark';
+document.documentElement.setAttribute('data-theme',savedTheme);
+document.getElementById('theme-btn').textContent=savedTheme==='dark'?'🌙':'☀️';
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  document.getElementById('theme-btn').textContent=next==='dark'?'🌙':'☀️';
+}
+
+// ===== PWA =====
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredPrompt=e;
+  document.getElementById('pwa-btn').style.display='flex';
+});
+function installPWA(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;document.getElementById('pwa-btn').style.display='none';}}
+
+// ===== NAV =====
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  if(id==='dict') renderDict();
+  if(id==='badges') renderBadges();
+  if(id==='portfolio') renderPortfolio();
+}
+
+// ===== CURRENCY BAR (NBU) =====
+async function loadCurrencies(){
+  try{
+    const r=await fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
+    const d=await r.json();
+    const get=code=>d.find(c=>c.cc===code);
+    const usd=get('USD'),eur=get('EUR'),gbp=get('GBP');
+    if(usd){document.getElementById('cb-usd').textContent=usd.rate.toFixed(2)+' ₴';document.getElementById('usd-rate').value=Math.round(usd.rate);}
+    if(eur){document.getElementById('cb-eur').textContent=eur.rate.toFixed(2)+' ₴';document.getElementById('eur-rate').value=Math.round(eur.rate);}
+    if(gbp) document.getElementById('cb-gbp').textContent=gbp.rate.toFixed(2)+' ₴';
+    document.getElementById('cb-time').textContent='НБУ '+new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'});
+  }catch(e){
+    document.getElementById('cb-usd').textContent='~41.5 ₴';
+    document.getElementById('cb-eur').textContent='~44.2 ₴';
+    document.getElementById('cb-time').textContent='Офлайн дані';
+  }
+  // Crypto approx (static fallback)
+  document.getElementById('cb-btc').textContent='~$67k';
+  document.getElementById('cb-eth').textContent='~$3.2k';
+  document.getElementById('cb-spx').textContent='~5500';
+}
+loadCurrencies();
+
+// ===== UTILS =====
+function fmtH(n){return new Intl.NumberFormat('uk-UA',{maximumFractionDigits:0}).format(Math.round(n))+' ₴';}
+function fmtU(n){return '$'+new Intl.NumberFormat('uk-UA',{maximumFractionDigits:0}).format(Math.round(n));}
+function fmtE(n){return '€'+new Intl.NumberFormat('uk-UA',{maximumFractionDigits:0}).format(Math.round(n));}
+function plural(n,a,b,c){if(n%10===1&&n%100!==11)return a;if(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))return b;return c;}
+function compFV(P,r,n,t,pmt){
+  if(t===0)return P; const rn=r/n;
+  let fv=P*Math.pow(1+rn,n*t);
+  if(pmt>0){const pp=pmt*12/n;fv+=pp*(Math.pow(1+rn,n*t)-1)/rn;}
+  return fv;
+}
+function simpleFV(P,r,t,pmt){return P+P*r*t+(pmt*12*t);}
+
+// ===== YEARS SYNC =====
+function syncYears(src){
+  const sl=document.getElementById('years-sl'),n=document.getElementById('years-n');
+  if(src==='sl'){n.value=sl.value;}else{sl.value=Math.min(Math.max(+n.value,1),30);n.value=sl.value;}
+  document.getElementById('yv').textContent=sl.value+' '+plural(+sl.value,'рік','роки','років');
+}
+
+// ===== INSTRUMENT =====
+function selectInstr(type){
+  document.querySelectorAll('.icard').forEach(c=>c.classList.remove('active'));
+  document.querySelector('.icard.'+type).classList.add('active');
+  document.getElementById('instrument').value=type;
+  document.getElementById('rate').value=(RATES[type]+SCEN[curScen]).toFixed(1);
+}
+function onInstrChange(){
+  const t=document.getElementById('instrument').value;
+  document.getElementById('rate').value=(RATES[t]+SCEN[curScen]).toFixed(1);
+  document.querySelectorAll('.icard').forEach(c=>c.classList.remove('active'));
+  document.querySelector('.icard.'+t).classList.add('active');
+}
+
+// ===== SCENARIO =====
+function setScen(s,el){
+  curScen=s;
+  document.querySelectorAll('.scen-tab').forEach(t=>t.className='scen-tab');
+  el.className='scen-tab active-'+s;
+  const t=document.getElementById('instrument').value;
+  document.getElementById('rate').value=(RATES[t]+SCEN[s]).toFixed(1);
+}
+
+// ===== TOGGLES =====
+function toggleOpt(rowId,cbId){
+  const row=document.getElementById(rowId);
+  const cur=row.classList.contains('on');
+  row.classList.toggle('on',!cur);
+  row.querySelector('.tog-box').textContent=!cur?'✓':'';
+  if(cbId==='reinvest')reinvestOn=!cur;
+  if(cbId==='infl'){inflOn=!cur;document.getElementById('infl-field').style.display=inflOn?'block':'none';document.getElementById('infl-comp').style.display=inflOn?'flex':'none';document.getElementById('real-row').style.display=inflOn?'flex':'none';}
+  if(cbId==='usd-on'){usdOn=!cur;document.getElementById('usd-field').style.display=usdOn?'block':'none';document.getElementById('forex-block').style.display=usdOn?'block':'none';}
+  if(cbId==='tax-on'){taxOn=!cur;document.getElementById('tax-row').style.display=taxOn?'flex':'none';document.getElementById('tax-box').classList.toggle('show',taxOn);}
+}
+
+// ===== MAIN CALC =====
+function calculate(){
+  const P=+document.getElementById('amount').value||100000;
+  const t=+document.getElementById('years-sl').value;
+  const r=+document.getElementById('rate').value/100;
+  const n=+document.getElementById('compound').value;
+  const pmt=+document.getElementById('monthly').value||0;
+  const inflR=inflOn?+document.getElementById('infl-rate').value/100:0;
+  const usdRate=+document.getElementById('usd-rate').value||41;
+  const eurRate=+document.getElementById('eur-rate').value||44;
+  const depr=usdOn?+document.getElementById('usd-depr').value/100:0;
+  const instr=document.getElementById('instrument').value;
+  const totalContrib=P+pmt*12*t;
+  let fv=reinvestOn?compFV(P,r,n,t,pmt):simpleFV(P,r,t,pmt);
+  let taxAmt=0;
+  if(taxOn&&instr==='deposit'){
+    const gross=fv-totalContrib;taxAmt=gross*0.23;fv-=taxAmt;
+    document.getElementById('tx-gross').textContent=fmtH(gross);
+    document.getElementById('tx-pdfo').textContent='-'+fmtH(gross*0.18);
+    document.getElementById('tx-vz').textContent='-'+fmtH(gross*0.05);
+    document.getElementById('r-tax').textContent='-'+fmtH(taxAmt);
+  }
+  const interest=fv-totalContrib;
+  const realFV=inflR>0?fv/Math.pow(1+inflR,t):fv;
+  const futureUsd=usdRate*Math.pow(1+depr,t);
+  const futureEur=eurRate*Math.pow(1+depr,t);
+  document.getElementById('r-init').textContent=fmtH(P);
+  document.getElementById('r-cont').textContent=fmtH(totalContrib);
+  document.getElementById('r-int').textContent='+'+fmtH(interest);
+  document.getElementById('r-total').textContent=fmtH(fv);
+  document.getElementById('r-profit-hrn').textContent='+'+fmtH(fv-totalContrib);
+  if(inflOn){document.getElementById('r-real').textContent=fmtH(realFV);}
+  if(usdOn){document.getElementById('r-usd').textContent=fmtU(fv/futureUsd);document.getElementById('r-eur').textContent=fmtE(fv/futureEur);}
+  const cashReal=inflOn?totalContrib/Math.pow(1+inflR,t):totalContrib;
+  if(inflOn){
+    document.getElementById('loss-box').style.display='block';
+    document.getElementById('r-loss').textContent='-'+fmtH(totalContrib-cashReal);
+    document.getElementById('r-loss-sub').textContent=`Інфляція ${(inflR*100).toFixed(1)}%/рік за ${t} р. з'їла б ${fmtH(totalContrib-cashReal)}. Реальна купівельна спроможність: ${fmtH(cashReal)}.`;
+  }else{document.getElementById('loss-box').style.display='none';}
+  document.getElementById('results').classList.add('show');
+  document.getElementById('comp-yrs').textContent=t;
+  updateComparison(P,t,n,pmt,inflR);
+  buildLineChart(P,r,n,t,pmt,inflR);
+  buildPie(totalContrib,fv);
+  buildTable(P,r,n,t,pmt);
+  saveToUrl(P,t,r*100,n,pmt);
+  checkBadges(fv,t,P);
+}
+
+// ===== COMPARISON =====
+function updateComparison(P,t,n,pmt,inflR){
+  const fvO=compFV(P,RATES.ovdp/100,n,t,pmt);
+  const fvD=compFV(P,RATES.deposit/100,n,t,pmt);
+  const fvI=compFV(P,RATES.inzur/100,n,t,pmt);
+  const fvE=compFV(P,RATES.etf/100,n,t,pmt);
+  const fvC=compFV(P,RATES.crypto/100,n,t,pmt);
+  const cash=P+pmt*12*t;
+  const r=+document.getElementById('rate').value/100;
+  const fvReal=inflR>0?compFV(P,r,n,t,pmt)/Math.pow(1+inflR,t):0;
+  const maxV=Math.max(fvO,fvD,fvI,fvE,fvC,fvReal||0,1);
+  document.getElementById('c-ovdp').textContent=fmtH(fvO);
+  document.getElementById('c-dep').textContent=fmtH(fvD);
+  document.getElementById('c-inzur').textContent=fmtH(fvI);
+  document.getElementById('c-etf').textContent=fmtH(fvE);
+  document.getElementById('c-crypto').textContent=fmtH(fvC);
+  document.getElementById('c-cash').textContent=fmtH(cash);
+  if(inflR>0) document.getElementById('c-real').textContent=fmtH(fvReal);
+  setTimeout(()=>{
+    document.getElementById('bar-ovdp').style.width=(fvO/maxV*100)+'%';
+    document.getElementById('bar-dep').style.width=(fvD/maxV*100)+'%';
+    document.getElementById('bar-inzur').style.width=(fvI/maxV*100)+'%';
+    document.getElementById('bar-etf').style.width=(fvE/maxV*100)+'%';
+    document.getElementById('bar-crypto').style.width=(fvC/maxV*100)+'%';
+    document.getElementById('bar-cash').style.width=Math.max(cash/maxV*100,3)+'%';
+    if(inflR>0) document.getElementById('bar-real').style.width=(fvReal/maxV*100)+'%';
+  },60);
+}
+
+// ===== LINE CHART =====
+function buildLineChart(P,r,n,t,pmt,inflR){
+  const svg=document.getElementById('linechart');
+  const years=Math.min(t,20),pts=[],ptsCash=[],ptsReal=[];
+  let maxV=0;
+  for(let y=0;y<=years;y++){
+    const v=y===0?P:compFV(P,r,n,y,pmt);
+    const cash=P+pmt*12*y;
+    const real=inflR>0?v/Math.pow(1+inflR,y):v;
+    pts.push(v);ptsCash.push(cash);ptsReal.push(real);
+    maxV=Math.max(maxV,v,real);
+  }
+  const W=500,H=120,PL=8,PT=8,PB=18;
+  const xS=(W-PL)/(years||1),yS=(H-PT-PB)/maxV;
+  function toPath(arr){return arr.map((v,i)=>`${i===0?'M':'L'}${PL+i*xS},${H-PB-v*yS}`).join(' ');}
+  let html=`<defs><linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f5c842" stop-opacity=".2"/><stop offset="100%" stop-color="#f5c842" stop-opacity="0"/></linearGradient></defs>
+    <path d="${toPath(pts)} L${PL+years*xS},${H-PB} L${PL},${H-PB} Z" fill="url(#gf)"/>
+    <path d="${toPath(pts)}" fill="none" stroke="#f5c842" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${toPath(ptsCash)}" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,3"/>`;
+  if(inflR>0) html+=`<path d="${toPath(ptsReal)}" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3,3"/>`;
+  const step=years<=10?1:Math.ceil(years/7);
+  for(let y=0;y<=years;y+=step) html+=`<text x="${PL+y*xS}" y="${H}" font-size="9" fill="#64748b" text-anchor="middle">${y}р</text>`;
+  const lastY=H-PB-pts[years]*yS;
+  html+=`<circle cx="${PL+years*xS}" cy="${lastY}" r="3.5" fill="#f5c842"/>`;
+  svg.innerHTML=html;
+  document.getElementById('chart-legend').innerHTML=`
+    <div class="cl-item"><div class="cl-dot" style="background:var(--gold)"></div>Капітал</div>
+    <div class="cl-item"><div class="cl-dot" style="background:var(--red)"></div>Внески</div>
+    ${inflR>0?'<div class="cl-item"><div class="cl-dot" style="background:var(--purple)"></div>Реально</div>':''}`;
+}
+
+// ===== PIE =====
+function buildPie(contrib,total){
+  const interest=Math.max(total-contrib,0),pct=total>0?interest/total:0;
+  const r=42,cx=50,cy=50,circum=2*Math.PI*r,dash=circum*pct;
+  document.getElementById('pie-svg').innerHTML=`
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1a2235" stroke-width="14"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f5c842" stroke-width="14" stroke-dasharray="${dash} ${circum-dash}" stroke-dashoffset="${circum*0.25}" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#3b7ef8" stroke-width="14" stroke-dasharray="${circum-dash} ${dash}" stroke-dashoffset="${circum*0.25-dash}" stroke-linecap="round"/>`;
+  document.getElementById('pie-legend').innerHTML=`
+    <div class="pl-item"><div class="pl-sq" style="background:var(--gold)"></div><span class="pl-label">Відсотки</span><span class="pl-val" style="color:var(--gold);margin-left:8px">${(pct*100).toFixed(1)}%</span></div>
+    <div class="pl-item"><div class="pl-sq" style="background:var(--blue)"></div><span class="pl-label">Внески</span><span class="pl-val" style="color:var(--blue);margin-left:8px">${((1-pct)*100).toFixed(1)}%</span></div>`;
+}
+
+// ===== TABLE =====
+function buildTable(P,r,n,t,pmt){
+  const body=document.getElementById('ytbody');body.innerHTML='';
+  for(let y=1;y<=Math.min(t,20);y++){
+    const fv=compFV(P,r,n,y,pmt),contrib=P+pmt*12*y,interest=fv-contrib,cash=P+pmt*12*y,vs=fv-cash;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="yn">${y}</td><td>${fmtH(contrib)}</td><td class="yg">+${fmtH(interest)}</td><td class="yv">${fmtH(fv)}</td><td class="${vs>=0?'yg':'yr'}">${vs>=0?'+':''}${fmtH(vs)}</td>`;
+    body.appendChild(tr);
+  }
+}
+
+// ===== SHARE =====
+function saveToUrl(P,t,r,n,pmt){ try{history.replaceState(null,'','?'+new URLSearchParams({P,t,r,n,pmt}).toString());}catch(e){} }
+function copyLink(){navigator.clipboard.writeText(location.href).then(()=>{const b=event.currentTarget;b.textContent='✓ Скопійовано!';b.classList.add('copied');setTimeout(()=>{b.textContent='🔗 Поділитись';b.classList.remove('copied')},2000)});}
+function copyResult(){
+  const lines=['r-init','r-cont','r-int','r-total','r-profit-hrn'];
+  let txt='📊 Українець інвестує\n';
+  lines.forEach(id=>{const row=document.getElementById(id)?.closest('.r-row');if(row)txt+=row.querySelector('.r-label').textContent+': '+document.getElementById(id).textContent+'\n';});
+  navigator.clipboard.writeText(txt).then(()=>{const b=event.currentTarget;b.textContent='✓!';setTimeout(()=>b.textContent='📋 Копіювати',2000);});
+}
+function addToPortfolio(){
+  const instr=document.getElementById('instrument').value;
+  const amount=+document.getElementById('amount').value;
+  const rate=+document.getElementById('rate').value;
+  const names={ovdp:'🏦 ОВДП',deposit:'🏛️ Депозит',inzur:'📈 Inzur',etf:'🌍 ETF',crypto:'₿ Крипто',spx:'📊 Акції'};
+  portfolio.push({id:Date.now(),type:instr,name:names[instr],amount,rate,date:new Date().toISOString().slice(0,10)});
+  localStorage.setItem('portfolio',JSON.stringify(portfolio));
+  showBadgeToast('📊 Додано до портфеля!');
+  checkBadges(0,0,amount);
+}
+
+// ===== PORTFOLIO =====
+const ASSET_COLORS={ovdp:'#f5c842',deposit:'#3b7ef8',inzur:'#22c55e',etf:'#7c3aed',crypto:'#f59e0b',spx:'#06b6d4',gold:'#d97706',cash:'#64748b',other:'#94a3b8'};
+function renderPortfolio(){
+  const list=document.getElementById('asset-list');
+  if(portfolio.length===0){list.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">Поки немає активів. Додай перший! 👆</div>';updatePortfolioTotals();return;}
+  list.innerHTML='';
+  portfolio.forEach(a=>{
+    const today=new Date(),start=new Date(a.date);
+    const years=(today-start)/(365.25*24*60*60*1000);
+    const fv=compFV(a.amount,a.rate/100,1,Math.max(years,0),0);
+    const profit=fv-a.amount;
+    const div=document.createElement('div');div.className='asset-item';
+    div.innerHTML=`<div class="asset-dot" style="background:${ASSET_COLORS[a.type]||'#64748b'}"></div>
+      <div class="asset-info"><div class="asset-name">${a.name}</div><div class="asset-sub">${a.rate}%/рік · з ${a.date}</div></div>
+      <div><div class="asset-val">${fmtH(fv)}</div><div style="font-size:9px;color:var(--green)">+${fmtH(profit)}</div></div>
+      <button class="asset-del" onclick="removeAsset(${a.id})">×</button>`;
+    list.appendChild(div);
+  });
+  updatePortfolioTotals();
+}
+function updatePortfolioTotals(){
+  let totalFV=0,totalInvested=0;
+  portfolio.forEach(a=>{
+    const years=(new Date()-new Date(a.date))/(365.25*24*60*60*1000);
+    totalFV+=compFV(a.amount,a.rate/100,1,Math.max(years,0),0);
+    totalInvested+=a.amount;
+  });
+  const profit=totalFV-totalInvested,pct=totalInvested>0?profit/totalInvested*100:0;
+  document.getElementById('port-total-val').textContent=fmtH(totalFV);
+  document.getElementById('pb-invested').textContent=fmtH(totalInvested);
+  document.getElementById('pb-profit').textContent='+'+fmtH(profit);
+  document.getElementById('pb-pct').textContent='+'+pct.toFixed(1)+'%';
+  const bars=document.getElementById('port-breakdown-bars');
+  bars.innerHTML='';
+  const maxA=Math.max(...portfolio.map(a=>a.amount),1);
+  portfolio.forEach(a=>{
+    const pct2=(a.amount/totalInvested*100).toFixed(1);
+    bars.innerHTML+=`<div class="comp-item"><div class="comp-hdr"><span class="comp-name">${a.name}</span><span class="comp-v">${pct2}%</span></div><div class="cbar"><div class="cfill" style="background:${ASSET_COLORS[a.type]};width:${a.amount/maxA*100}%"></div></div></div>`;
+  });
+}
+function addAsset(){
+  const type=document.getElementById('pa-type').value;
+  const amount=+document.getElementById('pa-amount').value;
+  const rate=+document.getElementById('pa-rate').value;
+  const date=document.getElementById('pa-date').value||new Date().toISOString().slice(0,10);
+  const names={ovdp:'🏦 ОВДП',deposit:'🏛️ Депозит',inzur:'📈 Inzur',etf:'🌍 ETF',crypto:'₿ Крипто',spx:'📊 Акції SPX',gold:'🥇 Золото',cash:'💵 Готівка USD',other:'📌 Інше'};
+  portfolio.push({id:Date.now(),type,name:names[type],amount,rate,date});
+  localStorage.setItem('portfolio',JSON.stringify(portfolio));
+  renderPortfolio();checkBadges(0,0,amount);
+  showBadgeToast('✅ Актив додано!');
+}
+function removeAsset(id){portfolio=portfolio.filter(a=>a.id!==id);localStorage.setItem('portfolio',JSON.stringify(portfolio));renderPortfolio();}
+function exportPortfolio(){const a=document.createElement('a');a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(portfolio,null,2));a.download='portfolio.json';a.click();}
+function importPortfolio(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const r=new FileReader();r.onload=ev=>{try{portfolio=JSON.parse(ev.target.result);localStorage.setItem('portfolio',JSON.stringify(portfolio));renderPortfolio();}catch(e){alert('Невірний формат файлу');}};r.readAsText(e.target.files[0]);};i.click();}
+
+// Set today date for portfolio form
+document.getElementById('pa-date').value=new Date().toISOString().slice(0,10);
+
+// ===== TEST =====
+const QUESTIONS=[
+  {q:'Як довго плануєш інвестувати?',opts:['Менше 1 року','1–3 роки','3–7 років','Більше 7 років'],scores:[0,1,2,3]},
+  {q:'Якщо твій портфель впаде на 30% — що зробиш?',opts:['Продам все і вийду','Переживу але буду нервувати','Додам ще грошей','Куплю більше на просідання'],scores:[0,1,2,3]},
+  {q:'Яка твоя головна мета?',opts:['Зберегти гроші від інфляції','Отримати стабільний пасивний дохід','Примножити капітал','Максимальний ріст будь-якою ціною'],scores:[0,1,2,3]},
+  {q:'Який відсоток доходу готовий інвестувати?',opts:['До 5%','5–15%','15–30%','Більше 30%'],scores:[0,1,2,3]},
+  {q:'Твій досвід з інвестиціями?',opts:['Жодного','Тільки депозити','Є базовий досвід','Активний інвестор'],scores:[0,1,2,3]},
+  {q:'Як ти ставишся до крипти?',opts:['Це лохотрон','Може, але страшно','Маю трохи','Основна частина портфеля'],scores:[0,1,2,3]},
+  {q:'Що важливіше для тебе?',opts:['Не втратити','Невеликий але стабільний дохід','Баланс ризик/дохід','Максимальний прибуток'],scores:[0,1,2,3]},
+  {q:'Як ти реагуєш на фінансові новини?',opts:['Панікую і продаю','Стежу але тримаюся','Аналізую і роблю висновки','Ігнорую короткострокові коливання'],scores:[0,1,2,3]},
+  {q:'Твій фінансовий резерв (подушка безпеки)?',opts:['Немає','1–2 місяці витрат','3–6 місяців','Більше 6 місяців'],scores:[0,1,2,3]},
+  {q:'Ти готовий вкласти і забути на 5+ років?',opts:['Ні, гроші потрібні скоро','Можливо 1-2 роки','Так, 3–5 років','Так, навіть 10+ років'],scores:[0,1,2,3]}
+];
+const PROFILES=[
+  {min:0,max:8,emoji:'🛡️',type:'Консерватор',desc:'Ти цінуєш надійність і стабільність понад усе. Твій пріоритет — збереження капіталу, а не максимальний прибуток. Тобі підходять ОВДП, депозити та золото.',alloc:[{l:'ОВДП',p:50,c:'var(--gold)'},{l:'Депозит',p:30,c:'var(--blue)'},{l:'Золото',p:20,c:'#f59e0b'}]},
+  {min:9,max:16,emoji:'⚖️',type:'Помірний інвестор',desc:'Ти шукаєш баланс між ризиком і прибутком. Готовий до невеликих просідань заради кращої дохідності. Тобі підходять ETF, ОВДП та невелика частка Inzur.',alloc:[{l:'ОВДП',p:35,c:'var(--gold)'},{l:'ETF',p:35,c:'var(--purple)'},{l:'Inzur',p:20,c:'var(--green)'},{l:'Крипта',p:10,c:'#f59e0b'}]},
+  {min:17,max:22,emoji:'📈',type:'Зростання',desc:'Ти орієнтований на активний ріст капіталу. Готовий до волатильності заради вищої дохідності. Акції, ETF та крипта — твоя стихія.',alloc:[{l:'ETF/Акції',p:45,c:'var(--blue)'},{l:'Крипта',p:25,c:'#f59e0b'},{l:'Inzur',p:20,c:'var(--green)'},{l:'ОВДП',p:10,c:'var(--gold)'}]},
+  {min:23,max:30,emoji:'🚀',type:'Агресивний інвестор',desc:'Ти справжній ризик-тейкер! Максимальна дохідність будь-якою ціною. Крипта, акції зростання, альтернативні інвестиції — твій профіль.',alloc:[{l:'Крипта',p:40,c:'#f59e0b'},{l:'Акції',p:35,c:'var(--blue)'},{l:'Inzur',p:15,c:'var(--green)'},{l:'ETF',p:10,c:'var(--purple)'}]}
+];
+function initTest(){testAnswers=new Array(QUESTIONS.length).fill(-1);testCurrent=0;renderQuestion();}
+function renderQuestion(){
+  const q=QUESTIONS[testCurrent];
+  document.getElementById('test-q').textContent=q.q;
+  document.getElementById('test-counter').textContent=`${testCurrent+1} / ${QUESTIONS.length}`;
+  document.getElementById('test-prog').style.width=((testCurrent+1)/QUESTIONS.length*100)+'%';
+  const opts=document.getElementById('test-opts');opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const div=document.createElement('div');div.className='test-opt'+(testAnswers[testCurrent]===i?' selected':'');
+    div.textContent=o;div.onclick=()=>{testAnswers[testCurrent]=i;document.querySelectorAll('.test-opt').forEach(x=>x.classList.remove('selected'));div.classList.add('selected');};
+    opts.appendChild(div);
+  });
+}
+function testNext(){
+  if(testAnswers[testCurrent]===-1){alert('Обери відповідь!');return;}
+  if(testCurrent<QUESTIONS.length-1){testCurrent++;renderQuestion();}else{showTestResult();}
+}
+function testPrev(){if(testCurrent>0){testCurrent--;renderQuestion();}}
+function showTestResult(){
+  const total=testAnswers.reduce((s,a,i)=>s+(a>=0?QUESTIONS[i].scores[a]:0),0);
+  const profile=PROFILES.find(p=>total>=p.min&&total<=p.max)||PROFILES[0];
+  document.getElementById('res-emoji').textContent=profile.emoji;
+  document.getElementById('res-type').textContent=profile.type;
+  document.getElementById('res-desc').textContent=profile.desc;
+  const alloc=document.getElementById('res-alloc');alloc.innerHTML='';
+  profile.alloc.forEach(a=>{alloc.innerHTML+=`<div class="ra-item"><div class="ra-pct" style="color:${a.c}">${a.p}%</div><div class="ra-label">${a.l}</div></div>`;});
+  document.getElementById('test-screen').style.display='none';
+  document.getElementById('test-result-screen').style.display='block';
+  earnBadge('test_done');
+}
+function restartTest(){document.getElementById('test-screen').style.display='block';document.getElementById('test-result-screen').style.display='none';initTest();}
+initTest();
+
+// ===== AI CHAT =====
+if(geminiKey){document.getElementById('gemini-key').value='••••••••••••••••';document.getElementById('api-status').textContent='✅ API ключ активний';}
+function saveApiKey(){
+  const key=document.getElementById('gemini-key').value.trim();
+  if(!key.startsWith('AIza')){alert('Невірний формат ключа. Має починатись з AIza...');return;}
+  geminiKey=key;localStorage.setItem('gemini_key',key);
+  document.getElementById('gemini-key').value='••••••••••••••••';
+  document.getElementById('api-status').textContent='✅ API ключ збережено! Тепер AI активний.';
+  document.getElementById('api-status').style.color='var(--green)';
+}
+function addMsg(text,role){
+  const box=document.getElementById('chat-box');
+  const div=document.createElement('div');div.className='msg msg-'+role;
+  if(role==='ai') div.innerHTML=`<div class="msg-sender">🤖 AI-радник</div>${text}`;
+  else div.textContent=text;
+  box.appendChild(div);box.scrollTop=box.scrollHeight;
+  return div;
+}
+function addTyping(){const d=addMsg('<div class="typing"><span></span><span></span><span></span></div>','ai');return d;}
+async function sendMessage(){
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();if(!text)return;
+  input.value='';addMsg(text,'user');
+  chatHistory.push({role:'user',parts:[{text}]});
+  const typing=addTyping();
+  if(!geminiKey){
+    setTimeout(()=>{typing.innerHTML='<div class="msg-sender">🤖 AI-радник</div>'+getFallbackAnswer(text);},800);
+    return;
+  }
+  try{
+    const sysPrompt='Ти фінансовий радник для українців. Відповідай ТІЛЬКИ українською. Спеціалізуєшся на: ОВДП, банківські депозити, Inzur, ETF, крипта, акції. Давай конкретні, практичні поради з урахуванням реалій України 2024. Будь лаконічним але корисним.';
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiKey}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system_instruction:{parts:[{text:sysPrompt}]},contents:chatHistory})
+    });
+    const data=await resp.json();
+    const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||'Вибач, не вдалось отримати відповідь.';
+    chatHistory.push({role:'model',parts:[{text:reply}]});
+    typing.innerHTML='<div class="msg-sender">🤖 AI-радник</div>'+reply.replace(/\n/g,'<br>');
+  }catch(e){typing.innerHTML='<div class="msg-sender">🤖 AI-радник</div>Помилка з\'єднання. Перевір API ключ.';}
+  document.getElementById('chat-box').scrollTop=99999;
+}
+function sendSuggestion(el){document.getElementById('chat-input').value=el.textContent;sendMessage();}
+function getFallbackAnswer(q){
+  const lq=q.toLowerCase();
+  if(lq.includes('овдп'))return'ОВДП — найнадійніший інструмент для гривневих заощаджень! Головний плюс: <strong>звільнені від ПДФО та ВЗ</strong>. Купити можна через Дію, Ощадбанк або Сенс банк. Поточна ставка ~17-18% річних. Для початківців — відмінний старт 🏦';
+  if(lq.includes('депозит'))return'Депозити дають ~18-20% річних, але <strong>з відсотків платиш ПДФО 18%+ВЗ 5% = 23%</strong>! Тому реальна дохідність нижча ніж в ОВДП. Топ банки: Monobank, ПУМБ, Ощад. Захист ФГВФО до 600 000 грн 🏛️';
+  if(lq.includes('etf')||lq.includes('s&p'))return'ETF — це кошик з 500+ акцій великих компаній США. VOO або SPY (S&P500) дає ~10% річних у доларах. Для покупки потрібен рахунок в <strong>Interactive Brokers</strong>. Ідеально для довгострокового інвестування на 5-10+ років 🌍';
+  if(lq.includes('крипт')||lq.includes('bitcoin')||lq.includes('btc'))return'Крипта — <strong>дуже волатильний</strong> інструмент. BTC може дати +200% або -70% за рік. Для новачків рекомендую не більше 5-10% портфелю. USDT стейкінг (8-12%) — безпечніший варіант. Platforma: Binance, Kraken ₿';
+  if(lq.includes('куди')||lq.includes('вкласти')||lq.includes('початк'))return'Для початківця в Україні рекомендую:<br>1️⃣ <strong>ОВДП</strong> — 40% (надійно, без податків)<br>2️⃣ <strong>Депозит</strong> — 30% (зручно)<br>3️⃣ <strong>ETF S&P500</strong> — 20% (захист від знецінення грн)<br>4️⃣ <strong>Крипто USDT</strong> — 10% (вищий дохід)<br><br>Введи свій Gemini API ключ для персональних порад!';
+  return'Гарне питання! Щоб отримати детальну відповідь від AI — введи Gemini API ключ вгорі (безкоштовно на aistudio.google.com). Я дам персоналізовані поради саме для твоєї ситуації 🤖';
+}
+
+// ===== GOAL =====
+function setGoalPreset(amt,label,el){document.querySelectorAll('.preset').forEach(p=>p.classList.remove('sel'));el.classList.add('sel');document.getElementById('goal-amount').value=amt;document.getElementById('goal-label-txt').value=label;}
+function calcGoal(){
+  const target=+document.getElementById('goal-amount').value;
+  const have=+document.getElementById('goal-have').value||0;
+  const monthly=+document.getElementById('goal-monthly').value||0;
+  const r=+document.getElementById('goal-instr').value/100;
+  const label=document.getElementById('goal-label-txt').value||'Мета';
+  if(target<=have){document.getElementById('goal-big').textContent='🎉 Мета вже досягнута!';document.getElementById('goal-sub').textContent='У тебе вже є достатньо коштів.';document.getElementById('goal-result').classList.add('show');return;}
+  let months=0,bal=have;const rm=r/12;
+  while(bal<target&&months<1200){bal=bal*(1+rm)+monthly;months++;}
+  if(months>=1200){document.getElementById('goal-big').textContent='❌ Збільш внесок або ставку';document.getElementById('goal-result').classList.add('show');return;}
+  const yrs=Math.floor(months/12),mns=months%12;
+  const now=new Date();now.setMonth(now.getMonth()+months);
+  document.getElementById('goal-big').textContent=`${label}: ${yrs}р. ${mns}міс.`;
+  document.getElementById('goal-sub').textContent=`При ${(r*100).toFixed(1)}% та внеску ${fmtH(monthly)}/міс досягнеш мети у ${now.toLocaleDateString('uk-UA',{year:'numeric',month:'long'})}.`;
+  const pct=Math.min(have/target*100,100);
+  document.getElementById('prog-pct').textContent=pct.toFixed(1)+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('cd-y').textContent=yrs;document.getElementById('cd-m').textContent=mns;document.getElementById('cd-d').textContent=Math.round(months*4.33);
+  document.getElementById('goal-result').classList.add('show');
+}
+function calcCashLoss(){
+  const amt=+document.getElementById('cash-amount').value||100000;
+  const infl=+document.getElementById('cash-infl').value/100||0.12;
+  const yrs=+document.getElementById('cash-years').value||5;
+  const real=amt/Math.pow(1+infl,yrs);const lost=amt-real;
+  document.getElementById('cl-yrs').textContent=yrs;
+  document.getElementById('cl-val').textContent=fmtH(real);
+  document.getElementById('cl-sub').textContent=`${fmtH(amt)} сьогодні = лише ${fmtH(real)} реальної купівельної спроможності через ${yrs} р. при інфляції ${(infl*100).toFixed(1)}%/рік.`;
+  document.getElementById('cl-lost').textContent=fmtH(lost);
+  document.getElementById('cl-pct').textContent=(lost/amt*100).toFixed(1)+'%';
+  document.getElementById('cl-pwr').textContent=(real/amt*100).toFixed(1)+'%';
+  document.getElementById('cash-result').classList.add('show');
+}
+
+// ===== COMPARE TWO =====
+function compareTwo(){
+  function get(p){return{P:+document.getElementById(p+'-amount').value||100000,t:+document.getElementById(p+'-years').value||5,r:+document.getElementById(p+'-rate').value/100,pmt:+document.getElementById(p+'-monthly').value||0};}
+  const a=get('ca'),b=get('cb');
+  const fvA=compFV(a.P,a.r,12,a.t,a.pmt),fvB=compFV(b.P,b.r,12,b.t,b.pmt);
+  function fill(id,fv,cont,t){document.getElementById(id).innerHTML=`<div style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:800;color:var(--gold);margin-bottom:5px">${fmtH(fv)}</div><div style="font-size:11px;color:var(--muted)">Прибуток: <span style="color:var(--green)">+${fmtH(fv-cont)}</span> за ${t} р.</div>`;}
+  fill('ca-res',fvA,a.P+a.pmt*12*a.t,a.t);fill('cb-res',fvB,b.P+b.pmt*12*b.t,b.t);
+  const wb=document.getElementById('winner-box');wb.classList.add('show');
+  document.getElementById('winner-text').textContent=fvA>fvB?`Стратегія А перемагає на ${fmtH(fvA-fvB)} 🏆`:fvB>fvA?`Стратегія Б перемагає на ${fmtH(fvB-fvA)} 🏆`:'Рівні результати! 🤝';
+}
+
+// ===== REVERSE =====
+function calcReverse(){
+  const target=+document.getElementById('rv-target').value||1000000;
+  const have=+document.getElementById('rv-have').value||0;
+  const t=+document.getElementById('rv-years').value||10;
+  const r=+document.getElementById('rv-rate').value/100;
+  const rn=r/12,periods=12*t,growFactor=Math.pow(1+rn,periods);
+  const needed=target-have*growFactor;
+  if(needed<=0){document.getElementById('rv-monthly').textContent='🎉 Вже достатньо!';document.getElementById('rev-result').classList.add('show');return;}
+  const pmtM=needed/((growFactor-1)/rn);
+  document.getElementById('rv-monthly').textContent=fmtH(pmtM)+'/міс';
+  document.getElementById('rv-sub').textContent=`Щоб накопичити ${fmtH(target)} за ${t} р. при ${(r*100).toFixed(1)}% — вкладай ${fmtH(pmtM)} щомісяця. Разом внесеш: ${fmtH(pmtM*12*t+have)}.`;
+  document.getElementById('rev-result').classList.add('show');
+}
+
+// ===== DICTIONARY =====
+const DICT=[
+  {term:'ОВДП',def:'Облігації внутрішньої державної позики — цінні папери, якими держава залучає гроші від громадян. Захищені гарантією держави і звільнені від ПДФО та ВЗ.',cat:'Україна',catColor:'var(--gold)'},
+  {term:'Складний відсоток',def:'Нарахування відсотків не тільки на початкову суму, а й на вже нараховані відсотки. Ефект "снігової кулі" — головний секрет багатих інвесторів.',cat:'Базово',catColor:'var(--green)'},
+  {term:'ETF',def:'Exchange Traded Fund — фонд, що торгується на біржі як акція. Містить сотні або тисячі акцій одразу. VOO, SPY — найпопулярніші ETF на S&P500.',cat:'Акції',catColor:'var(--blue)'},
+  {term:'S&P500',def:'Індекс 500 найбільших компаній США (Apple, Microsoft, Google тощо). Середня дохідність за 50+ років — ~10% річних у доларах.',cat:'Акції',catColor:'var(--blue)'},
+  {term:'ПДФО',def:'Податок на доходи фізичних осіб — 18% в Україні. Стягується з доходу від депозитів, акцій, дивідендів.',cat:'Податки',catColor:'var(--red)'},
+  {term:'ВЗ (військовий збір)',def:'Военний збір 5% (з 2024 р. підвищено з 1.5%). Стягується разом з ПДФО з більшості фінансових доходів.',cat:'Податки',catColor:'var(--red)'},
+  {term:'ФГВФО',def:'Фонд гарантування вкладів фізичних осіб — захищає депозити до 600 000 грн на одного вкладника в одному банку.',cat:'Україна',catColor:'var(--gold)'},
+  {term:'Диверсифікація',def:'Розподіл інвестицій між різними активами для зниження ризику. "Не клади всі яйця в один кошик" — головний принцип.',cat:'Базово',catColor:'var(--green)'},
+  {term:'Волатильність',def:'Ступінь коливання ціни активу. Висока волатильність = великі злети і падіння. Характерна для криптовалют та акцій зростання.',cat:'Ризики',catColor:'var(--purple)'},
+  {term:'Ліквідність',def:'Швидкість і легкість перетворення активу в готівку. Готівка — найліквідніший актив. Нерухомість — найменш ліквідна.',cat:'Базово',catColor:'var(--green)'},
+  {term:'BTC (Bitcoin)',def:'Перша і найбільша криптовалюта. "Цифрове золото". Обмежена емісія 21 млн монет. Висока волатильність.',cat:'Крипта',catColor:'#f59e0b'},
+  {term:'ETH (Ethereum)',def:'Друга за капіталізацією криптовалюта. Платформа для смарт-контрактів та DeFi додатків.',cat:'Крипта',catColor:'#f59e0b'},
+  {term:'USDT (Tether)',def:'Стейблкоїн прив\'язаний до долара США. 1 USDT ≈ $1. Використовується для стейкінгу (8-12% річних) та захисту від волатильності.',cat:'Крипта',catColor:'#f59e0b'},
+  {term:'Грід-бот',def:'Автоматична торгова програма яка купує і продає актив у заданому діапазоні цін. Приносить прибуток на бічному ринку.',cat:'Крипта',catColor:'#f59e0b'},
+  {term:'Стейкінг',def:'Заморожування криптовалюти для підтримки мережі в обмін на нагороди. USDT стейкінг дає 8-12% річних без волатильності.',cat:'Крипта',catColor:'#f59e0b'},
+  {term:'Interactive Brokers',def:'Американський брокер — найпопулярніший серед українських інвесторів для купівлі ETF та акцій США. Мінімальний депозит відсутній.',cat:'Брокери',catColor:'var(--blue)'},
+  {term:'Дохідність',def:'Відсоток прибутку від інвестиції за певний період (зазвичай рік). Номінальна дохідність не враховує інфляцію.',cat:'Базово',catColor:'var(--green)'},
+  {term:'Інфляція',def:'Знецінення грошей з часом — зростання цін. В Україні інфляція 2023-24 = 5-15%/рік. З\'їдає реальну вартість заощаджень.',cat:'Економіка',catColor:'var(--muted)'},
+  {term:'Дивіденди',def:'Виплати акціонерам частини прибутку компанії. Топ дивідендні акції платять 3-6% річних у $ на додаток до росту ціни.',cat:'Акції',catColor:'var(--blue)'},
+  {term:'Rebalancing',def:'Ребалансування портфеля — відновлення початкових пропорцій між активами. Робиться раз на рік або при відхиленні більше 5%.',cat:'Стратегія',catColor:'var(--purple)'},
+];
+function renderDict(filter=''){
+  const grid=document.getElementById('dict-grid');grid.innerHTML='';
+  const f=filter.toLowerCase();
+  DICT.filter(d=>!f||d.term.toLowerCase().includes(f)||d.def.toLowerCase().includes(f)).forEach(d=>{
+    grid.innerHTML+=`<div class="dict-item"><div class="dict-term">${d.term}</div><div class="dict-def">${d.def}</div><span class="dict-cat" style="background:${d.catColor}22;color:${d.catColor}">${d.cat}</span></div>`;
+  });
+}
+function filterDict(){renderDict(document.getElementById('dict-search').value);}
+
+// ===== BADGES =====
+const BADGES_LIST=[
+  {id:'first_calc',emoji:'🧮',name:'Перший розрахунок',desc:'Порахував складний % вперше',cond:'auto'},
+  {id:'million',emoji:'💎',name:'Мільйонер',desc:'Розрахунок на 1 000 000+ грн',cond:'auto'},
+  {id:'long_term',emoji:'⏳',name:'Довгостроковий',desc:'Інвестиція на 10+ років',cond:'auto'},
+  {id:'test_done',emoji:'🎯',name:'Знаю себе',desc:'Пройшов тест інвестора',cond:'auto'},
+  {id:'diversified',emoji:'🌍',name:'Диверсифікований',desc:'Додав 3+ активи в портфель',cond:'auto'},
+  {id:'big_deposit',emoji:'🏦',name:'Великий вкладник',desc:'Вклав 500 000+ грн',cond:'auto'},
+  {id:'crypto_fan',emoji:'₿',name:'Крипто-фанат',desc:'Розрахував крипто-інвестицію',cond:'auto'},
+  {id:'etf_investor',emoji:'🌍',name:'ETF інвестор',desc:'Розрахував ETF стратегію',cond:'auto'},
+  {id:'planner',emoji:'📅',name:'Планувальник',desc:'Встановив фінансову мету',cond:'auto'},
+  {id:'analyst',emoji:'📊',name:'Аналітик',desc:'Порівняв 2 стратегії',cond:'auto'},
+];
+function earnBadge(id){
+  if(!earnedBadges.includes(id)){
+    earnedBadges.push(id);localStorage.setItem('badges',JSON.stringify(earnedBadges));
+    const b=BADGES_LIST.find(x=>x.id===id);
+    if(b)showBadgeToast(b.emoji+' '+b.name+' — розблоковано!');
+  }
+}
+function showBadgeToast(text){
+  const t=document.getElementById('badge-toast');t.textContent=text;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+function renderBadges(){
+  const grid=document.getElementById('badges-grid');grid.innerHTML='';
+  BADGES_LIST.forEach(b=>{
+    const earned=earnedBadges.includes(b.id);
+    grid.innerHTML+=`<div class="badge-card ${earned?'earned':'locked'}">
+      <div class="badge-emoji">${b.emoji}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.desc}</div>
+      ${earned?'<div class="badge-earned-label">✓ Зароблено</div>':'<div class="badge-desc" style="color:var(--muted);margin-top:5px">🔒 Не зароблено</div>'}
+    </div>`;
+  });
+}
+function checkBadges(fv,t,P){
+  earnBadge('first_calc');
+  if(fv>=1000000)earnBadge('million');
+  if(t>=10)earnBadge('long_term');
+  if(portfolio.length>=3)earnBadge('diversified');
+  if(P>=500000)earnBadge('big_deposit');
+  const instr=document.getElementById('instrument')?.value;
+  if(instr==='crypto')earnBadge('crypto_fan');
+  if(instr==='etf')earnBadge('etf_investor');
+}
+
+// ===== URL PARAMS =====
+function loadFromUrl(){
+  try{
+    const p=new URLSearchParams(location.search);
+    if(p.has('P'))document.getElementById('amount').value=p.get('P');
+    if(p.has('t')){document.getElementById('years-sl').value=p.get('t');document.getElementById('years-n').value=p.get('t');syncYears('sl');}
+    if(p.has('r'))document.getElementById('rate').value=p.get('r');
+    if(p.has('n'))document.getElementById('compound').value=p.get('n');
+    if(p.has('pmt'))document.getElementById('monthly').value=p.get('pmt');
+    if(p.has('P'))calculate();
+  }catch(e){}
+}
+
+// ===== INIT =====
+loadFromUrl();
+if(!location.search)calculate();
+renderDict();
+renderPortfolio();
+</script>
+</body>
+</html>
