@@ -592,7 +592,7 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
     <div class="icard inzur" onclick="selectInstr('inzur')">
       <div class="ic-icon">📈</div><div class="ic-title">Inzur</div>
       <div class="ic-desc">Інвестиційна платформа.</div>
-      <div class="ic-rate">22%</div><div class="ic-rl">прогноз річних</div>
+      <div class="ic-rate">12%</div><div class="ic-rl">прогноз річних</div>
       <div class="ic-tags"><span class="tag tr">Ризик</span><span class="tag tg">Довгостроково</span></div>
     </div>
     <div class="icard etf" onclick="selectInstr('etf')">
@@ -621,8 +621,15 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
       <div class="panel">
         <div class="ptitle">Параметри інвестиції</div>
         <div class="field">
-          <label class="fl">Сума вкладення (грн)</label>
-          <input type="number" id="amount" value="100000" min="1000" step="1000">
+          <label class="fl">Валюта розрахунку</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px">
+            <div class="scen-tab active-opt" id="cur-uah" onclick="setCurrency('UAH')" style="cursor:pointer">🇺🇦 Гривня (₴)</div>
+            <div class="scen-tab" id="cur-usd" onclick="setCurrency('USD')" style="cursor:pointer">🇺🇸 Долар ($)</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="fl">Сума вкладення (<span id="cur-label">грн</span>)</label>
+          <input type="number" id="amount" value="100000" min="1" step="1000">
         </div>
         <div class="field">
           <label class="fl">Строк: <span id="yv" style="color:var(--gold)">5 років</span></label>
@@ -1034,7 +1041,41 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
 
 <script>
 // ===== STATE =====
-const RATES={ovdp:17.5,deposit:18,inzur:22,etf:10,crypto:25,spx:12};
+const RATES={ovdp:17.5,deposit:18,inzur:12,etf:10,crypto:25,spx:12};
+
+// ===== CURRENCY MODE =====
+let curCurrency='UAH';
+let liveUsdRate=41;
+
+function setCurrency(cur){
+  curCurrency=cur;
+  // Update tab styles
+  document.getElementById('cur-uah').className='scen-tab'+(cur==='UAH'?' active-opt':'');
+  document.getElementById('cur-usd').className='scen-tab'+(cur==='USD'?' active-opt':'');
+  // Update labels
+  const sym=cur==='UAH'?'грн':'USD ($)';
+  document.getElementById('cur-label').textContent=sym;
+  // Update amount field step and value
+  const amtEl=document.getElementById('amount');
+  if(cur==='USD'){
+    amtEl.step=100;
+    amtEl.value=Math.round(+amtEl.value/liveUsdRate);
+  } else {
+    amtEl.step=1000;
+    amtEl.value=Math.round(+amtEl.value*liveUsdRate);
+  }
+  // Recalculate if results shown
+  if(document.getElementById('results').classList.contains('show')) calculate();
+}
+
+function getAmountInUAH(){
+  const v=+document.getElementById('amount').value||0;
+  return curCurrency==='USD' ? v*liveUsdRate : v;
+}
+function getMonthlyInUAH(){
+  const v=+document.getElementById('monthly').value||0;
+  return curCurrency==='USD' ? v*liveUsdRate : v;
+}
 const SCEN={opt:0,real:-3,pes:-7};
 let curScen='opt',reinvestOn=true,inflOn=false,usdOn=false,taxOn=false;
 let deferredPrompt=null;
@@ -1082,7 +1123,7 @@ async function loadCurrencies(){
     const d=await r.json();
     const get=code=>d.find(c=>c.cc===code);
     const usd=get('USD'),eur=get('EUR'),gbp=get('GBP');
-    if(usd){document.getElementById('cb-usd').textContent=usd.rate.toFixed(2)+' ₴';document.getElementById('usd-rate').value=Math.round(usd.rate);}
+    if(usd){document.getElementById('cb-usd').textContent=usd.rate.toFixed(2)+' ₴';document.getElementById('usd-rate').value=Math.round(usd.rate);liveUsdRate=usd.rate;}
     if(eur){document.getElementById('cb-eur').textContent=eur.rate.toFixed(2)+' ₴';document.getElementById('eur-rate').value=Math.round(eur.rate);}
     if(gbp) document.getElementById('cb-gbp').textContent=gbp.rate.toFixed(2)+' ₴';
     document.getElementById('cb-time').textContent='НБУ '+new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'});
@@ -1091,12 +1132,30 @@ async function loadCurrencies(){
     document.getElementById('cb-eur').textContent='~44.2 ₴';
     document.getElementById('cb-time').textContent='Офлайн дані';
   }
-  // Crypto approx (static fallback)
-  document.getElementById('cb-btc').textContent='~$67k';
-  document.getElementById('cb-eth').textContent='~$3.2k';
-  document.getElementById('cb-spx').textContent='~5500';
+  // Crypto real prices via CoinGecko (free, no key)
+  try {
+    const cr = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
+    const cd = await cr.json();
+    if(cd.bitcoin) document.getElementById('cb-btc').textContent='$'+Math.round(cd.bitcoin.usd).toLocaleString();
+    if(cd.ethereum) document.getElementById('cb-eth').textContent='$'+Math.round(cd.ethereum.usd).toLocaleString();
+  } catch(e) {
+    document.getElementById('cb-btc').textContent='—';
+    document.getElementById('cb-eth').textContent='—';
+  }
+  // SPX via Yahoo Finance proxy
+  try {
+    const sr = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1d&range=1d');
+    const sd = await sr.json();
+    const price = sd?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if(price) document.getElementById('cb-spx').textContent=Math.round(price).toLocaleString();
+    else document.getElementById('cb-spx').textContent='—';
+  } catch(e) {
+    document.getElementById('cb-spx').textContent='—';
+  }
 }
 loadCurrencies();
+// Refresh every 5 minutes
+setInterval(loadCurrencies, 5*60*1000);
 
 // ===== UTILS =====
 function fmtH(n){return new Intl.NumberFormat('uk-UA',{maximumFractionDigits:0}).format(Math.round(n))+' ₴';}
@@ -1155,11 +1214,11 @@ function toggleOpt(rowId,cbId){
 
 // ===== MAIN CALC =====
 function calculate(){
-  const P=+document.getElementById('amount').value||100000;
+  const P=getAmountInUAH()||100000;
   const t=+document.getElementById('years-sl').value;
   const r=+document.getElementById('rate').value/100;
   const n=+document.getElementById('compound').value;
-  const pmt=+document.getElementById('monthly').value||0;
+  const pmt=getMonthlyInUAH()||0;
   const inflR=inflOn?+document.getElementById('infl-rate').value/100:0;
   const usdRate=+document.getElementById('usd-rate').value||41;
   const eurRate=+document.getElementById('eur-rate').value||44;
