@@ -524,6 +524,92 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
   .years-row{grid-template-columns:1fr}
 }
 </style>
+
+<style>
+/* ===== AUTH MODAL ===== */
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);animation:fadeIn .25s ease}
+.auth-modal{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:36px;width:100%;max-width:420px;margin:16px;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.auth-logo{text-align:center;font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px}
+.auth-logo span{color:var(--gold)}
+.auth-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:28px}
+.auth-tabs{display:flex;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:22px;gap:3px}
+.auth-tab{flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;font-family:'Manrope',sans-serif;color:var(--muted);transition:all .2s}
+.auth-tab.active{background:var(--gold);color:#000}
+.auth-field{margin-bottom:14px}
+.auth-field label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.auth-field input{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:'Manrope',sans-serif;font-weight:500;outline:none;transition:border-color .2s}
+.auth-field input:focus{border-color:var(--gold)}
+.btn-auth{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:11px;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:#000;cursor:pointer;transition:all .25s;margin-top:4px}
+.btn-auth:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(245,200,66,.3)}
+.auth-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:10px 13px;font-size:12px;color:#f87171;margin-bottom:12px;display:none}
+.auth-err.show{display:block}
+.auth-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;background:var(--s2);border:1px solid var(--border);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+
+/* ===== USER MENU ===== */
+.user-menu{position:relative}
+.user-btn{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:6px 12px;cursor:pointer;transition:all .2s;font-size:12px;font-weight:600}
+.user-btn:hover{border-color:var(--border2)}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#000;flex-shrink:0}
+.user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;min-width:180px;z-index:500;animation:fadeIn .2s ease;display:none;box-shadow:0 12px 32px rgba(0,0,0,.3)}
+.user-dropdown.open{display:block}
+.ud-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;font-size:12px;font-weight:500;cursor:pointer;transition:background .15s;color:var(--text)}
+.ud-item:hover{background:var(--s2)}
+.ud-item.danger{color:var(--red)}
+.ud-sep{height:1px;background:var(--border);margin:5px 0}
+.ud-email{padding:8px 12px;font-size:10px;color:var(--muted);font-weight:500}
+
+/* ===== CABINET PAGE ===== */
+.cab-grid{display:grid;grid-template-columns:280px 1fr;gap:18px;max-width:1200px;margin:0 auto;padding:0 32px 50px}
+.cab-sidebar{display:flex;flex-direction:column;gap:12px}
+.cab-profile{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;text-align:center}
+.cab-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#000;margin:0 auto 12px}
+.cab-name{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.cab-email{font-size:11px;color:var(--muted)}
+.cab-since{font-size:10px;color:var(--muted);margin-top:6px}
+.cab-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.cs-item{background:var(--s2);border-radius:10px;padding:11px;text-align:center}
+.cs-val{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--gold)}
+.cs-label{font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.cab-nav{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:8px}
+.cab-nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted2)}
+.cab-nav-item:hover{background:var(--s2);color:var(--text)}
+.cab-nav-item.active{background:rgba(245,200,66,.1);color:var(--gold)}
+.cab-content{display:flex;flex-direction:column;gap:16px}
+.cab-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px;display:none}
+.cab-section.active{display:block}
+.cab-section-title{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;margin-bottom:20px}
+
+/* ASSET CARDS */
+.asset-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:16px}
+.asset-card{background:var(--s2);border:1px solid var(--border);border-radius:14px;padding:16px;position:relative;transition:all .25s}
+.asset-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.ac-type{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.ac-name{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:10px}
+.ac-amount{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:800;color:var(--gold);margin-bottom:4px}
+.ac-profit{font-size:11px;font-weight:600;color:var(--green)}
+.ac-meta{display:flex;gap:12px;margin-top:10px;font-size:10px;color:var(--muted)}
+.ac-del{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:6px;background:rgba(239,68,68,.1);border:none;color:var(--red);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.ac-days{background:rgba(245,200,66,.1);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:var(--gold)}
+
+/* GOAL CARDS */
+.goal-cards{display:flex;flex-direction:column;gap:10px}
+.goal-card{background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.gc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.gc-name{font-weight:700;font-size:13px}
+.gc-pct{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--gold)}
+.gc-bar{height:6px;background:var(--bg);border-radius:100px;overflow:hidden;margin-bottom:8px}
+.gc-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--gold),var(--green));transition:width .8s ease}
+.gc-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+
+/* ADD ASSET FORM */
+.add-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+@media(max-width:900px){
+  .cab-grid{grid-template-columns:1fr;padding:0 14px 50px}
+  .add-form-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -544,10 +630,30 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
     <button class="nav-tab" onclick="showPage('dict',this)">📚 Словник</button>
     <button class="nav-tab" onclick="showPage('badges',this)">🏅 Бейджі</button>
     <button class="nav-tab" onclick="showPage('info',this)">ℹ️ Гід</button>
+    <button class="nav-tab" id="cab-nav-tab" onclick="showPage('cabinet',this)">👤 Кабінет</button>
   </nav>
   <div class="header-right">
     <div class="btn-icon" onclick="toggleTheme()" title="Тема" id="theme-btn">🌙</div>
     <div class="btn-icon" onclick="installPWA()" title="Встановити додаток" id="pwa-btn" style="display:none">📱</div>
+    <!-- USER MENU -->
+    <div id="auth-btn-wrap">
+      <button class="btn-icon" onclick="openAuth()" title="Увійти" id="login-btn" style="font-size:13px;width:auto;padding:0 12px;gap:5px;display:flex;align-items:center">👤 Увійти</button>
+    </div>
+    <div class="user-menu" id="user-menu" style="display:none">
+      <div class="user-btn" onclick="toggleUserDropdown()">
+        <div class="user-avatar" id="hdr-avatar">?</div>
+        <span id="hdr-name" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</span>
+        <span style="color:var(--muted)">▾</span>
+      </div>
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="ud-email" id="ud-email">—</div>
+        <div class="ud-sep"></div>
+        <div class="ud-item" onclick="showPage('cabinet',null);toggleUserDropdown()">📊 Мій кабінет</div>
+        <div class="ud-item" onclick="showPage('portfolio',null);toggleUserDropdown()">💼 Портфель</div>
+        <div class="ud-sep"></div>
+        <div class="ud-item danger" onclick="doLogout()">🚪 Вийти</div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -632,11 +738,16 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
           <input type="number" id="amount" value="100000" min="1" step="1000">
         </div>
         <div class="field">
+          <label class="fl">Одиниця часу</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div class="scen-tab active-opt" id="unit-years" onclick="setTimeUnit('years')" style="cursor:pointer">📅 Роки</div>
+            <div class="scen-tab" id="unit-months" onclick="setTimeUnit('months')" style="cursor:pointer">🗓️ Місяці</div>
+          </div>
           <label class="fl">Строк: <span id="yv" style="color:var(--gold)">5 років</span></label>
           <div class="years-row">
             <div>
               <input type="range" id="years-sl" min="1" max="30" value="5" oninput="syncYears('sl')">
-              <div class="slider-labels"><span>1р</span><span>5р</span><span>10р</span><span>20р</span><span>30р</span></div>
+              <div class="slider-labels" id="sl-labels"><span>1р</span><span>5р</span><span>10р</span><span>20р</span><span>30р</span></div>
             </div>
             <input type="number" id="years-n" value="5" min="1" max="30" oninput="syncYears('n')">
           </div>
@@ -672,6 +783,11 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
             <option value="2">Двічі на рік</option>
             <option value="1" selected>Щороку</option>
           </select>
+          <div id="term-1m-wrap" style="display:none;margin-top:8px">
+            <div style="background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--gold)">
+              💡 Для 1 місяця ОВДП: ставка ~17.5% / 12 = ~1.46% за місяць
+            </div>
+          </div>
         </div>
         <div class="field">
           <label class="fl">Щомісячне поповнення (грн)</label>
@@ -1036,6 +1152,148 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
   </div>
 </div>
 
+
+<!-- ===== AUTH MODAL ===== -->
+<div id="auth-overlay" style="display:none">
+  <div class="auth-overlay" onclick="if(event.target===this)closeAuth()">
+    <div class="auth-modal" style="position:relative">
+      <div class="auth-close" onclick="closeAuth()">×</div>
+      <div class="auth-logo">Українець<span>інвестує</span></div>
+      <div class="auth-sub">Увійди щоб зберігати портфель та цілі</div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login',this)">Увійти</button>
+        <button class="auth-tab" onclick="switchAuthTab('register',this)">Реєстрація</button>
+      </div>
+      <div class="auth-err" id="auth-err"></div>
+      <div id="auth-login">
+        <div class="auth-field"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
+        <div class="auth-field"><label>Пароль</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+        <button class="btn-auth" onclick="doLogin()">УВІЙТИ →</button>
+        <div style="text-align:center;margin-top:12px"><a href="#" onclick="showForgot()" style="font-size:11px;color:var(--muted)">Забув пароль?</a></div>
+      </div>
+      <div id="auth-register" style="display:none">
+        <div class="auth-field"><label>Ім'я</label><input type="text" id="reg-name" placeholder="Іван Петренко"></div>
+        <div class="auth-field"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com"></div>
+        <div class="auth-field"><label>Пароль (мін. 6 символів)</label><input type="password" id="reg-pass" placeholder="••••••••"></div>
+        <button class="btn-auth" onclick="doRegister()">ЗАРЕЄСТРУВАТИСЬ →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CABINET PAGE ===== -->
+<div id="page-cabinet" class="page">
+  <section class="hero" style="padding-bottom:24px">
+    <div class="hero-tag">👤 Особистий кабінет</div>
+    <h1>Мій <span class="g">портфель</span></h1>
+  </section>
+  <div class="cab-grid">
+    <!-- SIDEBAR -->
+    <div class="cab-sidebar">
+      <div class="cab-profile">
+        <div class="cab-avatar" id="cab-avatar">?</div>
+        <div class="cab-name" id="cab-name">—</div>
+        <div class="cab-email" id="cab-email">—</div>
+        <div class="cab-since" id="cab-since"></div>
+        <div class="cab-stats">
+          <div class="cs-item"><div class="cs-val" id="cs-total">0</div><div class="cs-label">Активів</div></div>
+          <div class="cs-item"><div class="cs-val" id="cs-profit" style="color:var(--green)">0%</div><div class="cs-label">Дохідність</div></div>
+        </div>
+      </div>
+      <div class="cab-nav">
+        <div class="cab-nav-item active" onclick="showCabSection('portfolio',this)">📊 Мій портфель</div>
+        <div class="cab-nav-item" onclick="showCabSection('add-asset',this)">➕ Додати актив</div>
+        <div class="cab-nav-item" onclick="showCabSection('goals',this)">🎯 Мої цілі</div>
+        <div class="cab-nav-item" onclick="showCabSection('add-goal',this)">➕ Додати ціль</div>
+        <div class="cab-nav-item" onclick="showCabSection('history',this)">📅 Історія</div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="cab-content">
+
+      <!-- PORTFOLIO -->
+      <div class="cab-section active" id="cab-portfolio">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+          <div class="cab-section-title" style="margin:0">📊 Мій портфель</div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;color:var(--gold)" id="cab-total-val">0 ₴</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+          <div class="cs-item"><div class="cs-val" id="cab-invested">0 ₴</div><div class="cs-label">Вкладено</div></div>
+          <div class="cs-item"><div class="cs-val" style="color:var(--green)" id="cab-earn">+0 ₴</div><div class="cs-label">Зароблено</div></div>
+          <div class="cs-item"><div class="cs-val" style="color:var(--gold)" id="cab-roi">0%</div><div class="cs-label">ROI</div></div>
+        </div>
+        <div class="asset-cards" id="cab-asset-cards">
+          <div style="color:var(--muted);font-size:12px;padding:20px;grid-column:1/-1;text-align:center">Поки немає активів. Додай перший! 👆</div>
+        </div>
+      </div>
+
+      <!-- ADD ASSET -->
+      <div class="cab-section" id="cab-add-asset">
+        <div class="cab-section-title">➕ Додати актив</div>
+        <div class="add-form-grid">
+          <div class="field"><label class="fl">Тип активу</label>
+            <select id="cab-pa-type">
+              <option value="ovdp">🏦 ОВДП</option>
+              <option value="deposit">🏛️ Депозит</option>
+              <option value="inzur">📈 Inzur</option>
+              <option value="etf">🌍 ETF</option>
+              <option value="crypto">₿ Крипта</option>
+              <option value="spx">📊 Акції SPX</option>
+              <option value="gold">🥇 Золото</option>
+              <option value="cash">💵 Готівка USD</option>
+              <option value="other">📌 Інше</option>
+            </select>
+          </div>
+          <div class="field"><label class="fl">Назва (опційно)</label><input type="text" id="cab-pa-name" placeholder="напр. ОВДП 2025"></div>
+          <div class="field"><label class="fl">Сума (грн)</label><input type="number" id="cab-pa-amount" value="50000" step="1000"></div>
+          <div class="field"><label class="fl">Річна ставка (%)</label><input type="number" id="cab-pa-rate" value="17.5" step="0.5"></div>
+          <div class="field"><label class="fl">Дата відкриття</label><input type="date" id="cab-pa-start"></div>
+          <div class="field"><label class="fl">Дата закінчення (опційно)</label><input type="date" id="cab-pa-end"></div>
+          <div class="field" style="grid-column:1/-1"><label class="fl">Нотатки</label><textarea id="cab-pa-notes" placeholder="Банк, брокер, умови..."></textarea></div>
+        </div>
+        <button class="btn-calc" onclick="cabAddAsset()">ЗБЕРЕГТИ АКТИВ →</button>
+      </div>
+
+      <!-- GOALS -->
+      <div class="cab-section" id="cab-goals">
+        <div class="cab-section-title">🎯 Мої цілі</div>
+        <div class="goal-cards" id="cab-goal-cards">
+          <div style="color:var(--muted);font-size:12px;padding:20px;text-align:center">Поки немає цілей. Додай першу! 👆</div>
+        </div>
+      </div>
+
+      <!-- ADD GOAL -->
+      <div class="cab-section" id="cab-add-goal">
+        <div class="cab-section-title">➕ Додати ціль</div>
+        <div class="add-form-grid">
+          <div class="field"><label class="fl">Назва цілі</label><input type="text" id="cab-g-name" placeholder="🏠 Квартира у Львові"></div>
+          <div class="field"><label class="fl">Сума цілі (грн)</label><input type="number" id="cab-g-target" value="1000000" step="10000"></div>
+          <div class="field"><label class="fl">Вже накопичено (грн)</label><input type="number" id="cab-g-current" value="0" step="1000"></div>
+          <div class="field"><label class="fl">Дедлайн (опційно)</label><input type="date" id="cab-g-deadline"></div>
+          <div class="field"><label class="fl">Інструмент</label>
+            <select id="cab-g-instr">
+              <option value="ovdp">🏦 ОВДП</option>
+              <option value="deposit">🏛️ Депозит</option>
+              <option value="inzur">📈 Inzur</option>
+              <option value="etf">🌍 ETF</option>
+            </select>
+          </div>
+          <div class="field"><label class="fl">Щомісячний внесок (грн)</label><input type="number" id="cab-g-monthly" value="5000" step="500"></div>
+        </div>
+        <button class="btn-calc" onclick="cabAddGoal()">ЗБЕРЕГТИ ЦІЛЬ →</button>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="cab-section" id="cab-history">
+        <div class="cab-section-title">📅 Історія транзакцій</div>
+        <div id="cab-history-list" style="font-size:12px;color:var(--muted);text-align:center;padding:20px">Завантаження...</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 </div>
 <footer>🇺🇦 Українець інвестує v2.0 — Калькулятор складних відсотків · 2024</footer>
 
@@ -1107,13 +1365,18 @@ function installPWA(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=
 
 // ===== NAV =====
 function showPage(id,el){
+  // Cabinet requires auth
+  if(id==='cabinet' && !currentUser){ openAuth(); return; }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
+  const page = document.getElementById('page-'+id);
+  if(!page){ console.warn('Page not found: page-'+id); return; }
+  page.classList.add('active');
   if(el) el.classList.add('active');
   if(id==='dict') renderDict();
   if(id==='badges') renderBadges();
   if(id==='portfolio') renderPortfolio();
+  if(id==='cabinet') loadCabData();
 }
 
 // ===== CURRENCY BAR (NBU) =====
@@ -1173,8 +1436,13 @@ function simpleFV(P,r,t,pmt){return P+P*r*t+(pmt*12*t);}
 // ===== YEARS SYNC =====
 function syncYears(src){
   const sl=document.getElementById('years-sl'),n=document.getElementById('years-n');
-  if(src==='sl'){n.value=sl.value;}else{sl.value=Math.min(Math.max(+n.value,1),30);n.value=sl.value;}
-  document.getElementById('yv').textContent=sl.value+' '+plural(+sl.value,'рік','роки','років');
+  if(src==='sl'){n.value=sl.value;}else{sl.value=Math.min(Math.max(+n.value,1),+sl.max||30);n.value=sl.value;}
+  const val=+sl.value;
+  if(typeof timeUnit!=='undefined'&&timeUnit==='months'){
+    document.getElementById('yv').textContent=val+' '+plural(val,'місяць','місяці','місяців');
+  } else {
+    document.getElementById('yv').textContent=val+' '+plural(val,'рік','роки','років');
+  }
 }
 
 // ===== INSTRUMENT =====
@@ -1215,7 +1483,7 @@ function toggleOpt(rowId,cbId){
 // ===== MAIN CALC =====
 function calculate(){
   const P=getAmountInUAH()||100000;
-  const t=+document.getElementById('years-sl').value;
+  const t=typeof getYearsForCalc==='function'?getYearsForCalc():+document.getElementById('years-sl').value;
   const r=+document.getElementById('rate').value/100;
   const n=+document.getElementById('compound').value;
   const pmt=getMonthlyInUAH()||0;
@@ -1688,5 +1956,296 @@ if(!location.search)calculate();
 renderDict();
 renderPortfolio();
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ===== SUPABASE =====
+const SB_URL = 'https://cdqyxrekyibfnkdavbsc.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkcXl4cmVreWliZm5rZGF2YnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNzI1MTIsImV4cCI6MjA5Mzc0ODUxMn0.V9hxsCFS6wSJYVJxATx_nFfNV6nxYzFkQkP2VSk-uxU';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+let currentUser = null;
+
+// ===== TIME UNIT (months/years) =====
+let timeUnit = 'years';
+function setTimeUnit(unit) {
+  timeUnit = unit;
+  const sl = document.getElementById('years-sl');
+  const n = document.getElementById('years-n');
+  const labels = document.getElementById('sl-labels');
+  document.getElementById('unit-years').className = 'scen-tab' + (unit==='years'?' active-opt':'');
+  document.getElementById('unit-months').className = 'scen-tab' + (unit==='months'?' active-opt':'');
+  if(unit === 'months') {
+    sl.min=1; sl.max=36; sl.value=Math.min(+sl.value*12,36);
+    n.min=1; n.max=36; n.value=sl.value;
+    labels.innerHTML='<span>1м</span><span>6м</span><span>12м</span><span>24м</span><span>36м</span>';
+    document.getElementById('term-1m-wrap').style.display='block';
+  } else {
+    sl.min=1; sl.max=30; sl.value=Math.max(Math.round(+sl.value/12),1);
+    n.min=1; n.max=30; n.value=sl.value;
+    labels.innerHTML='<span>1р</span><span>5р</span><span>10р</span><span>20р</span><span>30р</span>';
+    document.getElementById('term-1m-wrap').style.display='none';
+  }
+  syncYears('sl');
+}
+
+// getYearsForCalc - used in calculate()
+function getYearsForCalc() {
+  const v = +document.getElementById('years-sl').value;
+  return timeUnit === 'months' ? v/12 : v;
+}
+
+// ===== AUTH =====
+function openAuth() { document.getElementById('auth-overlay').style.display='flex'; }
+function closeAuth() { document.getElementById('auth-overlay').style.display='none'; }
+function switchAuthTab(tab, el) {
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('auth-login').style.display = tab==='login'?'block':'none';
+  document.getElementById('auth-register').style.display = tab==='register'?'block':'none';
+  document.getElementById('auth-err').classList.remove('show');
+}
+function showAuthErr(msg) { const e=document.getElementById('auth-err'); e.textContent=msg; e.classList.add('show'); }
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if(!email||!pass) return showAuthErr('Заповни всі поля');
+  const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
+  if(error) return showAuthErr(error.message);
+  closeAuth();
+  onUserLogin(data.user);
+}
+
+async function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  if(!name||!email||!pass) return showAuthErr('Заповни всі поля');
+  if(pass.length<6) return showAuthErr('Пароль мінімум 6 символів');
+  const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{name}}});
+  if(error) return showAuthErr(error.message);
+  // Update name in profile
+  if(data.user) {
+    await sb.from('profiles').upsert({id:data.user.id,email,name});
+  }
+  showAuthErr('✅ Перевір email для підтвердження!');
+  document.getElementById('auth-err').style.background='rgba(34,197,94,.1)';
+  document.getElementById('auth-err').style.borderColor='rgba(34,197,94,.25)';
+  document.getElementById('auth-err').style.color='var(--green)';
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  currentUser = null;
+  document.getElementById('auth-btn-wrap').style.display='block';
+  document.getElementById('user-menu').style.display='none';
+  document.getElementById('user-dropdown').classList.remove('open');
+  showBadgeToast('👋 До побачення!');
+}
+
+function requireAuth(cb) {
+  if(currentUser) cb();
+  else openAuth();
+}
+
+function toggleUserDropdown() {
+  document.getElementById('user-dropdown').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if(!e.target.closest('.user-menu')) document.getElementById('user-dropdown')?.classList.remove('open');
+});
+
+function onUserLogin(user) {
+  currentUser = user;
+  document.getElementById('auth-btn-wrap').style.display='none';
+  document.getElementById('user-menu').style.display='block';
+  const name = user.user_metadata?.name || user.email.split('@')[0];
+  const initials = name.slice(0,2).toUpperCase();
+  document.getElementById('hdr-avatar').textContent = initials;
+  document.getElementById('hdr-name').textContent = name;
+  document.getElementById('ud-email').textContent = user.email;
+  // Cabinet
+  document.getElementById('cab-avatar').textContent = initials;
+  document.getElementById('cab-name').textContent = name;
+  document.getElementById('cab-email').textContent = user.email;
+  document.getElementById('cab-since').textContent = 'З нами з ' + new Date(user.created_at).toLocaleDateString('uk-UA',{month:'long',year:'numeric'});
+  loadCabData();
+}
+
+// Auto-restore session
+sb.auth.getSession().then(result => {
+  const session = result?.data?.session;
+  if(session?.user) onUserLogin(session.user);
+});
+sb.auth.onAuthStateChange((event, session) => {
+  if(session?.user) onUserLogin(session.user);
+});
+
+async function showForgot() {
+  const email = document.getElementById('login-email').value.trim();
+  if(!email) return showAuthErr('Введи email для скидання паролю');
+  const {error} = await sb.auth.resetPasswordForEmail(email);
+  if(error) return showAuthErr(error.message);
+  showAuthErr('✅ Лист для скидання паролю надіслано!');
+}
+
+// ===== CABINET =====
+function showCabSection(id, el) {
+  document.querySelectorAll('.cab-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.cab-nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('cab-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  if(id==='history') loadHistory();
+}
+
+async function loadCabData() {
+  if(!currentUser) return;
+  // Load assets
+  const {data:assets} = await sb.from('assets').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+  renderCabAssets(assets||[]);
+  // Load goals
+  const {data:goals} = await sb.from('goals').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+  renderCabGoals(goals||[]);
+}
+
+const ASSET_ICONS = {ovdp:'🏦',deposit:'🏛️',inzur:'📈',etf:'🌍',crypto:'₿',spx:'📊',gold:'🥇',cash:'💵',other:'📌'};
+const ASSET_NAMES = {ovdp:'ОВДП',deposit:'Депозит',inzur:'Inzur',etf:'ETF',crypto:'Крипта',spx:'Акції SPX',gold:'Золото',cash:'Готівка USD',other:'Інше'};
+const ASSET_COLORS2 = {ovdp:'var(--gold)',deposit:'var(--blue)',inzur:'var(--green)',etf:'var(--purple2)',crypto:'#f59e0b',spx:'#06b6d4',gold:'#d97706',cash:'#64748b',other:'#94a3b8'};
+
+function renderCabAssets(assets) {
+  const cards = document.getElementById('cab-asset-cards');
+  if(!assets.length) {
+    cards.innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px;grid-column:1/-1;text-align:center">Поки немає активів. Натисни "Додати актив" 👆</div>';
+    document.getElementById('cs-total').textContent='0';
+    document.getElementById('cs-profit').textContent='0%';
+    document.getElementById('cab-total-val').textContent='0 ₴';
+    document.getElementById('cab-invested').textContent='0 ₴';
+    document.getElementById('cab-earn').textContent='+0 ₴';
+    document.getElementById('cab-roi').textContent='0%';
+    return;
+  }
+  let totalFV=0,totalInv=0;
+  cards.innerHTML='';
+  assets.forEach(a => {
+    const start=new Date(a.date_start), now=new Date();
+    const years=Math.max((now-start)/(365.25*24*60*60*1000),0);
+    const fv=compFV(+a.amount,+a.rate/100,1,years,0);
+    const profit=fv-a.amount;
+    const profPct=(profit/a.amount*100).toFixed(1);
+    totalFV+=fv; totalInv+=+a.amount;
+    // Days until end
+    let daysTag='';
+    if(a.date_end) {
+      const daysLeft=Math.ceil((new Date(a.date_end)-now)/(24*60*60*1000));
+      daysTag=`<span class="ac-days">${daysLeft>0?daysLeft+' дн. залишилось':'Завершено'}</span>`;
+    }
+    const card=document.createElement('div');
+    card.className='asset-card';
+    card.style.borderLeft=`3px solid ${ASSET_COLORS2[a.type]||'var(--muted)'}`;
+    card.innerHTML=`
+      <div class="ac-type">${ASSET_ICONS[a.type]||'📌'} ${ASSET_NAMES[a.type]||a.type}</div>
+      <div class="ac-name">${a.name||ASSET_NAMES[a.type]||a.type}</div>
+      <div class="ac-amount">${fmtH(fv)}</div>
+      <div class="ac-profit">+${fmtH(profit)} (+${profPct}%)</div>
+      <div class="ac-meta">
+        <span>📅 ${a.date_start}</span>
+        <span>📈 ${a.rate}%/рік</span>
+        ${daysTag}
+      </div>
+      ${a.notes?`<div style="font-size:10px;color:var(--muted);margin-top:8px">${a.notes}</div>`:''}
+      <button class="ac-del" onclick="cabDelAsset('${a.id}')">×</button>`;
+    cards.appendChild(card);
+  });
+  const totalProfit=totalFV-totalInv;
+  const roi=totalInv>0?(totalProfit/totalInv*100).toFixed(1):0;
+  document.getElementById('cs-total').textContent=assets.length;
+  document.getElementById('cs-profit').textContent='+'+roi+'%';
+  document.getElementById('cab-total-val').textContent=fmtH(totalFV);
+  document.getElementById('cab-invested').textContent=fmtH(totalInv);
+  document.getElementById('cab-earn').textContent='+'+fmtH(totalProfit);
+  document.getElementById('cab-roi').textContent='+'+roi+'%';
+}
+
+function renderCabGoals(goals) {
+  const gc=document.getElementById('cab-goal-cards');
+  if(!goals.length) { gc.innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px;text-align:center">Поки немає цілей. Натисни "Додати ціль" 👆</div>'; return; }
+  gc.innerHTML='';
+  goals.forEach(g => {
+    const pct=Math.min(+g.current_amount/+g.target_amount*100,100).toFixed(1);
+    const card=document.createElement('div');
+    card.className='goal-card';
+    card.innerHTML=`
+      <div class="gc-header"><span class="gc-name">${g.name}</span><span class="gc-pct">${pct}%</span></div>
+      <div class="gc-bar"><div class="gc-fill" style="width:${pct}%"></div></div>
+      <div class="gc-meta">
+        <span>${fmtH(+g.current_amount)} з ${fmtH(+g.target_amount)}</span>
+        ${g.deadline?`<span>📅 до ${new Date(g.deadline).toLocaleDateString('uk-UA')}</span>`:''}
+      </div>`;
+    gc.appendChild(card);
+  });
+}
+
+async function cabAddAsset() {
+  if(!currentUser) return openAuth();
+  const type=document.getElementById('cab-pa-type').value;
+  const name=document.getElementById('cab-pa-name').value||ASSET_NAMES[type];
+  const amount=+document.getElementById('cab-pa-amount').value;
+  const rate=+document.getElementById('cab-pa-rate').value;
+  const date_start=document.getElementById('cab-pa-start').value;
+  const date_end=document.getElementById('cab-pa-end').value||null;
+  const notes=document.getElementById('cab-pa-notes').value||null;
+  if(!amount||!rate||!date_start) return showBadgeToast("⚠️ Заповни обов'язкові поля");
+  const {error}=await sb.from('assets').insert({user_id:currentUser.id,type,name,amount,rate,date_start,date_end,notes});
+  if(error) return showBadgeToast('❌ Помилка: '+error.message);
+  showBadgeToast('✅ Актив збережено!');
+  earnBadge('first_calc');
+  showCabSection('portfolio', document.querySelector('.cab-nav-item'));
+  loadCabData();
+}
+
+async function cabDelAsset(id) {
+  if(!confirm('Видалити актив?')) return;
+  await sb.from('assets').delete().eq('id',id);
+  loadCabData();
+}
+
+async function cabAddGoal() {
+  if(!currentUser) return openAuth();
+  const name=document.getElementById('cab-g-name').value;
+  const target_amount=+document.getElementById('cab-g-target').value;
+  const current_amount=+document.getElementById('cab-g-current').value||0;
+  const deadline=document.getElementById('cab-g-deadline').value||null;
+  const instrument=document.getElementById('cab-g-instr').value;
+  const monthly_contribution=+document.getElementById('cab-g-monthly').value||0;
+  if(!name||!target_amount) return showBadgeToast("⚠️ Заповни обов'язкові поля");
+  const {error}=await sb.from('goals').insert({user_id:currentUser.id,name,target_amount,current_amount,deadline,instrument,monthly_contribution});
+  if(error) return showBadgeToast('❌ Помилка: '+error.message);
+  showBadgeToast('🎯 Ціль збережено!');
+  showCabSection('goals', null);
+  loadCabData();
+}
+
+async function loadHistory() {
+  if(!currentUser) return;
+  const {data} = await sb.from('assets').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);
+  const list=document.getElementById('cab-history-list');
+  if(!data?.length) { list.innerHTML='<div style="color:var(--muted);text-align:center;padding:20px">Поки немає записів</div>'; return; }
+  list.innerHTML=data.map(a=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-weight:600;font-size:12px">${ASSET_ICONS[a.type]} ${a.name}</div>
+        <div style="font-size:10px;color:var(--muted)">${a.date_start} · ${a.rate}%/рік</div>
+      </div>
+      <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;color:var(--gold)">${fmtH(+a.amount)}</div>
+    </div>`).join('');
+}
+
+// Set today for date fields
+document.addEventListener('DOMContentLoaded',()=>{
+  const today=new Date().toISOString().slice(0,10);
+  if(document.getElementById('cab-pa-start')) document.getElementById('cab-pa-start').value=today;
+});
+</script>
+
 </body>
 </html>
