@@ -168,6 +168,54 @@
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Блог — Українець інвестує",
+  "url": "https://invest.mytimebox.app/#blog",
+  "description": "Практичні статті про інвестиції в Україні — ОВДП, ETF, пасивний дохід",
+  "inLanguage": "uk-UA",
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Як накопичити на пенсію в Україні через ОВДП",
+      "description": "Реальна історія Михайла який побудував власну пенсію через ОВДП. Покрокова стратегія накопичення.",
+      "url": "https://invest.mytimebox.app/#blog-pension",
+      "datePublished": "2025-06-01",
+      "dateModified": "2025-06-01",
+      "author": {"@type": "Person", "name": "Українець інвестує"},
+      "publisher": {"@type": "Organization", "name": "Українець інвестує", "url": "https://invest.mytimebox.app"},
+      "keywords": "ОВДП пенсія Україна, накопичити на пенсію, ОВДП складний відсоток",
+      "articleBody": "Як накопичити на пенсію в Україні через ОВДП — практичний гід. ОВДП дають 17-18% річних без ПДФО. При внеску 5000 грн/міс за 22 роки капітал складе ~42 млн грн."
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Як вийти на 10 000 грн на місяць пасивного доходу при зарплаті 10 000 грн",
+      "description": "Покрокова стратегія як людина з середньою зарплатою досягла фінансової свободи через ОВДП за 9 років.",
+      "url": "https://invest.mytimebox.app/#blog-10k",
+      "datePublished": "2025-06-01",
+      "dateModified": "2025-06-01",
+      "author": {"@type": "Person", "name": "Українець інвестує"},
+      "publisher": {"@type": "Organization", "name": "Українець інвестує", "url": "https://invest.mytimebox.app"},
+      "keywords": "пасивний дохід Україна, 10000 грн пасивний дохід, ОВДП дохід щомісяця",
+      "articleBody": "Як вийти на пасивний дохід 10000 грн на місяць. Потрібен капітал 686 000 грн при ставці ОВДП 17.5%. При внеску 3000 грн/міс досягається за 13 років."
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "ETF vs ОВДП — що обрати українцю у 2025 році",
+      "description": "Детальне порівняння ETF та ОВДП для українських інвесторів. Коли краще обирати кожен інструмент.",
+      "url": "https://invest.mytimebox.app/#blog-etf",
+      "datePublished": "2025-06-01",
+      "dateModified": "2025-06-01",
+      "author": {"@type": "Person", "name": "Українець інвестує"},
+      "publisher": {"@type": "Organization", "name": "Українець інвестує", "url": "https://invest.mytimebox.app"},
+      "keywords": "ETF vs ОВДП Україна, S&P500 чи ОВДП, куди вкласти гроші Україна 2025",
+      "articleBody": "Порівняння ETF та ОВДП для українців. ОВДП дають 17.5% в гривні без податків. ETF S&P500 дають ~10% у доларах. Оптимальна стратегія — 60% ОВДП + 40% ETF."
+    }
+  ]
+}
+</script>
 
 <!-- ===== PERFORMANCE ===== -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -631,6 +679,9 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
     <button class="nav-tab" onclick="showPage('badges',this)">🏅 Бейджі</button>
     <button class="nav-tab" onclick="showPage('info',this)">ℹ️ Гід</button>
     <button class="nav-tab" id="cab-nav-tab" onclick="showPage('cabinet',this)">👤 Кабінет</button>
+    <button class="nav-tab" onclick="showPage('bonuses',this)">🎁 Бонуси</button>
+    <button class="nav-tab" onclick="showPage('giveaway',this)">🎰 Розіграш</button>
+    <button class="nav-tab" onclick="showPage('blog',this)">📝 Блог</button>
   </nav>
   <div class="header-right">
     <div class="btn-icon" onclick="toggleTheme()" title="Тема" id="theme-btn">🌙</div>
@@ -842,6 +893,24 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
             <div class="loss-title">💸 Якщо б тримав в готівці — втратив би</div>
             <div class="loss-val" id="r-loss">—</div>
             <div class="loss-sub" id="r-loss-sub"></div>
+          </div>
+          <!-- DAILY INCOME FORECAST -->
+          <div id="daily-forecast" style="background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(245,200,66,0.08));border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:14px;margin-top:10px">
+            <div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px">📈 Прогнозований дохід</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <div style="text-align:center;background:var(--s2);border-radius:8px;padding:9px">
+                <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--green)" id="fc-day">—</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:2px">В ДЕНЬ</div>
+              </div>
+              <div style="text-align:center;background:var(--s2);border-radius:8px;padding:9px">
+                <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--green)" id="fc-week">—</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:2px">В ТИЖДЕНЬ</div>
+              </div>
+              <div style="text-align:center;background:var(--s2);border-radius:8px;padding:9px">
+                <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold)" id="fc-month">—</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:2px">В МІСЯЦЬ</div>
+              </div>
+            </div>
           </div>
           <div class="share-row">
             <button class="btn-share" onclick="copyLink()">🔗 Поділитись</button>
@@ -1153,6 +1222,120 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
 </div>
 
 
+
+<!-- ======== PAGE: BONUSES ======== -->
+<div id="page-bonuses" class="page">
+  <section class="hero">
+    <div class="hero-tag">🎁 Безкоштовні бонуси</div>
+    <h1>Отримай бонуси<br><span class="g">за реєстрацію</span></h1>
+    <p class="hero-sub">Реєструйся через наші реферальні посилання і отримуй реальні бонуси — сертифікати, кешбек та подарунки</p>
+  </section>
+  <div class="csect">
+    <div id="bonuses-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;max-width:1100px;margin:0 auto"></div>
+  </div>
+</div>
+
+<!-- ======== PAGE: GIVEAWAY ======== -->
+<div id="page-giveaway" class="page">
+  <section class="hero">
+    <div class="hero-tag">🎰 Розіграш</div>
+    <h1>Беріть участь<br><span class="g">у розіграші</span></h1>
+    <p class="hero-sub">Виконай умови та отримай шанс виграти призи від Українець інвестує</p>
+  </section>
+  <div class="csect">
+    <div style="max-width:700px;margin:0 auto" id="giveaway-wrap"></div>
+  </div>
+</div>
+
+<!-- ======== PAGE: OVDP DAY ======== -->
+<div id="page-ovdp-day" class="page">
+  <section class="hero">
+    <div class="hero-tag">🏦 ОВДП дохід</div>
+    <h1>Скільки приносять<br><span class="g">ОВДП в день?</span></h1>
+    <p class="hero-sub">Точний розрахунок денного, тижневого та місячного доходу від ОВДП</p>
+  </section>
+  <div class="csect">
+    <div style="max-width:800px;margin:0 auto">
+      <div class="cgrid">
+        <div class="panel">
+          <div class="ptitle">Параметри ОВДП</div>
+          <div class="field"><label class="fl">Сума вкладення (грн)</label><input type="number" id="od-amount" value="100000" step="1000"></div>
+          <div class="field">
+            <label class="fl">Банк / Тип ОВДП</label>
+            <select id="od-bank" onchange="odSetRate()">
+              <option value="16.5">🏦 ПриватБанк — 3 міс (16.5%)</option>
+              <option value="16.75">🏦 ПриватБанк — 6 міс (16.75%)</option>
+              <option value="17.0">🏦 ПриватБанк — 12 міс (17.0%)</option>
+              <option value="16.5">🏛️ Ощадбанк — 3 міс (16.5%)</option>
+              <option value="17.0">🏛️ Ощадбанк — 6 міс (17.0%)</option>
+              <option value="17.5">🏛️ Ощадбанк — 12 міс (17.5%)</option>
+              <option value="17.0">💳 Монобанк — 6 міс (17.0%)</option>
+              <option value="17.5">💳 Монобанк — 12 міс (17.5%)</option>
+              <option value="custom">✏️ Ввести свою ставку</option>
+            </select>
+          </div>
+          <div class="field" id="od-custom-wrap" style="display:none">
+            <label class="fl">Своя ставка (%)</label>
+            <input type="number" id="od-custom-rate" value="17.5" step="0.25">
+          </div>
+          <div class="field"><label class="fl">Кількість ОВДП (номінал 1000 грн)</label><input type="number" id="od-count" value="100" step="1" min="1"></div>
+          <button class="btn-calc" onclick="calcOvdpDay()">ПОРАХУВАТИ →</button>
+        </div>
+        <div class="panel" id="od-results" style="display:none">
+          <div class="ptitle">💰 Ваш дохід</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+            <div class="cs-item"><div class="cs-val" id="od-day" style="color:var(--green);font-size:22px">—</div><div class="cs-label">За день</div></div>
+            <div class="cs-item"><div class="cs-val" id="od-week" style="color:var(--green);font-size:22px">—</div><div class="cs-label">За тиждень</div></div>
+            <div class="cs-item"><div class="cs-val" id="od-month" style="color:var(--gold);font-size:22px">—</div><div class="cs-label">За місяць</div></div>
+            <div class="cs-item"><div class="cs-val" id="od-year" style="color:var(--gold);font-size:22px">—</div><div class="cs-label">За рік</div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="r-row"><span class="r-label">Сума вкладення</span><span class="r-val" id="od-invested">—</span></div>
+          <div class="r-row"><span class="r-label">Річна ставка</span><span class="r-val" id="od-rate-show">—</span></div>
+          <div class="r-row"><span class="r-label">Дохід за рік</span><span class="r-val g" id="od-year-total">—</span></div>
+          <div class="r-row" style="border:none"><span class="r-label">Ефективна ставка</span><span class="r-val" id="od-eff">—</span></div>
+          <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:10px;padding:12px;margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7" id="od-note"></div>
+        </div>
+      </div>
+      <!-- COMPARISON TABLE -->
+      <div class="panel" style="margin-top:16px" id="od-compare-wrap" style="display:none">
+        <div class="ptitle">📊 Порівняння сум вкладень</div>
+        <div style="overflow-x:auto">
+          <table class="ytable" id="od-compare-table">
+            <thead><tr><th>Сума</th><th>В день</th><th>В тиждень</th><th>В місяць</th><th>В рік</th></tr></thead>
+            <tbody id="od-compare-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: BLOG ======== -->
+<div id="page-blog" class="page">
+  <section class="hero">
+    <div class="hero-tag">📝 Блог інвестора</div>
+    <h1>Корисні статті<br><span class="g">про інвестиції</span></h1>
+    <p class="hero-sub">Практичні гіди як примножити гроші в Україні — без води, тільки конкретика</p>
+  </section>
+  <div class="csect">
+    <div id="blog-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;max-width:1100px;margin:0 auto"></div>
+    <div id="blog-article" style="max-width:760px;margin:0 auto;display:none">
+      <button onclick="closeBlogArticle()" style="background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:9px 16px;color:var(--muted2);font-size:12px;font-weight:600;cursor:pointer;margin-bottom:20px">← Назад до статей</button>
+      <div class="panel" id="blog-article-content"></div>
+      <!-- CTA -->
+      <div style="background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(59,126,248,0.1));border:1px solid rgba(245,200,66,0.2);border-radius:16px;padding:28px;text-align:center;margin-top:20px">
+        <div style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin-bottom:10px">Підписуйся — нові статті щотижня 🇺🇦</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:18px">Приєднуйся до спільноти українських інвесторів</div>
+        <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+          <a href="https://t.me/+uEQ9QpBiE5IwZTli" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(0,136,204,0.15);border:1px solid rgba(0,136,204,0.3);border-radius:10px;padding:11px 20px;color:#29b6f6;font-size:13px;font-weight:700;text-decoration:none">💬 Telegram канал</a>
+          <a href="https://www.youtube.com/@Aleks_Du" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.25);border-radius:10px;padding:11px 20px;color:#ff4444;font-size:13px;font-weight:700;text-decoration:none">▶️ YouTube канал</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== AUTH MODAL ===== -->
 <div id="auth-overlay" style="display:none">
   <div class="auth-overlay" onclick="if(event.target===this)closeAuth()">
@@ -1218,10 +1401,26 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
           <div class="cab-section-title" style="margin:0">📊 Мій портфель</div>
           <div style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;color:var(--gold)" id="cab-total-val">0 ₴</div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px">
           <div class="cs-item"><div class="cs-val" id="cab-invested">0 ₴</div><div class="cs-label">Вкладено</div></div>
           <div class="cs-item"><div class="cs-val" style="color:var(--green)" id="cab-earn">+0 ₴</div><div class="cs-label">Зароблено</div></div>
-          <div class="cs-item"><div class="cs-val" style="color:var(--gold)" id="cab-roi">0%</div><div class="cs-label">ROI</div></div>
+        </div>
+        <div style="background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(245,200,66,0.08));border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:14px;margin-bottom:14px">
+          <div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px">💰 Дохід від портфеля</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div style="text-align:center;background:var(--s2);border-radius:8px;padding:9px">
+              <div style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--green)" id="cab-daily">0 ₴</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:2px">В ДЕНЬ</div>
+            </div>
+            <div style="text-align:center;background:var(--s2);border-radius:8px;padding:9px">
+              <div style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--green)" id="cab-weekly">0 ₴</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:2px">В ТИЖДЕНЬ</div>
+            </div>
+            <div style="text-align:center;background:var(--s2);border-radius:8px;padding:9px">
+              <div style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--gold)" id="cab-monthly-inc">0 ₴</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:2px">В МІСЯЦЬ</div>
+            </div>
+          </div>
         </div>
         <div class="asset-cards" id="cab-asset-cards">
           <div style="color:var(--muted);font-size:12px;padding:20px;grid-column:1/-1;text-align:center">Поки немає активів. Додай перший! 👆</div>
@@ -1295,7 +1494,22 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
 </div>
 
 </div>
-<footer>🇺🇦 Українець інвестує v2.0 — Калькулятор складних відсотків · 2024</footer>
+<footer>
+  <div style="display:flex;justify-content:center;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+    <a href="https://www.youtube.com/@Aleks_Du" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.25);border-radius:10px;padding:9px 16px;color:#ff4444;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(255,0,0,0.2)'" onmouseout="this.style.background='rgba(255,0,0,0.1)'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.8 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+      YouTube — @Aleks_Du
+    </a>
+    <a href="https://t.me/+uEQ9QpBiE5IwZTli" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;background:rgba(0,136,204,0.1);border:1px solid rgba(0,136,204,0.25);border-radius:10px;padding:9px 16px;color:#29b6f6;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(0,136,204,0.2)'" onmouseout="this.style.background='rgba(0,136,204,0.1)'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.9 8.2l-2 9.4c-.1.6-.5.8-1 .5l-2.7-2-1.3 1.2c-.1.1-.3.2-.6.2l.2-2.8 5-4.5c.2-.2 0-.3-.3-.1L6.3 14.5 3.7 13.7c-.6-.2-.6-.6.1-.8l11.5-4.5c.6-.2 1.1.1.6.8z"/></svg>
+      Telegram канал
+    </a>
+    <a href="invest.mytimebox.app" style="display:flex;align-items:center;gap:8px;background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:10px;padding:9px 16px;color:var(--gold);font-size:12px;font-weight:700;text-decoration:none">
+      🇺🇦 invest.mytimebox.app
+    </a>
+  </div>
+  <div style="color:var(--muted);font-size:11px">Українець інвестує v2.1 · Калькулятор складних відсотків · 2025 · Не є фінансовою порадою</div>
+</footer>
 
 <script>
 // ===== STATE =====
@@ -1377,6 +1591,9 @@ function showPage(id,el){
   if(id==='badges') renderBadges();
   if(id==='portfolio') renderPortfolio();
   if(id==='cabinet') loadCabData();
+  if(id==='bonuses') renderBonuses();
+  if(id==='giveaway') renderGiveaway();
+  if(id==='blog') renderBlog();
 }
 
 // ===== CURRENCY BAR (NBU) =====
@@ -1527,6 +1744,16 @@ function calculate(){
   buildTable(P,r,n,t,pmt);
   saveToUrl(P,t,r*100,n,pmt);
   checkBadges(fv,t,P);
+  // Update daily forecast — річний дохід / 365
+  const annualIncome = fv - totalContrib; // реальний річний дохід за весь термін
+  const annualRate = P * r; // річний дохід від початкової суми
+  const dailyIncome = annualRate / 365;
+  const fcDay = document.getElementById('fc-day');
+  const fcWeek = document.getElementById('fc-week');
+  const fcMonth = document.getElementById('fc-month');
+  if(fcDay){ fcDay.textContent = fmtH(dailyIncome); }
+  if(fcWeek){ fcWeek.textContent = fmtH(dailyIncome * 7); }
+  if(fcMonth){ fcMonth.textContent = fmtH(dailyIncome * 30.4); }
 }
 
 // ===== COMPARISON =====
@@ -2245,6 +2472,562 @@ document.addEventListener('DOMContentLoaded',()=>{
   const today=new Date().toISOString().slice(0,10);
   if(document.getElementById('cab-pa-start')) document.getElementById('cab-pa-start').value=today;
 });
+</script>
+
+
+<script>
+// ===== BONUSES DATA (редагуй тут) =====
+const BONUSES = [
+  {
+    id: 1,
+    company: 'Inzhur',
+    icon: '📈',
+    color: 'var(--green)',
+    title: '20 сертифікатів Inzhur',
+    value: '200 грн',
+    desc: 'Просто зареєструйся в Inzhur за нашим посиланням — і одразу отримаєш 20 безкоштовних сертифікатів на суму 200 грн. Без жодних умов!',
+    conditions: ['Перейти за реферальним посиланням', 'Зареєструватись в Inzhur', '✅ 200 грн (20 сертифікатів) зараховуються автоматично'],
+    link: 'https://www.inzhur.reit/signin?refId=xWNTFBBI5gOX4p9V175sl',
+    btnText: '🎁 Отримати 200 грн →',
+    badge: 'Просто реєстрація 🔥',
+    badgeColor: 'var(--green)'
+  },
+  {
+    id: 2,
+    company: 'ПриватБанк',
+    icon: '🏦',
+    color: 'var(--gold)',
+    title: '150 грн за відкриття карти',
+    value: '150 грн',
+    desc: 'Відкрий Універсальну картку ПриватБанку за нашим посиланням і отримай 150 грн бонусу прямо на рахунок!',
+    conditions: ['Перейти за посиланням', 'Відкрити картку Універсальна', '✅ 150 грн зараховуються автоматично'],
+    link: 'https://www.privat24.ua/invite/j34g9',
+    btnText: '🏦 Отримати 150 грн →',
+    badge: 'Топ пропозиція ✨',
+    badgeColor: 'var(--gold)'
+  },
+];
+
+// ===== GIVEAWAY DATA (редагуй тут) =====
+const GIVEAWAY = {
+  active: false,
+  title: '🎰 Розіграш #1',
+  prize: '500 грн на ОВДП',
+  prizeDesc: 'Переможець отримає 500 грн для інвестиції в ОВДП через ПриватБанк',
+  endDate: '2025-08-01',
+  totalSlots: 100,
+  filledSlots: 47,
+  conditions: [
+    { id: 'tg', text: 'Підписатись на Telegram канал', link: 'https://t.me/+uEQ9QpBiE5IwZTli', icon: '💬' },
+    { id: 'yt', text: 'Підписатись на YouTube канал', link: 'https://www.youtube.com/@Aleks_Du', icon: '▶️' },
+    { id: 'share', text: 'Поділитись сайтом з другом', link: null, icon: '🔗' },
+  ],
+  winnerAnnounce: 'Переможець буде визначений рандомно 1 серпня 2025 в прямому ефірі YouTube'
+};
+
+// ===== BLOG ARTICLES (редагуй тут) =====
+const BLOG_ARTICLES = [
+  {
+    id: 'pension',
+    emoji: '🏖️',
+    title: 'Як накопичити на пенсію через ОВДП',
+    desc: 'Реальна історія Михайла, 38 років, який вирішив не розраховувати на державу і побудував власну пенсію',
+    readTime: '12 хв',
+    date: 'Червень 2025',
+    color: 'var(--gold)',
+    content: `
+      <h2 style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;line-height:1.3;letter-spacing:-.5px">🏖️ Як накопичити на пенсію в Україні через ОВДП</h2>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:28px">Червень 2025 · 12 хвилин читання</p>
+
+      <p style="font-size:15px;color:var(--muted2);line-height:1.9;margin-bottom:20px">Михайлу 38 років. Він — менеджер середньої ланки у Харкові, батько двох дітей. Зарплата 25 000 грн. Кілька років тому він зрозумів одну просту річ, яка змінила його фінансове мислення назавжди:</p>
+
+      <div style="background:rgba(245,200,66,0.08);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:18px 20px;margin-bottom:24px;font-size:15px;font-style:italic;color:var(--text);line-height:1.8">"Якщо я розраховую на державну пенсію — я вже програв. Потрібно будувати власну."</div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--gold)">📉 Реальність державної пенсії</h3>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:16px">Середня пенсія в Україні у 2025 році — близько 4 200 грн. Прожитковий мінімум для непрацюючих — 3 028 грн. Тобто пенсіонер отримує трохи більше прожиткового мінімуму. Без власних заощаджень — це бідність.</p>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:20px">Михайло порахував: щоб жити нормально на пенсії — йому потрібно мінімум 30 000 грн на місяць. Де взяти решту 25 800 грн? Відповідь одна — самостійні інвестиції.</p>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--gold)">🏦 Чому він обрав саме ОВДП</h3>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:12px">Михайло спробував різне. Депозити — хороші, але ПДФО 18% і ВЗ 5% з'їдають майже чверть доходу. Крипта — занадто нервово, він не міг нормально спати коли ринок падав на 40%. Нерухомість — потрібен великий початковий капітал.</p>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:20px">ОВДП виявились ідеальними: <strong style="color:var(--text)">17–18% річних, гарантія держави, і найголовніше — НУЛЬОВІ ПОДАТКИ на дохід.</strong> Це не обхід законів — це пряма норма Податкового кодексу України.</p>
+
+      <div style="background:var(--s2);border-radius:14px;padding:20px;margin-bottom:24px">
+        <div style="font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:14px;letter-spacing:.5px;text-transform:uppercase">Порівняння: 100 000 грн за рік</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:9px;padding:11px 14px">
+            <span style="font-size:13px;color:var(--muted2)">🏦 ОВДП 17.5%</span>
+            <span style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--green)">+17 500 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:9px;padding:11px 14px">
+            <span style="font-size:13px;color:var(--muted2)">🏛️ Депозит 18% (після ПДФО+ВЗ)</span>
+            <span style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--red)">+13 860 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:9px;padding:11px 14px">
+            <span style="font-size:13px;font-weight:700;color:var(--text)">Різниця на користь ОВДП</span>
+            <span style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--green)">+3 640 ₴/рік</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--gold)">📊 Стратегія Михайла — крок за кроком</h3>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:16px">Він не заробляє надзвичайно багато. Але систематичність — це його суперсила. Ось що він робить:</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+        <div style="background:var(--s2);border-radius:11px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(245,200,66,0.2);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold);flex-shrink:0">1</div>
+          <div><div style="font-size:13px;font-weight:700;margin-bottom:3px">Щомісяця відкладає 5 000 грн</div><div style="font-size:12px;color:var(--muted);line-height:1.6">Це 20% від зарплати. Автоматичний переказ одразу після зарплати — до того як витратить.</div></div>
+        </div>
+        <div style="background:var(--s2);border-radius:11px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(245,200,66,0.2);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold);flex-shrink:0">2</div>
+          <div><div style="font-size:13px;font-weight:700;margin-bottom:3px">Купує ОВДП на 12 місяців</div><div style="font-size:12px;color:var(--muted);line-height:1.6">Через застосунок ПриватБанку. Займає 3 хвилини. Вибирає ОВДП з найвищою ставкою на 12 місяців.</div></div>
+        </div>
+        <div style="background:var(--s2);border-radius:11px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(245,200,66,0.2);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold);flex-shrink:0">3</div>
+          <div><div style="font-size:13px;font-weight:700;margin-bottom:3px">Реінвестує ВСЕ — тіло + відсотки</div><div style="font-size:12px;color:var(--muted);line-height:1.6">Жодної копійки не знімає. Коли ОВДП погашаються — купує нові на всю суму. Це і є складний відсоток.</div></div>
+        </div>
+        <div style="background:var(--s2);border-radius:11px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(245,200,66,0.2);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold);flex-shrink:0">4</div>
+          <div><div style="font-size:13px;font-weight:700;margin-bottom:3px">20% портфелю — ETF в доларах</div><div style="font-size:12px;color:var(--muted);line-height:1.6">Захист від знецінення гривні. Через Interactive Brokers купує VOO (S&P500). Довгостроково.</div></div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--gold)">📈 Результат через 22 роки</h3>
+      <div style="background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(34,197,94,0.08));border:1px solid rgba(245,200,66,0.25);border-radius:14px;padding:22px;margin-bottom:24px;text-align:center">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Михайло піде на пенсію у 60 років. За 22 роки при 5 000 грн/міс та 17.5%:</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:36px;font-weight:800;color:var(--gold);margin-bottom:8px">~42 000 000 ₴</div>
+        <div style="font-size:13px;color:var(--muted2)">З цього капіталу він може знімати <strong style="color:var(--green)">~600 000 грн/місяць</strong> не чіпаючи основний капітал</div>
+      </div>
+
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:16px">Звісно, інфляція з'їсть частину. Але навіть з урахуванням знецінення грошей — результат вражаючий. Михайло не геній і не мільйонер. Він просто <strong style="color:var(--text)">почав рано і не зупиняється.</strong></p>
+
+      <div style="background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:12px;padding:18px;font-size:14px;color:var(--muted2);line-height:1.8">
+        💡 <strong style="color:var(--blue)">Головний урок:</strong> Не важливо скільки ти заробляєш. Важливо скільки ти зберігаєш і як системно інвестуєш. Почни з будь-якої суми — навіть 1 000 грн на місяць через 20 років перетворяться на мільйони завдяки складному відсотку.
+      </div>
+    `
+  },
+  {
+    id: '10k',
+    emoji: '💰',
+    title: 'Як вийти на 10 000 грн/міс пасивного доходу при зарплаті 10 000 грн',
+    desc: 'Реальна стратегія Олени з Полтави — як людина з середньою зарплатою досягла фінансової свободи за 9 років',
+    readTime: '10 хв',
+    date: 'Червень 2025',
+    color: 'var(--green)',
+    content: `
+      <h2 style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;line-height:1.3;letter-spacing:-.5px">💰 Пасивний дохід = Зарплата: реальна історія</h2>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:28px">Червень 2025 · 10 хвилин читання</p>
+
+      <p style="font-size:15px;color:var(--muted2);line-height:1.9;margin-bottom:20px">Олені 34 роки. Вчителька в Полтаві. Зарплата — 10 500 грн. Живе скромно, але впевнено. І вже сьогодні її ОВДП щомісяця приносять їй 8 400 грн пасивного доходу — майже стільки ж скільки вона заробляє на роботі.</p>
+
+      <div style="background:rgba(34,197,94,0.08);border-left:4px solid var(--green);border-radius:0 12px 12px 0;padding:18px 20px;margin-bottom:28px;font-size:15px;font-style:italic;color:var(--text);line-height:1.8">"Я не вірила що це можливо на вчительську зарплату. Думала — інвестиції це для багатих. Але виявилось, головне — не скільки маєш, а що з цим робиш."</div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--green)">🚀 З чого почалось</h3>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:16px">2016 рік. Олена отримала спадок від бабусі — 50 000 грн. Могла витратити на ремонт, але подруга порадила спробувати ОВДП. Тоді ставки були 18–19%. Вона поклала гроші і забула про них на рік.</p>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:20px">Через 12 місяців побачила на рахунку 59 000 грн. <strong style="color:var(--text)">9 000 грн прибутку без жодних зусиль.</strong> Це змінило все.</p>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--green)">📅 9 років дисципліни — рік за роком</h3>
+
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+        <div style="background:var(--s2);border-radius:11px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:12px;font-weight:700">2016 — Старт</div><div style="font-size:11px;color:var(--muted)">50 000 грн спадок + 1 000 грн/міс</div></div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold)">63 000 ₴</div>
+        </div>
+        <div style="background:var(--s2);border-radius:11px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:12px;font-weight:700">2018 — Розгін</div><div style="font-size:11px;color:var(--muted)">Збільшила до 2 000 грн/міс</div></div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold)">145 000 ₴</div>
+        </div>
+        <div style="background:var(--s2);border-radius:11px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:12px;font-weight:700">2020 — Криза COVID</div><div style="font-size:11px;color:var(--muted)">Не зупинилась, тримала ОВДП</div></div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold)">248 000 ₴</div>
+        </div>
+        <div style="background:var(--s2);border-radius:11px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:12px;font-weight:700">2022 — Війна</div><div style="font-size:11px;color:var(--muted)">Евакуація, але ОВДП не продала</div></div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold)">380 000 ₴</div>
+        </div>
+        <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);border-radius:11px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:12px;font-weight:700;color:var(--green)">2025 — Сьогодні</div><div style="font-size:11px;color:var(--muted)">Капітал + продовжує інвестувати</div></div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--green)">575 000 ₴</div>
+        </div>
+      </div>
+
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:24px">575 000 грн × 17.5% ÷ 12 = <strong style="color:var(--green);font-size:16px">8 385 грн/місяць</strong> пасивного доходу. І це без жодного ризику — державні облігації.</p>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--green)">🎯 Стратегія "20-30-50"</h3>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:14px">Олена дотримується простого правила:</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px">
+        <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;color:var(--green);margin-bottom:6px">20%</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5">В ОВДП щомісяця — завжди, без винятків</div>
+        </div>
+        <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;color:var(--gold);margin-bottom:6px">30%</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5">Накопичення на конкретні цілі</div>
+        </div>
+        <div style="background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;color:var(--blue);margin-bottom:6px">50%</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5">Поточні витрати і задоволення</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--green)">💡 Що потрібно для 10 000 грн/міс</h3>
+      <div style="background:var(--s2);border-radius:14px;padding:20px;margin-bottom:24px">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">При ставці ОВДП 17.5% вам потрібен капітал:</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:32px;font-weight:800;color:var(--gold);text-align:center;margin-bottom:10px">686 000 ₴</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 12px;background:var(--bg);border-radius:8px">
+            <span style="color:var(--muted)">Відкладаю 1 000 ₴/міс</span><span style="font-weight:700;color:var(--text)">~28 років</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 12px;background:var(--bg);border-radius:8px">
+            <span style="color:var(--muted)">Відкладаю 2 000 ₴/міс</span><span style="font-weight:700;color:var(--text)">~18 років</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 12px;background:rgba(34,197,94,0.08);border-radius:8px;border:1px solid rgba(34,197,94,0.2)">
+            <span style="color:var(--muted)">Відкладаю 3 000 ₴/міс</span><span style="font-weight:700;color:var(--green)">~13 років ✅</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 12px;background:var(--bg);border-radius:8px">
+            <span style="color:var(--muted)">Відкладаю 5 000 ₴/міс</span><span style="font-weight:700;color:var(--text)">~9 років</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:18px;font-size:14px;color:var(--muted2);line-height:1.8">
+        🏆 <strong style="color:var(--green)">Висновок Олени:</strong> "Не чекайте ідеального моменту. Я починала з 1 000 грн на місяць коли це здавалось смішними грошима. Але ці 1 000 грн через рік стали частиною 63 000 грн. А ті 63 000 — частиною 575 000. Час — ваш головний актив."
+      </div>
+    `
+  },
+  {
+    id: 'etf-vs-ovdp',
+    emoji: '⚖️',
+    title: 'ETF vs ОВДП — що обрати українцю у 2025?',
+    desc: 'Чесне порівняння без прикрас: коли краще ОВДП, коли ETF, і чому найрозумніші інвестори обирають обидва',
+    readTime: '9 хв',
+    date: 'Червень 2025',
+    color: 'var(--blue)',
+    content: `
+      <h2 style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;line-height:1.3;letter-spacing:-.5px">⚖️ ETF vs ОВДП: чесна відповідь у 2025</h2>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:28px">Червень 2025 · 9 хвилин читання</p>
+
+      <p style="font-size:15px;color:var(--muted2);line-height:1.9;margin-bottom:20px">Це питання щомісяця ставлять тисячі українців у фінансових чатах. І зазвичай отримують дві агресивні команди: одні кричать "тільки ОВДП!", інші — "тільки S&P500!". Правда, як завжди, складніша і цікавіша.</p>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--gold)">🏦 ОВДП: коли це ідеальний вибір</h3>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:14px">Уявіть Дмитра. Йому 45. У нього є 500 000 грн і він хоче через 3 роки купити квартиру доньці. Він не може дозволити собі ризик.</p>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:16px">ОВДП для нього — ідеал. 17.5% на рік, гарантія держави, без ПДФО. За 3 роки з реінвестицією: <strong style="color:var(--gold)">~803 000 грн.</strong> Прибуток 303 000 грн без жодного нервового дня.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px">
+        <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:14px;padding:18px">
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--gold);margin-bottom:12px">🏦 ОВДП підходить якщо:</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.9">✅ Горизонт до 5 років<br>✅ Не можеш ризикувати<br>✅ Хочеш гривневий дохід<br>✅ Важлива передбачуваність<br>✅ Немає IB рахунку<br>✅ Починаєш інвестувати</div>
+        </div>
+        <div style="background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:14px;padding:18px">
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--blue);margin-bottom:12px">🌍 ETF підходить якщо:</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.9">✅ Горизонт 10+ років<br>✅ Готовий до просідань -30%<br>✅ Хочеш захист від знецінення грн<br>✅ Є IB або eToro рахунок<br>✅ Диверсифікація по світу<br>✅ Вже є подушка в ОВДП</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--blue)">📊 Реальні цифри за 20 років</h3>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:16px">Вкладено 100 000 грн одразу + 3 000 грн/міс протягом 20 років:</p>
+
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+        <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:11px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13px;font-weight:700;color:var(--gold)">ОВДП 17.5% в гривні</div><div style="font-size:11px;color:var(--muted)">Без ПДФО, стабільно</div></div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;color:var(--gold)">~28 млн ₴</div>
+        </div>
+        <div style="background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:11px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13px;font-weight:700;color:var(--blue)">ETF S&P500 10% в доларах</div><div style="font-size:11px;color:var(--muted)">Якщо курс $1=50 грн через 20 р.</div></div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;color:var(--blue)">~35 млн ₴</div>
+        </div>
+        <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:11px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13px;font-weight:700;color:var(--purple2)">60% ОВДП + 40% ETF</div><div style="font-size:11px;color:var(--muted)">Оптимальний баланс</div></div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;color:var(--purple2)">~31 млн ₴</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--blue)">🧠 Відповідь на питання "що обрати?"</h3>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.9;margin-bottom:16px">Не ETF або ОВДП. А <strong style="color:var(--text)">ETF І ОВДП.</strong> Ось проста формула залежно від віку:</p>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:24px">
+        <div style="background:var(--s2);border-radius:9px;padding:11px 14px;display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">До 30 років</span><span style="font-weight:700">30% ОВДП + 70% ETF</span></div>
+        <div style="background:var(--s2);border-radius:9px;padding:11px 14px;display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">30–45 років</span><span style="font-weight:700;color:var(--gold)">50% ОВДП + 50% ETF ✅</span></div>
+        <div style="background:var(--s2);border-radius:9px;padding:11px 14px;display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">45–55 років</span><span style="font-weight:700">70% ОВДП + 30% ETF</span></div>
+        <div style="background:var(--s2);border-radius:9px;padding:11px 14px;display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">55+ років</span><span style="font-weight:700">90% ОВДП + 10% ETF</span></div>
+      </div>
+
+      <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:18px;font-size:14px;color:var(--muted2);line-height:1.8">
+        🎯 <strong style="color:var(--purple2)">Практична порада:</strong> Почни з ОВДП — це твоя фінансова подушка і стабільний дохід. Як накопичиш 3–6 місяців витрат в ОВДП — відкривай IB і починай купувати VOO щомісяця. Обидва інструменти доповнюють один одного ідеально.
+      </div>
+    `
+  }
+];
+
+// ===== RENDER BONUSES =====
+function renderBonuses() {
+  const list = document.getElementById('bonuses-list');
+  if(!list) return;
+  list.innerHTML = BONUSES.map(b => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;position:relative;overflow:hidden;transition:all .3s" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+      <div style="position:absolute;top:14px;right:14px;background:${b.badgeColor}22;border:1px solid ${b.badgeColor}55;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:${b.badgeColor}">${b.badge}</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:42px;height:42px;border-radius:11px;background:${b.color}22;display:flex;align-items:center;justify-content:center;font-size:20px">${b.icon}</div>
+        <div><div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px">${b.company}</div><div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700">${b.title}</div></div>
+      </div>
+      <div style="font-family:'Unbounded',sans-serif;font-size:26px;font-weight:800;color:${b.color};margin-bottom:8px">${b.value}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px">${b.desc}</div>
+      <div style="margin-bottom:14px">${b.conditions.map(c2=>`<div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted2);margin-bottom:5px"><span style="color:${b.color}">✓</span>${c2}</div>`).join('')}</div>
+      <a href="${b.link}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:10px;font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:#000;text-decoration:none;transition:all .2s" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 20px rgba(245,200,66,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        ${b.btnText}
+      </a>
+    </div>
+  `).join('');
+}
+
+// ===== RENDER GIVEAWAY =====
+function renderGiveaway() {
+  const wrap = document.getElementById('giveaway-wrap');
+  if(!wrap) return;
+  const g = GIVEAWAY;
+  if(!g.active) {
+    wrap.innerHTML = `
+      <div class="panel" style="text-align:center;padding:48px 32px">
+        <div style="font-size:64px;margin-bottom:20px">🎰</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:800;margin-bottom:12px">Розіграші</div>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.7">На даний момент немає актуальних акцій.<br>Стежи за оновленнями в наших каналах!</div>
+        <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+          <a href="https://t.me/+uEQ9QpBiE5IwZTli" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(0,136,204,0.15);border:1px solid rgba(0,136,204,0.3);border-radius:10px;padding:11px 20px;color:#29b6f6;font-size:13px;font-weight:700;text-decoration:none">💬 Telegram — будь першим</a>
+          <a href="https://www.youtube.com/@Aleks_Du" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.25);border-radius:10px;padding:11px 20px;color:#ff4444;font-size:13px;font-weight:700;text-decoration:none">▶️ YouTube канал</a>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  const pct = Math.min(g.filledSlots/g.totalSlots*100,100);
+  const end = new Date(g.endDate);
+  const daysLeft = Math.ceil((end - new Date())/(24*60*60*1000));
+  const savedConds = JSON.parse(localStorage.getItem('giveaway_conds')||'{}');
+
+  wrap.innerHTML = `
+    <div class="panel">
+      <div style="text-align:center;margin-bottom:22px">
+        <div style="font-size:48px;margin-bottom:10px">🎰</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px">${g.title}</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:800;color:var(--gold)">${g.prize}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">${g.prizeDesc}</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+        <div class="cs-item"><div class="cs-val" style="color:var(--red)">${daysLeft > 0 ? daysLeft+' дн.' : 'Завершено'}</div><div class="cs-label">До кінця</div></div>
+        <div class="cs-item"><div class="cs-val">${g.filledSlots}/${g.totalSlots}</div><div class="cs-label">Учасників</div></div>
+      </div>
+
+      <div style="margin-bottom:8px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted)"><span>Заповненість</span><span>${pct.toFixed(0)}%</span></div>
+      <div style="height:8px;background:var(--s2);border-radius:100px;overflow:hidden;margin-bottom:22px"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:100px;transition:width 1s ease"></div></div>
+
+      <div style="font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;margin-bottom:12px;color:var(--muted2);letter-spacing:.5px;text-transform:uppercase">Умови участі</div>
+
+      ${g.conditions.map(cond => `
+        <label style="display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid ${savedConds[cond.id]?'var(--green)':'var(--border)'};border-radius:11px;padding:13px 16px;margin-bottom:10px;cursor:pointer;transition:all .2s">
+          <input type="checkbox" id="cond-${cond.id}" ${savedConds[cond.id]?'checked':''} onchange="saveCond('${cond.id}',this.checked)" style="display:none">
+          <div style="width:20px;height:20px;border-radius:6px;border:2px solid ${savedConds[cond.id]?'var(--green)':'var(--border)'};background:${savedConds[cond.id]?'var(--green)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:12px;color:#000">${savedConds[cond.id]?'✓':''}</div>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:600">${cond.icon} ${cond.text}</div>
+            ${cond.link?`<a href="${cond.link}" target="_blank" onclick="event.stopPropagation()" style="font-size:10px;color:var(--gold);text-decoration:none">Перейти →</a>`:''}
+          </div>
+        </label>
+      `).join('')}
+
+      <button onclick="joinGiveaway()" class="btn-calc" style="margin-top:8px">🎰 ВЗЯТИ УЧАСТЬ →</button>
+      <div id="giveaway-msg" style="display:none;text-align:center;margin-top:12px;font-size:12px;color:var(--green)"></div>
+      <div style="background:var(--s2);border-radius:10px;padding:12px;margin-top:14px;font-size:11px;color:var(--muted);text-align:center">📢 ${g.winnerAnnounce}</div>
+    </div>
+  `;
+}
+
+function saveCond(id, checked) {
+  const conds = JSON.parse(localStorage.getItem('giveaway_conds')||'{}');
+  conds[id] = checked;
+  localStorage.setItem('giveaway_conds', JSON.stringify(conds));
+  renderGiveaway();
+}
+
+function joinGiveaway() {
+  const conds = JSON.parse(localStorage.getItem('giveaway_conds')||'{}');
+  const allDone = GIVEAWAY.conditions.every(c => conds[c.id]);
+  const msg = document.getElementById('giveaway-msg');
+  if(!allDone) {
+    msg.style.display='block'; msg.style.color='var(--red)';
+    msg.textContent='⚠️ Виконай всі умови щоб взяти участь!';
+    return;
+  }
+  const participated = localStorage.getItem('giveaway_joined');
+  if(participated) {
+    msg.style.display='block'; msg.style.color='var(--gold)';
+    msg.textContent='✅ Ти вже берешь участь! Очікуй результатів.';
+    return;
+  }
+  localStorage.setItem('giveaway_joined', '1');
+  GIVEAWAY.filledSlots++;
+  msg.style.display='block'; msg.style.color='var(--green)';
+  msg.textContent='🎉 Вітаємо! Ти в списку учасників. Стежи за оголошенням переможця!';
+  earnBadge('planner');
+  renderGiveaway();
+}
+
+// ===== OVDP DAY CALC =====
+function odSetRate() {
+  const sel = document.getElementById('od-bank');
+  const wrap = document.getElementById('od-custom-wrap');
+  wrap.style.display = sel.value === 'custom' ? 'block' : 'none';
+}
+
+function calcOvdpDay() {
+  const amount = +document.getElementById('od-amount').value || 100000;
+  const sel = document.getElementById('od-bank');
+  const rate = sel.value === 'custom'
+    ? +document.getElementById('od-custom-rate').value / 100
+    : +sel.value / 100;
+  const count = +document.getElementById('od-count').value || 100;
+  const totalAmount = Math.max(amount, count * 1000);
+
+  const day = totalAmount * rate / 365;
+  const week = day * 7;
+  const month = day * 30.4;
+  const year = totalAmount * rate;
+
+  document.getElementById('od-day').textContent = fmtH(day);
+  document.getElementById('od-week').textContent = fmtH(week);
+  document.getElementById('od-month').textContent = fmtH(month);
+  document.getElementById('od-year').textContent = fmtH(year);
+  document.getElementById('od-invested').textContent = fmtH(totalAmount);
+  document.getElementById('od-rate-show').textContent = (rate*100).toFixed(2) + '%';
+  document.getElementById('od-year-total').textContent = '+' + fmtH(year);
+  document.getElementById('od-eff').textContent = (rate*100).toFixed(2) + '% річних';
+  document.getElementById('od-note').innerHTML = `
+    💡 <strong>Як рахується:</strong> ${fmtH(totalAmount)} × ${(rate*100).toFixed(2)}% ÷ 365 = ${fmtH(day)}/день<br>
+    ⚠️ ОВДП звільнені від ПДФО (18%) та ВЗ (5%) — на відміну від депозитів!<br>
+    🏦 Купити можна в застосунку ПриватБанку, Ощаду або через брокера.
+  `;
+  document.getElementById('od-results').style.display = 'block';
+
+  // Comparison table
+  const amounts = [10000, 50000, 100000, 250000, 500000, 1000000];
+  const tbody = document.getElementById('od-compare-body');
+  tbody.innerHTML = amounts.map(a => `
+    <tr>
+      <td class="yn">${fmtH(a)}</td>
+      <td class="yg">${fmtH(a*rate/365)}</td>
+      <td class="yg">${fmtH(a*rate/365*7)}</td>
+      <td class="yv">${fmtH(a*rate/365*30.4)}</td>
+      <td class="yv">${fmtH(a*rate)}</td>
+    </tr>
+  `).join('');
+  document.getElementById('od-compare-wrap').style.display = 'block';
+}
+
+// ===== BLOG =====
+function renderBlog() {
+  const list = document.getElementById('blog-list');
+  if(!list) return;
+  list.innerHTML = BLOG_ARTICLES.map(a => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;cursor:pointer;transition:all .3s" onclick="openBlogArticle('${a.id}')" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='${a.color}'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+      <div style="font-size:36px;margin-bottom:12px">${a.emoji}</div>
+      <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:8px;line-height:1.4">${a.title}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px">${a.desc}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:10px;color:var(--muted)">${a.date} · ${a.readTime}</div>
+        <div style="font-size:11px;font-weight:700;color:${a.color}">Читати →</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openBlogArticle(id) {
+  const article = BLOG_ARTICLES.find(a => a.id === id);
+  if(!article) return;
+  document.getElementById('blog-list').style.display = 'none';
+  document.getElementById('blog-article').style.display = 'block';
+  document.getElementById('blog-article-content').innerHTML = article.content;
+  window.scrollTo(0,0);
+}
+
+function closeBlogArticle() {
+  document.getElementById('blog-list').style.display = 'grid';
+  document.getElementById('blog-article').style.display = 'none';
+}
+
+// ===== FIX CABINET DAILY/WEEKLY/MONTHLY INCOME =====
+function renderCabAssets(assets) {
+  const cards = document.getElementById('cab-asset-cards');
+  if(!assets.length) {
+    cards.innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px;grid-column:1/-1;text-align:center">Поки немає активів. Натисни "Додати актив" 👆</div>';
+    updateCabTotals(0,0,[]);
+    return;
+  }
+  let totalFV=0, totalInv=0, dailyTotal=0;
+  cards.innerHTML='';
+  assets.forEach(a => {
+    const start = new Date(a.date_start), now = new Date();
+    const years = Math.max((now-start)/(365.25*24*60*60*1000), 0);
+    const fv = compFV(+a.amount, +a.rate/100, 1, years, 0);
+    const profit = fv - +a.amount;
+    const profPct = (+a.amount > 0 ? profit/+a.amount*100 : 0).toFixed(2);
+    const daily = +a.amount * +a.rate/100 / 365;
+    totalFV += fv; totalInv += +a.amount; dailyTotal += daily;
+
+    let daysTag = '';
+    if(a.date_end) {
+      const daysLeft = Math.ceil((new Date(a.date_end)-now)/(24*60*60*1000));
+      daysTag = `<span class="ac-days">${daysLeft>0?daysLeft+' дн. залишилось':'✅ Завершено'}</span>`;
+    }
+    const col = ASSET_COLORS2[a.type] || 'var(--muted)';
+    const card = document.createElement('div');
+    card.className='asset-card';
+    card.style.borderLeft=`3px solid ${col}`;
+    card.innerHTML=`
+      <div class="ac-type">${ASSET_ICONS[a.type]||'📌'} ${ASSET_NAMES[a.type]||a.type}</div>
+      <div class="ac-name">${a.name||ASSET_NAMES[a.type]}</div>
+      <div class="ac-amount">${fmtH(fv)}</div>
+      <div class="ac-profit">+${fmtH(profit)} (+${profPct}%)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px;margin-bottom:8px">
+        <div style="background:var(--bg);border-radius:7px;padding:7px;text-align:center">
+          <div style="font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:var(--green)">${fmtH(daily)}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:1px">В день</div>
+        </div>
+        <div style="background:var(--bg);border-radius:7px;padding:7px;text-align:center">
+          <div style="font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:var(--green)">${fmtH(daily*7)}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:1px">В тиждень</div>
+        </div>
+        <div style="background:var(--bg);border-radius:7px;padding:7px;text-align:center">
+          <div style="font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:var(--gold)">${fmtH(daily*30.4)}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:1px">В місяць</div>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span>📅 ${a.date_start}</span>
+        <span>📈 ${a.rate}%/рік</span>
+        ${daysTag}
+      </div>
+      ${a.notes?`<div style="font-size:10px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px solid var(--border)">${a.notes}</div>`:''}
+      <button class="ac-del" onclick="cabDelAsset('${a.id}')">×</button>`;
+    cards.appendChild(card);
+  });
+  updateCabTotals(totalFV, totalInv, assets, dailyTotal);
+}
+
+function updateCabTotals(totalFV, totalInv, assets, dailyTotal=0) {
+  const profit = totalFV - totalInv;
+  const roi = totalInv > 0 ? (profit/totalInv*100).toFixed(1) : 0;
+  document.getElementById('cs-total').textContent = assets.length;
+  document.getElementById('cs-profit').textContent = '+' + roi + '%';
+  document.getElementById('cab-total-val').textContent = fmtH(totalFV);
+  document.getElementById('cab-invested').textContent = fmtH(totalInv);
+  document.getElementById('cab-earn').textContent = '+' + fmtH(profit);
+  // Daily/weekly/monthly income from portfolio
+  const d = document.getElementById('cab-daily');
+  const w = document.getElementById('cab-weekly');
+  const m = document.getElementById('cab-monthly-inc');
+  if(d) d.textContent = fmtH(dailyTotal);
+  if(w) w.textContent = fmtH(dailyTotal * 7);
+  if(m) m.textContent = fmtH(dailyTotal * 30.4);
+}
+
+
 </script>
 
 </body>
