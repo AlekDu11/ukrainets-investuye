@@ -2465,15 +2465,7 @@ function showCabSection(id, el) {
   if(id==='history') loadHistory();
 }
 
-async function loadCabData() {
-  if(!currentUser) return;
-  // Load assets
-  const {data:assets} = await sb.from('assets').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
-  renderCabAssets(assets||[]);
-  // Load goals
-  const {data:goals} = await sb.from('goals').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
-  renderCabGoals(goals||[]);
-}
+// loadCabData — see hybrid version below
 
 const ASSET_ICONS = {ovdp:'🏦',deposit:'🏛️',inzur:'📈',etf:'🌍',crypto:'₿',spx:'📊',gold:'🥇',cash:'💵',other:'📌'};
 const ASSET_NAMES = {ovdp:'ОВДП',deposit:'Депозит',inzur:'Inzur',etf:'ETF',crypto:'Крипта',spx:'Акції SPX',gold:'Золото',cash:'Готівка USD',other:'Інше'};
@@ -2558,26 +2550,28 @@ let storageMode = localStorage.getItem('storage_mode') || 'local';
 function setStorageMode(mode) {
   storageMode = mode;
   localStorage.setItem('storage_mode', mode);
-  // Update UI
+  initStorageUI(); // update UI buttons
+  // Only reload data if cabinet is currently visible
+  if(document.getElementById('page-cabinet')?.classList.contains('active')) {
+    loadCabData();
+  }
+}
+
+// Init storage UI only — no data reload
+function initStorageUI() {
   const btnLocal = document.getElementById('btn-local');
   const btnCloud = document.getElementById('btn-cloud');
   const desc = document.getElementById('storage-desc');
   if(!btnLocal || !btnCloud) return;
-  if(mode === 'local') {
+  if(storageMode === 'local') {
     btnLocal.style.cssText = 'padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center;cursor:pointer;border:1px solid var(--green);background:rgba(34,197,94,0.12);color:var(--green)';
     btnCloud.style.cssText = 'padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center;cursor:pointer;border:1px solid var(--border);background:var(--s2);color:var(--muted)';
-    desc.innerHTML = '💾 <strong style="color:var(--green)">Локально</strong> — дані зберігаються тільки у вашому браузері. Ніхто не має доступу.';
+    if(desc) desc.innerHTML = '💾 <strong style="color:var(--green)">Локально</strong> — дані зберігаються тільки у вашому браузері. Ніхто не має доступу.';
   } else {
     btnLocal.style.cssText = 'padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center;cursor:pointer;border:1px solid var(--border);background:var(--s2);color:var(--muted)';
     btnCloud.style.cssText = 'padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center;cursor:pointer;border:1px solid var(--blue);background:rgba(59,126,248,0.12);color:var(--blue)';
-    desc.innerHTML = '☁️ <strong style="color:var(--blue)">Хмара</strong> — дані синхронізуються між пристроями через Supabase. Доступні з будь-якого пристрою.';
+    if(desc) desc.innerHTML = '☁️ <strong style="color:var(--blue)">Хмара</strong> — дані синхронізуються між пристроями через Supabase. Доступні з будь-якого пристрою.';
   }
-  loadCabData();
-}
-
-// Init storage mode UI on load
-function initStorageUI() {
-  setStorageMode(storageMode);
 }
 
 // ===== LOCAL STORAGE HELPERS =====
@@ -2600,7 +2594,7 @@ function saveLocalGoals(goals) {
 // ===== UNIFIED loadCabData =====
 async function loadCabData() {
   if(!currentUser) return;
-  initStorageUI();
+  initStorageUI(); // just update buttons, no recursion
   if(storageMode === 'local') {
     const assets = getLocalAssets();
     const goals = getLocalGoals();
