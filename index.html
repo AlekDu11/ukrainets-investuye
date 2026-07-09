@@ -1464,6 +1464,28 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
   </div>
 </div>
 
+
+<!-- ===== RESET PASSWORD MODAL ===== -->
+<div id="reset-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9001;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)">
+  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:36px;width:100%;max-width:420px;margin:16px;position:relative">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:40px;margin-bottom:10px">🔑</div>
+      <div style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin-bottom:6px">Новий пароль</div>
+      <div style="font-size:13px;color:var(--muted)">Введи новий пароль для свого акаунту</div>
+    </div>
+    <div class="auth-err" id="reset-err"></div>
+    <div class="auth-field" style="margin-bottom:14px">
+      <label style="display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">Новий пароль</label>
+      <input type="password" id="new-pass" placeholder="Мінімум 6 символів" style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:'Manrope',sans-serif;font-weight:500;outline:none">
+    </div>
+    <div class="auth-field" style="margin-bottom:18px">
+      <label style="display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">Підтвердь пароль</label>
+      <input type="password" id="new-pass-confirm" placeholder="Повтори пароль" style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:'Manrope',sans-serif;font-weight:500;outline:none">
+    </div>
+    <button onclick="doResetPassword()" style="width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:11px;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:#000;cursor:pointer">ЗБЕРЕГТИ ПАРОЛЬ →</button>
+  </div>
+</div>
+
 <!-- ===== AUTH MODAL ===== -->
 <div id="auth-overlay" style="display:none">
   <div class="auth-overlay" onclick="if(event.target===this)closeAuth()">
@@ -2473,8 +2495,41 @@ sb.auth.getSession().then(result => {
   if(session?.user) onUserLogin(session.user);
 });
 sb.auth.onAuthStateChange((event, session) => {
+  if(event === 'PASSWORD_RECOVERY') {
+    // Show reset password modal
+    document.getElementById('reset-overlay').style.display = 'flex';
+    return;
+  }
   if(session?.user) onUserLogin(session.user);
 });
+
+async function doResetPassword() {
+  const pass = document.getElementById('new-pass').value;
+  const confirm = document.getElementById('new-pass-confirm').value;
+  const errEl = document.getElementById('reset-err');
+
+  if(!pass || pass.length < 6) {
+    errEl.textContent = 'Пароль мінімум 6 символів';
+    errEl.classList.add('show');
+    return;
+  }
+  if(pass !== confirm) {
+    errEl.textContent = 'Паролі не співпадають';
+    errEl.classList.add('show');
+    return;
+  }
+
+  const {error} = await sb.auth.updateUser({password: pass});
+  if(error) {
+    errEl.textContent = error.message;
+    errEl.classList.add('show');
+    return;
+  }
+
+  // Success
+  document.getElementById('reset-overlay').style.display = 'none';
+  showBadgeToast('✅ Пароль успішно змінено!');
+}
 
 function showForgot() {
   // Copy email from login field if filled
