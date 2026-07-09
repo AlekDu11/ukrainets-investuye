@@ -2395,10 +2395,19 @@ async function doRegister() {
   if(data.user) {
     await sb.from('profiles').upsert({id:data.user.id,email,name});
   }
-  showAuthErr('✅ Перевір email для підтвердження!');
-  document.getElementById('auth-err').style.background='rgba(34,197,94,.1)';
-  document.getElementById('auth-err').style.borderColor='rgba(34,197,94,.25)';
-  document.getElementById('auth-err').style.color='var(--green)';
+  // Check if email confirmation needed
+  if(data.session) {
+    // No email confirmation — logged in immediately
+    closeAuth();
+    onUserLogin(data.user);
+    showBadgeToast('🎉 Ласкаво просимо, ' + name + '!');
+  } else {
+    // Email confirmation needed
+    showAuthErr('✅ Перевір email для підтвердження!');
+    document.getElementById('auth-err').style.background='rgba(34,197,94,.1)';
+    document.getElementById('auth-err').style.borderColor='rgba(34,197,94,.25)';
+    document.getElementById('auth-err').style.color='var(--green)';
+  }
 }
 
 async function doLogout() {
