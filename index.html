@@ -1471,22 +1471,41 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
       <div class="auth-close" onclick="closeAuth()">×</div>
       <div class="auth-logo">Українець<span>інвестує</span></div>
       <div class="auth-sub">Увійди щоб зберігати портфель та цілі</div>
-      <div class="auth-tabs">
+      <div class="auth-tabs" id="auth-tabs-row">
         <button class="auth-tab active" onclick="switchAuthTab('login',this)">Увійти</button>
         <button class="auth-tab" onclick="switchAuthTab('register',this)">Реєстрація</button>
       </div>
       <div class="auth-err" id="auth-err"></div>
+
+      <!-- LOGIN -->
       <div id="auth-login">
         <div class="auth-field"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
-        <div class="auth-field"><label>Пароль</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+        <div class="auth-field"><label>Пароль</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
         <button class="btn-auth" onclick="doLogin()">УВІЙТИ →</button>
-        <div style="text-align:center;margin-top:12px"><a href="#" onclick="showForgot()" style="font-size:11px;color:var(--muted)">Забув пароль?</a></div>
+        <div style="text-align:center;margin-top:12px">
+          <a href="#" onclick="showForgot()" style="font-size:11px;color:var(--muted);text-decoration:none">Забув пароль?</a>
+        </div>
       </div>
+
+      <!-- REGISTER -->
       <div id="auth-register" style="display:none">
         <div class="auth-field"><label>Ім'я</label><input type="text" id="reg-name" placeholder="Іван Петренко"></div>
         <div class="auth-field"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com"></div>
         <div class="auth-field"><label>Пароль (мін. 6 символів)</label><input type="password" id="reg-pass" placeholder="••••••••"></div>
         <button class="btn-auth" onclick="doRegister()">ЗАРЕЄСТРУВАТИСЬ →</button>
+      </div>
+
+      <!-- FORGOT PASSWORD -->
+      <div id="auth-forgot" style="display:none">
+        <div style="text-align:center;margin-bottom:18px">
+          <div style="font-size:32px;margin-bottom:8px">🔑</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6">Введи свій email і ми надішлемо посилання для скидання паролю</div>
+        </div>
+        <div class="auth-field"><label>Email</label><input type="email" id="forgot-email" placeholder="your@email.com"></div>
+        <button class="btn-auth" onclick="doForgot()">НАДІСЛАТИ ЛИСТ →</button>
+        <div style="text-align:center;margin-top:12px">
+          <a href="#" onclick="hideForgot()" style="font-size:11px;color:var(--muted);text-decoration:none">← Назад до входу</a>
+        </div>
       </div>
     </div>
   </div>
@@ -2457,12 +2476,37 @@ sb.auth.onAuthStateChange((event, session) => {
   if(session?.user) onUserLogin(session.user);
 });
 
-async function showForgot() {
-  const email = document.getElementById('login-email').value.trim();
-  if(!email) return showAuthErr('Введи email для скидання паролю');
-  const {error} = await sb.auth.resetPasswordForEmail(email);
+function showForgot() {
+  // Copy email from login field if filled
+  const loginEmail = document.getElementById('login-email').value.trim();
+  if(loginEmail) document.getElementById('forgot-email').value = loginEmail;
+  // Show forgot screen, hide others
+  document.getElementById('auth-login').style.display = 'none';
+  document.getElementById('auth-register').style.display = 'none';
+  document.getElementById('auth-forgot').style.display = 'block';
+  document.getElementById('auth-tabs-row').style.display = 'none';
+  document.getElementById('auth-err').classList.remove('show');
+}
+
+function hideForgot() {
+  document.getElementById('auth-forgot').style.display = 'none';
+  document.getElementById('auth-login').style.display = 'block';
+  document.getElementById('auth-tabs-row').style.display = 'flex';
+  document.getElementById('auth-err').classList.remove('show');
+}
+
+async function doForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  if(!email) return showAuthErr('Введи свій email');
+  const {error} = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://invest.mytimebox.app'
+  });
   if(error) return showAuthErr(error.message);
-  showAuthErr('✅ Лист для скидання паролю надіслано!');
+  // Show success
+  document.getElementById('auth-err').style.background='rgba(34,197,94,.1)';
+  document.getElementById('auth-err').style.borderColor='rgba(34,197,94,.25)';
+  document.getElementById('auth-err').style.color='var(--green)';
+  showAuthErr('✅ Лист надіслано! Перевір пошту (і спам)');
 }
 
 // ===== CABINET =====
