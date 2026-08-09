@@ -670,18 +670,10 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
   <nav class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('calc',this)">🧮 Калькулятор</button>
     <button class="nav-tab" onclick="showPage('portfolio',this)">📊 Портфель</button>
-    <button class="nav-tab" onclick="showPage('test',this)">🎯 Тест</button>
-    <button class="nav-tab" onclick="showPage('ai',this)">🤖 AI-радник</button>
-    <button class="nav-tab" onclick="showPage('goal',this)">🎯 Мета</button>
-    <button class="nav-tab" onclick="showPage('compare',this)">⚖️ Порівняти</button>
-    <button class="nav-tab" onclick="showPage('reverse',this)">🔄 Зворотній</button>
-    <button class="nav-tab" onclick="showPage('dict',this)">📚 Словник</button>
-    <button class="nav-tab" onclick="showPage('badges',this)">🏅 Бейджі</button>
-    <button class="nav-tab" onclick="showPage('info',this)">ℹ️ Гід</button>
     <button class="nav-tab" id="cab-nav-tab" onclick="showPage('cabinet',this)">👤 Кабінет</button>
     <button class="nav-tab" onclick="showPage('bonuses',this)">🎁 Бонуси</button>
-    <button class="nav-tab" onclick="showPage('giveaway',this)">🎰 Розіграш</button>
     <button class="nav-tab" onclick="showPage('blog',this)">📝 Блог</button>
+    <button class="nav-tab" onclick="showPage('brokers',this)">🏦 Брокери</button>
   </nav>
   <div class="header-right">
     <div class="btn-icon" onclick="toggleTheme()" title="Тема" id="theme-btn">🌙</div>
@@ -893,6 +885,25 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
             <div class="loss-title">💸 Якщо б тримав в готівці — втратив би</div>
             <div class="loss-val" id="r-loss">—</div>
             <div class="loss-sub" id="r-loss-sub"></div>
+          </div>
+          <!-- FIRE CALCULATOR -->
+          <div id="fire-block" style="background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(59,126,248,0.08));border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:14px;margin-top:10px">
+            <div style="font-size:10px;font-weight:700;color:var(--purple2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px">🔥 FIRE — Фінансова свобода</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Скільки потрібно накопичити щоб жити з капіталу?</div>
+            <div class="field" style="margin-bottom:10px">
+              <label class="fl">Витрати на місяць (грн)</label>
+              <input type="number" id="fire-expenses" value="30000" step="1000" oninput="calcFire()">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="fire-results">
+              <div style="text-align:center;background:var(--s2);border-radius:8px;padding:10px">
+                <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--purple2)" id="fire-capital">—</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:2px">ПОТРІБЕН КАПІТАЛ</div>
+              </div>
+              <div style="text-align:center;background:var(--s2);border-radius:8px;padding:10px">
+                <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--green)" id="fire-years">—</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:2px">РОКІВ ДО МЕТИ</div>
+              </div>
+            </div>
           </div>
           <!-- DAILY INCOME FORECAST -->
           <div id="daily-forecast" style="background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(245,200,66,0.08));border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:14px;margin-top:10px">
@@ -1465,6 +1476,262 @@ footer{border-top:1px solid var(--border);padding:24px 32px;text-align:center;fo
 </div>
 
 
+
+<!-- ======== PAGE: BROKERS ======== -->
+<div id="page-brokers" class="page">
+  <section class="hero">
+    <div class="hero-tag">🏦 Рейтинг брокерів</div>
+    <h1>Де купити <span class="g">ОВДП?</span></h1>
+    <p class="hero-sub">Порівняння ліцензованих брокерів та банків — умови, ставки, мінімальна сума</p>
+  </section>
+  <div class="csect">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="overflow-x:auto;margin-bottom:24px">
+        <table class="ytable" style="min-width:700px">
+          <thead>
+            <tr>
+              <th>Брокер</th>
+              <th>Тип</th>
+              <th>Мін. сума</th>
+              <th>Строки ОВДП</th>
+              <th>Комісія</th>
+              <th>Зручність</th>
+              <th>Посилання</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>🏦 ПриватБанк</strong></td>
+              <td><span class="tag tb">Банк</span></td>
+              <td class="yv">1 000 ₴</td>
+              <td style="font-size:11px">3, 6, 12 міс</td>
+              <td class="yg">0%</td>
+              <td>⭐⭐⭐⭐⭐</td>
+              <td><a href="https://www.privat24.ua" target="_blank" style="color:var(--gold);font-size:11px">Відкрити →</a></td>
+            </tr>
+            <tr>
+              <td><strong>🏛️ Ощадбанк</strong></td>
+              <td><span class="tag tb">Банк</span></td>
+              <td class="yv">1 000 ₴</td>
+              <td style="font-size:11px">3, 6, 12, 24 міс</td>
+              <td class="yg">0%</td>
+              <td>⭐⭐⭐⭐</td>
+              <td><a href="https://www.oschadbank.ua" target="_blank" style="color:var(--gold);font-size:11px">Відкрити →</a></td>
+            </tr>
+            <tr>
+              <td><strong>💳 Монобанк</strong></td>
+              <td><span class="tag tb">Банк</span></td>
+              <td class="yv">1 000 ₴</td>
+              <td style="font-size:11px">6, 12 міс</td>
+              <td class="yg">0%</td>
+              <td>⭐⭐⭐⭐⭐</td>
+              <td><a href="https://www.monobank.ua" target="_blank" style="color:var(--gold);font-size:11px">Відкрити →</a></td>
+            </tr>
+            <tr>
+              <td><strong>📈 Inzhur</strong></td>
+              <td><span class="tag ts">Платформа</span></td>
+              <td class="yv">1 000 ₴</td>
+              <td style="font-size:11px">3, 6, 12 міс</td>
+              <td class="yg">0%</td>
+              <td>⭐⭐⭐⭐⭐</td>
+              <td><a href="https://www.inzhur.reit/signin?refId=xWNTFBBI5gOX4p9V175sl" target="_blank" style="color:var(--gold);font-size:11px">+200 грн →</a></td>
+            </tr>
+            <tr>
+              <td><strong>🔷 ICU</strong></td>
+              <td><span class="tag tp">Брокер</span></td>
+              <td class="yv">50 000 ₴</td>
+              <td style="font-size:11px">Всі строки</td>
+              <td style="font-size:11px;color:var(--muted)">0.1-0.3%</td>
+              <td>⭐⭐⭐⭐</td>
+              <td><a href="https://icu.ua" target="_blank" style="color:var(--gold);font-size:11px">Відкрити →</a></td>
+            </tr>
+            <tr>
+              <td><strong>🔶 Універ</strong></td>
+              <td><span class="tag tp">Брокер</span></td>
+              <td class="yv">10 000 ₴</td>
+              <td style="font-size:11px">Всі строки</td>
+              <td style="font-size:11px;color:var(--muted)">0.1%</td>
+              <td>⭐⭐⭐</td>
+              <td><a href="https://univer.ua" target="_blank" style="color:var(--gold);font-size:11px">Відкрити →</a></td>
+            </tr>
+            <tr>
+              <td><strong>🟢 Сенс Банк</strong></td>
+              <td><span class="tag tb">Банк</span></td>
+              <td class="yv">1 000 ₴</td>
+              <td style="font-size:11px">3, 6, 12 міс</td>
+              <td class="yg">0%</td>
+              <td>⭐⭐⭐⭐</td>
+              <td><a href="https://sense.com.ua" target="_blank" style="color:var(--gold);font-size:11px">Відкрити →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+        <div class="panel">
+          <div class="ptitle">🏆 Для початківців</div>
+          <p style="font-size:13px;color:var(--muted2);line-height:1.7;margin-bottom:12px">Найкращий старт — <strong style="color:var(--text)">ПриватБанк або Монобанк</strong>. Все в додатку, без комісій, від 1000 грн. За 3 хвилини купив і забув.</p>
+          <div style="display:flex;gap:8px">
+            <a href="https://www.privat24.ua/invite/j34g9" target="_blank" style="flex:1;text-align:center;padding:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:9px;font-size:11px;font-weight:700;color:#000;text-decoration:none">🏦 Приват +150₴</a>
+            <a href="https://www.inzhur.reit/signin?refId=xWNTFBBI5gOX4p9V175sl" target="_blank" style="flex:1;text-align:center;padding:10px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:9px;font-size:11px;font-weight:700;color:var(--green);text-decoration:none">📈 Inzhur +200₴</a>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="ptitle">💡 Корисно знати</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="font-size:12px;color:var(--muted2);line-height:1.6;display:flex;gap:8px"><span style="color:var(--green)">✓</span>ОВДП звільнені від ПДФО та ВЗ — на відміну від депозитів</div>
+            <div style="font-size:12px;color:var(--muted2);line-height:1.6;display:flex;gap:8px"><span style="color:var(--green)">✓</span>Мінімальний номінал — 1 000 грн (1 ОВДП)</div>
+            <div style="font-size:12px;color:var(--muted2);line-height:1.6;display:flex;gap:8px"><span style="color:var(--green)">✓</span>Гарантовані державою — найнадійніший гривневий інструмент</div>
+            <div style="font-size:12px;color:var(--muted2);line-height:1.6;display:flex;gap:8px"><span style="color:var(--red)">✗</span>Дострокове продаж — через вторинний ринок (невелика знижка)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: STOCKS ======== -->
+<div id="page-stocks" class="page">
+  <section class="hero">
+    <div class="hero-tag">📈 Українські акції</div>
+    <h1>Акції українських<br><span class="g">компаній</span></h1>
+    <p class="hero-sub">Актуальні ціни українських компаній що торгуються на міжнародних біржах</p>
+  </section>
+  <div class="csect">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <div class="slabel" style="margin:0">Дані оновлюються автоматично</div>
+        <button class="btn-sec" style="width:auto;padding:8px 16px" onclick="loadStocks()">🔄 Оновити</button>
+      </div>
+      <div id="stocks-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
+        <div style="color:var(--muted);text-align:center;padding:40px;grid-column:1/-1">Завантаження...</div>
+      </div>
+      <div class="disclaimer" style="margin-top:20px">⚠️ Дані носять інформаційний характер і можуть відставати від реального ринку. Не є інвестиційною рекомендацією.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: DIVIDENDS ======== -->
+<div id="page-divs" class="page">
+  <section class="hero">
+    <div class="hero-tag">💰 Дивідендний калькулятор</div>
+    <h1>Скільки принесуть<br><span class="g">дивіденди?</span></h1>
+    <p class="hero-sub">Розрахуй дохід від дивідендів з урахуванням реінвестування та податків</p>
+  </section>
+  <div class="csect">
+    <div style="max-width:900px;margin:0 auto">
+      <div class="cgrid">
+        <div class="panel">
+          <div class="ptitle">Параметри</div>
+          <div class="field"><label class="fl">Сума інвестиції (грн або $)</label><input type="number" id="div-amount" value="100000" step="1000"></div>
+          <div class="field"><label class="fl">Дивідендна дохідність (%/рік)</label><input type="number" id="div-yield" value="4" step="0.5" min="0"></div>
+          <div class="field"><label class="fl">Зростання дивідендів (%/рік)</label><input type="number" id="div-growth" value="5" step="0.5" min="0"></div>
+          <div class="field"><label class="fl">Строк (років)</label><input type="number" id="div-years" value="10" min="1" max="50"></div>
+          <div class="field">
+            <label class="fl">Податок на дивіденди</label>
+            <select id="div-tax">
+              <option value="0">0% (без податку)</option>
+              <option value="9">9% (нерезиденти UA)</option>
+              <option value="14" selected>14% (резиденти UA)</option>
+              <option value="15">15% (США)</option>
+            </select>
+          </div>
+          <div class="toggle-row" id="div-reinvest-tog" onclick="toggleOpt('div-reinvest-tog','div-reinvest')">
+            <div class="tog-box"></div><span class="tog-label">Реінвестувати дивіденди</span>
+          </div>
+          <button class="btn-calc" onclick="calcDivs()">ПОРАХУВАТИ →</button>
+        </div>
+        <div class="panel" id="div-results" style="display:none">
+          <div class="ptitle">Результат</div>
+          <div class="r-row"><span class="r-label">Початкова інвестиція</span><span class="r-val" id="dv-invested">—</span></div>
+          <div class="r-row"><span class="r-label">Дивіденди за 1-й рік</span><span class="r-val g" id="dv-year1">—</span></div>
+          <div class="r-row"><span class="r-label">Дивіденди за останній рік</span><span class="r-val g" id="dv-lastyr">—</span></div>
+          <div class="r-row"><span class="r-label">Всього дивідендів за період</span><span class="r-val big" id="dv-total">—</span></div>
+          <div class="r-row"><span class="r-label">Податків сплачено</span><span class="r-val r" id="dv-tax">—</span></div>
+          <div class="r-row" style="border:none"><span class="r-label">Загальна вартість портфеля</span><span class="r-val big" id="dv-portfolio">—</span></div>
+          <div class="divider"></div>
+          <div class="slabel" style="margin-bottom:10px">Дивіденди по роках</div>
+          <div style="overflow-x:auto"><table class="ytable"><thead><tr><th>Рік</th><th>Дивіденди</th><th>Після податку</th><th>Портфель</th></tr></thead><tbody id="div-tbody"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PAGE: AVG PRICE ======== -->
+<div id="page-avgprice" class="page">
+  <section class="hero">
+    <div class="hero-tag">÷ Середня ціна</div>
+    <h1>Середня ціна<br><span class="g">покупки</span></h1>
+    <p class="hero-sub">Купував кілька разів по різних цінах? Розрахуй середню ціну і загальну позицію</p>
+  </section>
+  <div class="csect">
+    <div style="max-width:700px;margin:0 auto">
+      <div class="panel">
+        <div class="ptitle">Мої покупки</div>
+        <div id="avg-rows" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+          <div class="avg-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end">
+            <div class="field" style="margin:0"><label class="fl">Кількість (шт або грн)</label><input type="number" class="avg-qty" value="10" step="1" min="0" oninput="calcAvg()"></div>
+            <div class="field" style="margin:0"><label class="fl">Ціна за одиницю</label><input type="number" class="avg-price" value="1000" step="10" min="0" oninput="calcAvg()"></div>
+            <button onclick="removeAvgRow(this)" style="padding:11px 14px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:9px;color:var(--red);cursor:pointer;font-size:16px;margin-bottom:0;height:42px;align-self:end">×</button>
+          </div>
+          <div class="avg-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end">
+            <div class="field" style="margin:0"><label class="fl">Кількість</label><input type="number" class="avg-qty" value="5" step="1" min="0" oninput="calcAvg()"></div>
+            <div class="field" style="margin:0"><label class="fl">Ціна</label><input type="number" class="avg-price" value="950" step="10" min="0" oninput="calcAvg()"></div>
+            <button onclick="removeAvgRow(this)" style="padding:11px 14px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:9px;color:var(--red);cursor:pointer;font-size:16px;height:42px;align-self:end">×</button>
+          </div>
+        </div>
+        <button class="btn-sec" onclick="addAvgRow()" style="margin-bottom:12px">+ Додати покупку</button>
+        <button class="btn-calc" onclick="calcAvg()">ПОРАХУВАТИ →</button>
+        <div id="avg-result" style="display:none;margin-top:16px">
+          <div class="divider"></div>
+          <div class="r-row"><span class="r-label">Всього куплено</span><span class="r-val" id="avg-total-qty">—</span></div>
+          <div class="r-row"><span class="r-label">Загальна сума</span><span class="r-val" id="avg-total-sum">—</span></div>
+          <div class="r-row" style="border:none"><span class="r-label">Середня ціна</span><span class="r-val big" id="avg-price-result">—</span></div>
+          <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:10px;padding:12px;margin-top:12px;font-size:12px;color:var(--muted2)">
+            💡 Введи поточну ціну щоб побачити прибуток/збиток:
+            <input type="number" id="avg-current-price" placeholder="Поточна ціна" style="margin-top:8px;width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none" oninput="calcAvgPnL()">
+            <div id="avg-pnl" style="margin-top:8px;font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== EDIT ASSET MODAL ===== -->
+<div id="edit-asset-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9002;align-items:center;justify-content:center;backdrop-filter:blur(8px)">
+  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:32px;width:100%;max-width:480px;margin:16px;position:relative;animation:slideUp .3s ease">
+    <div style="font-family:'Unbounded',sans-serif;font-size:15px;font-weight:800;margin-bottom:20px">✏️ Редагувати актив</div>
+    <input type="hidden" id="edit-asset-id">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="field"><label class="fl">Тип активу</label>
+        <select id="edit-pa-type">
+          <option value="ovdp">🏦 ОВДП</option>
+          <option value="deposit">🏛️ Депозит</option>
+          <option value="inzur">📈 Inzur</option>
+          <option value="etf">🌍 ETF</option>
+          <option value="crypto">₿ Крипта</option>
+          <option value="spx">📊 Акції SPX</option>
+          <option value="gold">🥇 Золото</option>
+          <option value="cash">💵 Готівка USD</option>
+          <option value="other">📌 Інше</option>
+        </select>
+      </div>
+      <div class="field"><label class="fl">Назва</label><input type="text" id="edit-pa-name" placeholder="напр. ОВДП 2025"></div>
+      <div class="field"><label class="fl">Сума (грн)</label><input type="number" id="edit-pa-amount" step="1000"></div>
+      <div class="field"><label class="fl">Річна ставка (%)</label><input type="number" id="edit-pa-rate" step="0.5"></div>
+      <div class="field"><label class="fl">Дата відкриття</label><input type="date" id="edit-pa-start"></div>
+      <div class="field"><label class="fl">Дата закінчення</label><input type="date" id="edit-pa-end"></div>
+      <div class="field" style="grid-column:1/-1"><label class="fl">Нотатки</label><textarea id="edit-pa-notes" style="min-height:60px"></textarea></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button onclick="saveEditAsset()" class="btn-calc" style="flex:1">ЗБЕРЕГТИ →</button>
+      <button onclick="closeEditAsset()" class="btn-sec" style="flex:0 0 auto;padding:13px 20px">Скасувати</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== RESET PASSWORD MODAL ===== -->
 <div id="reset-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9001;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:36px;width:100%;max-width:420px;margin:16px;position:relative">
@@ -1775,6 +2042,7 @@ function showPage(id,el){
   if(id==='bonuses') renderBonuses();
   if(id==='giveaway') renderGiveaway();
   if(id==='blog') renderBlog();
+  if(id==='stocks') loadStocks();
 }
 
 // ===== CURRENCY BAR (NBU) =====
@@ -1935,6 +2203,8 @@ function calculate(){
   if(fcDay){ fcDay.textContent = fmtH(dailyIncome); }
   if(fcWeek){ fcWeek.textContent = fmtH(dailyIncome * 7); }
   if(fcMonth){ fcMonth.textContent = fmtH(dailyIncome * 30.4); }
+  // Auto FIRE calc
+  setTimeout(calcFire, 50);
 }
 
 // ===== COMPARISON =====
@@ -2580,6 +2850,7 @@ const ASSET_NAMES = {ovdp:'ОВДП',deposit:'Депозит',inzur:'Inzur',etf:
 const ASSET_COLORS2 = {ovdp:'var(--gold)',deposit:'var(--blue)',inzur:'var(--green)',etf:'var(--purple2)',crypto:'#f59e0b',spx:'#06b6d4',gold:'#d97706',cash:'#64748b',other:'#94a3b8'};
 
 function renderCabAssets(assets) {
+  currentAssets = assets; // cache for edit
   const cards = document.getElementById('cab-asset-cards');
   if(!assets.length) {
     cards.innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px;grid-column:1/-1;text-align:center">Поки немає активів. Натисни "Додати актив" 👆</div>';
@@ -2620,7 +2891,10 @@ function renderCabAssets(assets) {
         ${daysTag}
       </div>
       ${a.notes?`<div style="font-size:10px;color:var(--muted);margin-top:8px">${a.notes}</div>`:''}
-      <button class="ac-del" onclick="cabDelAsset('${a.id}')">×</button>`;
+      <div style="display:flex;gap:6px;margin-top:10px">
+        <button onclick="openEditAsset('${a.id}')" style="flex:1;padding:7px;background:rgba(59,126,248,.1);border:1px solid rgba(59,126,248,.2);border-radius:7px;color:var(--blue);cursor:pointer;font-size:11px;font-weight:600;font-family:'Manrope',sans-serif">✏️ Редагувати</button>
+        <button class="ac-del" onclick="cabDelAsset('${a.id}')" style="position:static;width:auto;padding:7px 12px;border-radius:7px">🗑</button>
+      </div>`;
     cards.appendChild(card);
   });
   const totalProfit=totalFV-totalInv;
@@ -2825,6 +3099,20 @@ const BONUSES = [
     btnText: '🎁 Отримати 200 грн →',
     badge: 'Просто реєстрація 🔥',
     badgeColor: 'var(--green)'
+  },
+  {
+    id: 3,
+    company: 'Bybit',
+    icon: '₿',
+    color: '#f7a600',
+    title: 'Бонус $10 за реєстрацію',
+    value: '$10 USD',
+    desc: 'Зареєструйся на Bybit — одній з найбільших крипто-бірж світу — за нашим посиланням і отримай $10 бонусу на рахунок!',
+    conditions: ['Перейти за реферальним посиланням', 'Зареєструватись на Bybit', 'Пройти верифікацію (KYC)', '✅ $10 зараховуються автоматично'],
+    link: 'https://bybit.com/en/invite/?ref=P1Q6LN',
+    btnText: '₿ Отримати $10 →',
+    badge: 'Крипта 🔥',
+    badgeColor: '#f7a600'
   },
   {
     id: 2,
@@ -3363,6 +3651,389 @@ function updateCabTotals(totalFV, totalInv, assets, dailyTotal=0) {
 
 
 </script>
+
+
+<script>
+// ===== FIRE CALCULATOR =====
+function calcFire() {
+  const expenses = +document.getElementById('fire-expenses').value || 30000;
+  const r = +document.getElementById('rate').value / 100 || 0.175;
+  const P = +document.getElementById('amount').value || 100000;
+  const pmt = +document.getElementById('monthly').value || 0;
+  // Capital needed: expenses * 12 / rate (4% rule adapted)
+  const capital = expenses * 12 / r;
+  // Years to reach: binary search
+  let years = 0;
+  let bal = P;
+  const rm = r / 12;
+  while(bal < capital && years < 600) {
+    bal = bal * (1 + rm) + pmt;
+    years++;
+  }
+  const yrs = (years / 12).toFixed(1);
+  const capEl = document.getElementById('fire-capital');
+  const yrsEl = document.getElementById('fire-years');
+  if(capEl) capEl.textContent = fmtH(capital);
+  if(yrsEl) yrsEl.textContent = years >= 600 ? '100+ р.' : yrs + ' р.';
+}
+
+// ===== STOCKS (Yahoo Finance via proxy) =====
+const UA_STOCKS = [
+  {name:'Kyivstar Group', ticker:'KGS', desc:'Телеком, NASDAQ'},
+  {name:'MHP SE', ticker:'MHPC', desc:'Агро, Лондон'},
+  {name:'Kernel Holding', ticker:'KER', desc:'Агро, Варшава'},
+  {name:'Astarta Holding', ticker:'AST', desc:'Агро, Варшава'},
+  {name:'Ferrexpo', ticker:'FXPO', desc:'Гірнича, Лондон'},
+  {name:'Ukraine Reconstruction ETF', ticker:'UKRN', desc:'ETF, NYSE'},
+];
+
+async function loadStocks() {
+  const grid = document.getElementById('stocks-grid');
+  if(!grid) return;
+  grid.innerHTML = '<div style="color:var(--muted);text-align:center;padding:40px;grid-column:1/-1">Завантаження даних...</div>';
+  
+  const cards = UA_STOCKS.map(s => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;transition:all .3s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:3px">${s.name}</div>
+          <div style="font-size:10px;color:var(--muted)">${s.ticker} · ${s.desc}</div>
+        </div>
+        <div style="background:var(--s2);border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;color:var(--muted2)">${s.ticker}</div>
+      </div>
+      <div id="stock-${s.ticker}" style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;color:var(--gold)">—</div>
+      <div id="stock-chg-${s.ticker}" style="font-size:11px;margin-top:4px;color:var(--muted)">Завантаження...</div>
+    </div>
+  `).join('');
+  grid.innerHTML = cards;
+
+  // Fetch prices via Yahoo Finance
+  for(const s of UA_STOCKS) {
+    try {
+      const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${s.ticker}?interval=1d&range=1d`);
+      const d = await r.json();
+      const meta = d?.chart?.result?.[0]?.meta;
+      if(meta) {
+        const price = meta.regularMarketPrice;
+        const prev = meta.previousClose || meta.chartPreviousClose;
+        const chg = price - prev;
+        const chgPct = (chg / prev * 100).toFixed(2);
+        const isUp = chg >= 0;
+        const currency = meta.currency || '$';
+        document.getElementById('stock-' + s.ticker).textContent = currency + price?.toFixed(2);
+        document.getElementById('stock-chg-' + s.ticker).innerHTML = 
+          `<span style="color:${isUp ? 'var(--green)' : 'var(--red)'}">${isUp ? '+' : ''}${chg.toFixed(2)} (${isUp ? '+' : ''}${chgPct}%)</span>`;
+      }
+    } catch(e) {
+      const el = document.getElementById('stock-' + s.ticker);
+      if(el) el.textContent = 'Недоступно';
+    }
+  }
+}
+
+// ===== DIVIDENDS CALCULATOR =====
+function calcDivs() {
+  const P = +document.getElementById('div-amount').value || 100000;
+  const yieldRate = +document.getElementById('div-yield').value / 100;
+  const growth = +document.getElementById('div-growth').value / 100;
+  const years = +document.getElementById('div-years').value || 10;
+  const tax = +document.getElementById('div-tax').value / 100;
+  const reinvest = document.getElementById('div-reinvest-tog').classList.contains('on');
+  
+  let portfolio = P;
+  let totalDivs = 0, totalTax = 0;
+  const tbody = document.getElementById('div-tbody');
+  tbody.innerHTML = '';
+  let year1 = 0, lastYr = 0;
+
+  for(let y = 1; y <= years; y++) {
+    const grossDiv = portfolio * yieldRate;
+    const taxAmt = grossDiv * tax;
+    const netDiv = grossDiv - taxAmt;
+    totalDivs += netDiv;
+    totalTax += taxAmt;
+    if(y === 1) year1 = netDiv;
+    lastYr = netDiv;
+    if(reinvest) portfolio += netDiv;
+    portfolio = portfolio * (1 + growth * 0.3); // modest portfolio growth
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="yn">${y}</td><td class="yg">+${fmtH(grossDiv)}</td><td class="yg">+${fmtH(netDiv)}</td><td class="yv">${fmtH(portfolio)}</td>`;
+    tbody.appendChild(tr);
+  }
+  document.getElementById('dv-invested').textContent = fmtH(P);
+  document.getElementById('dv-year1').textContent = '+' + fmtH(year1);
+  document.getElementById('dv-lastyr').textContent = '+' + fmtH(lastYr);
+  document.getElementById('dv-total').textContent = '+' + fmtH(totalDivs);
+  document.getElementById('dv-tax').textContent = '-' + fmtH(totalTax);
+  document.getElementById('dv-portfolio').textContent = fmtH(portfolio);
+  document.getElementById('div-results').style.display = 'block';
+}
+
+// ===== AVG PRICE CALCULATOR =====
+function addAvgRow() {
+  const container = document.getElementById('avg-rows');
+  const row = document.createElement('div');
+  row.className = 'avg-row';
+  row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end';
+  row.innerHTML = `
+    <div class="field" style="margin:0"><label class="fl">Кількість</label><input type="number" class="avg-qty" value="0" step="1" min="0" oninput="calcAvg()"></div>
+    <div class="field" style="margin:0"><label class="fl">Ціна</label><input type="number" class="avg-price" value="0" step="10" min="0" oninput="calcAvg()"></div>
+    <button onclick="removeAvgRow(this)" style="padding:11px 14px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:9px;color:var(--red);cursor:pointer;font-size:16px;height:42px;align-self:end">×</button>`;
+  container.appendChild(row);
+  calcAvg();
+}
+
+function removeAvgRow(btn) {
+  const rows = document.querySelectorAll('.avg-row');
+  if(rows.length <= 1) return;
+  btn.closest('.avg-row').remove();
+  calcAvg();
+}
+
+function calcAvg() {
+  const qtys = [...document.querySelectorAll('.avg-qty')].map(el => +el.value || 0);
+  const prices = [...document.querySelectorAll('.avg-price')].map(el => +el.value || 0);
+  let totalQty = 0, totalSum = 0;
+  qtys.forEach((q, i) => { totalQty += q; totalSum += q * prices[i]; });
+  const avgPrice = totalQty > 0 ? totalSum / totalQty : 0;
+  document.getElementById('avg-total-qty').textContent = totalQty.toFixed(2) + ' шт';
+  document.getElementById('avg-total-sum').textContent = fmtH(totalSum);
+  document.getElementById('avg-price-result').textContent = fmtH(avgPrice);
+  document.getElementById('avg-result').style.display = 'block';
+  calcAvgPnL();
+}
+
+function calcAvgPnL() {
+  const qtys = [...document.querySelectorAll('.avg-qty')].map(el => +el.value || 0);
+  const prices = [...document.querySelectorAll('.avg-price')].map(el => +el.value || 0);
+  let totalQty = 0, totalSum = 0;
+  qtys.forEach((q, i) => { totalQty += q; totalSum += q * prices[i]; });
+  const avgPrice = totalQty > 0 ? totalSum / totalQty : 0;
+  const current = +document.getElementById('avg-current-price').value;
+  const pnlEl = document.getElementById('avg-pnl');
+  if(!current || !totalQty) { pnlEl.textContent = ''; return; }
+  const pnl = (current - avgPrice) * totalQty;
+  const pct = ((current - avgPrice) / avgPrice * 100).toFixed(2);
+  const isUp = pnl >= 0;
+  pnlEl.style.color = isUp ? 'var(--green)' : 'var(--red)';
+  pnlEl.textContent = (isUp ? '+' : '') + fmtH(pnl) + ' (' + (isUp ? '+' : '') + pct + '%)';
+}
+
+// ===== ADD NEW BLOG ARTICLES =====
+const NEW_ARTICLES = [
+  {
+    id: 'ua-stocks',
+    emoji: '📊',
+    title: 'Українські акції у 2025 — чи варто купувати?',
+    desc: 'Огляд компаній Kyivstar, MHP, Kernel, Ferrexpo — ризики, перспективи і як купити з України',
+    readTime: '8 хв',
+    date: 'Липень 2025',
+    color: 'var(--blue)',
+    content: `
+      <h2 style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;line-height:1.3;letter-spacing:-.5px">📊 Українські акції у 2025 — реальна оцінка</h2>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:28px">Липень 2025 · 8 хвилин читання</p>
+
+      <p style="font-size:15px;color:var(--muted2);line-height:1.9;margin-bottom:20px">Андрій — IT-спеціаліст з Дніпра. Він давно хотів інвестувати в Україну, але не через ОВДП, а в реальний бізнес. Почав вивчати українські акції і знайшов цікаве: деякі компанії торгуються на Лондонській біржі та Варшаві, і купити їх можна через звичайного брокера.</p>
+
+      <div style="background:rgba(59,126,248,0.08);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:18px 20px;margin-bottom:24px;font-size:15px;font-style:italic;color:var(--text);line-height:1.8">"Я хотів щоб мої гроші працювали на відновлення України, а не просто лежали в облігаціях. Акції — це частка реального бізнесу."</div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--blue)">🏢 Топ українських компаній</h3>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+        <div style="background:var(--s2);border-radius:12px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800">Kyivstar Group (KGS)</div>
+            <span style="font-size:11px;color:var(--blue);background:rgba(59,126,248,.15);padding:3px 9px;border-radius:5px">NASDAQ</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.7">Найбільший мобільний оператор України. Стабільний бізнес, дивіденди. Ризик — інфраструктура під ударами.</div>
+        </div>
+        <div style="background:var(--s2);border-radius:12px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800">MHP SE (MHPC)</div>
+            <span style="font-size:11px;color:var(--gold);background:rgba(245,200,66,.15);padding:3px 9px;border-radius:5px">Лондон</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.7">Найбільший виробник курятини в Україні та Європі. Експортує в 80+ країн. Відносно стабільний до воєнних ризиків.</div>
+        </div>
+        <div style="background:var(--s2);border-radius:12px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800">Ferrexpo (FXPO)</div>
+            <span style="font-size:11px;color:var(--gold);background:rgba(245,200,66,.15);padding:3px 9px;border-radius:5px">Лондон</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.7">Залізорудна компанія. Видобуток частково зупинено через війну. Висока потенційна дохідність при відновленні.</div>
+        </div>
+        <div style="background:var(--s2);border-radius:12px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800">Ukraine Reconstruction ETF (UKRN)</div>
+            <span style="font-size:11px;color:var(--green);background:rgba(34,197,94,.15);padding:3px 9px;border-radius:5px">NYSE</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.7">ETF що відстежує кошик українських компаній. Найбезпечніший спосіб інвестувати в "відновлення України".</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--blue)">⚖️ Ризики vs Потенціал</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
+        <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:16px">
+          <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:10px">⚠️ Ризики</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.8">✗ Воєнний ризик<br>✗ Низька ліквідність<br>✗ Девальвація гривні<br>✗ Невизначеність строків</div>
+        </div>
+        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:16px">
+          <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px">🚀 Потенціал</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.8">✓ Дуже низькі ціни зараз<br>✓ Величезний ріст після миру<br>✓ Міжнародна підтримка<br>✓ Реальний бізнес</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);border-radius:12px;padding:18px;font-size:14px;color:var(--muted2);line-height:1.8">
+        🎯 <strong style="color:var(--gold)">Висновок:</strong> Українські акції — це ставка на відновлення країни. Якщо маєш довгий горизонт (5-10 років) і готовий до ризику — 5-10% портфеля в UKRN ETF може дати феноменальний результат. Але основу портфеля все одно тримай в ОВДП.
+      </div>
+    `
+  },
+  {
+    id: 'etf-how',
+    emoji: '🌍',
+    title: 'Як купити ETF з України у 2025 — покроковий гід',
+    desc: 'Interactive Brokers, Freedom24, eToro — що обрати, як відкрити рахунок і зробити першу покупку',
+    readTime: '7 хв',
+    date: 'Липень 2025',
+    color: 'var(--purple2)',
+    content: `
+      <h2 style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;line-height:1.3;letter-spacing:-.5px">🌍 Як купити ETF з України — реальний досвід</h2>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:28px">Липень 2025 · 7 хвилин читання</p>
+
+      <p style="font-size:15px;color:var(--muted2);line-height:1.9;margin-bottom:20px">Валентина — бухгалтер з Одеси. Два роки тримала всі заощадження в ОВДП і була задоволена. Але потім порахувала: якщо гривня знеціниться вдвічі — всі її відсотки просто "з'їсть" девальвація. Вирішила диверсифікувати частину в долари через ETF.</p>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--purple2)">🏦 Три варіанти для українців</h3>
+
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+        <div style="background:var(--s2);border-radius:12px;padding:18px">
+          <div style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--gold);margin-bottom:8px">1. Interactive Brokers (IB)</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.7;margin-bottom:10px">Найпопулярніший серед досвідчених інвесторів. Доступ до всіх бірж світу, мінімальні комісії.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(34,197,94,.15);color:var(--green)">Мін. $0</span>
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(59,126,248,.15);color:var(--blue)">Комісія $1/угода</span>
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(245,200,66,.15);color:var(--gold)">Рекомендую</span>
+          </div>
+        </div>
+        <div style="background:var(--s2);border-radius:12px;padding:18px">
+          <div style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--blue);margin-bottom:8px">2. Freedom24</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.7;margin-bottom:10px">Є офіс в Україні, підтримка українською. Простіше для початківців але вищі комісії.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(34,197,94,.15);color:var(--green)">Мін. $50</span>
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(239,68,68,.12);color:#f87171">Вищі комісії</span>
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(34,197,94,.15);color:var(--green)">UA підтримка</span>
+          </div>
+        </div>
+        <div style="background:var(--s2);border-radius:12px;padding:18px">
+          <div style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:var(--green);margin-bottom:8px">3. eToro</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.7;margin-bottom:10px">Зручний для початківців, є соціальні функції (копіювати топ-трейдерів). Обмежений вибір ETF.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(34,197,94,.15);color:var(--green)">Мін. $50</span>
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(34,197,94,.15);color:var(--green)">0% комісія</span>
+            <span style="font-size:10px;padding:3px 8px;border-radius:5px;background:rgba(239,68,68,.12);color:#f87171">Спред</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin:28px 0 12px;color:var(--purple2)">📋 Як відкрити IB рахунок</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--s2);border-radius:10px;padding:12px 14px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(245,200,66,.2);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0">1</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.6">Зайди на <strong style="color:var(--text)">interactivebrokers.com</strong> → Open Account → Individual</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--s2);border-radius:10px;padding:12px 14px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(245,200,66,.2);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0">2</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.6">Заповни анкету, завантаж паспорт + документ адреси (комунальний рахунок)</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--s2);border-radius:10px;padding:12px 14px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(245,200,66,.2);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0">3</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.6">Верифікація 1-3 дні → Поповни рахунок через SWIFT переказ з будь-якого банку</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--s2);border-radius:10px;padding:12px 14px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(245,200,66,.2);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0">4</div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.6">Купи VOO (S&P500) або VT (весь світ) — пошук в TWS або мобільному додатку</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:12px;padding:18px;font-size:14px;color:var(--muted2);line-height:1.8">
+        💡 <strong style="color:var(--purple2)">Порада Валентини:</strong> "Я відкрила IB рахунок за 2 дні. Перший місяць боялась натиснути кнопку купити. Потім купила VOO на $500 і заспокоїлась. Зараз щомісяця додаю по $100-200 і не думаю про це. Це найкраще рішення яке я зробила."
+      </div>
+    `
+  }
+];
+
+// Merge with existing blog articles
+if(typeof BLOG_ARTICLES !== 'undefined') {
+  BLOG_ARTICLES.push(...NEW_ARTICLES);
+}
+
+// ===== PATCH showPage for new pages =====
+// stocks loaded via showPage
+
+// FIRE calc triggered from calculate() directly
+</script>
+
+
+// ===== EDIT ASSET =====
+let currentAssets = []; // cache for local mode
+
+function openEditAsset(id) {
+  const overlay = document.getElementById('edit-asset-overlay');
+  // Find asset - from local or from rendered data
+  let asset = null;
+  if(storageMode === 'local') {
+    asset = getLocalAssets().find(a => a.id === id);
+  } else {
+    // For cloud - find from last loaded data
+    asset = currentAssets.find(a => a.id === id);
+  }
+  if(!asset) return showBadgeToast('❌ Актив не знайдено');
+
+  document.getElementById('edit-asset-id').value = id;
+  document.getElementById('edit-pa-type').value = asset.type || 'ovdp';
+  document.getElementById('edit-pa-name').value = asset.name || '';
+  document.getElementById('edit-pa-amount').value = asset.amount || '';
+  document.getElementById('edit-pa-rate').value = asset.rate || '';
+  document.getElementById('edit-pa-start').value = asset.date_start || '';
+  document.getElementById('edit-pa-end').value = asset.date_end || '';
+  document.getElementById('edit-pa-notes').value = asset.notes || '';
+  overlay.style.display = 'flex';
+}
+
+function closeEditAsset() {
+  document.getElementById('edit-asset-overlay').style.display = 'none';
+}
+
+async function saveEditAsset() {
+  const id = document.getElementById('edit-asset-id').value;
+  const type = document.getElementById('edit-pa-type').value;
+  const name = document.getElementById('edit-pa-name').value || ASSET_NAMES[type];
+  const amount = +document.getElementById('edit-pa-amount').value;
+  const rate = +document.getElementById('edit-pa-rate').value;
+  const date_start = document.getElementById('edit-pa-start').value;
+  const date_end = document.getElementById('edit-pa-end').value || null;
+  const notes = document.getElementById('edit-pa-notes').value || null;
+
+  if(!amount || !rate || !date_start) return showBadgeToast('⚠️ Заповни обов'язкові поля');
+
+  if(storageMode === 'local') {
+    const assets = getLocalAssets().map(a =>
+      a.id === id ? {...a, type, name, amount, rate, date_start, date_end, notes} : a
+    );
+    saveLocalAssets(assets);
+    showBadgeToast('✅ Збережено локально 💾');
+  } else {
+    const {error} = await sb.from('assets').update({type, name, amount, rate, date_start, date_end, notes}).eq('id', id);
+    if(error) return showBadgeToast('❌ Помилка: ' + error.message);
+    showBadgeToast('✅ Збережено в хмарі ☁️');
+  }
+
+  closeEditAsset();
+  loadCabData();
+}
+
+// Close on overlay click
+document.getElementById('edit-asset-overlay')?.addEventListener('click', function(e) {
+  if(e.target === this) closeEditAsset();
+});
 
 </body>
 </html>
