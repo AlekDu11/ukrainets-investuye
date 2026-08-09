@@ -3575,6 +3575,7 @@ function closeBlogArticle() {
 
 // ===== FIX CABINET DAILY/WEEKLY/MONTHLY INCOME =====
 function renderCabAssets(assets) {
+  currentAssets = assets;
   const cards = document.getElementById('cab-asset-cards');
   if(!assets.length) {
     cards.innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px;grid-column:1/-1;text-align:center">Поки немає активів. Натисни "Додати актив" 👆</div>';
@@ -3626,7 +3627,10 @@ function renderCabAssets(assets) {
         ${daysTag}
       </div>
       ${a.notes?`<div style="font-size:10px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px solid var(--border)">${a.notes}</div>`:''}
-      <button class="ac-del" onclick="cabDelAsset('${a.id}')">×</button>`;
+      <div style="display:flex;gap:6px;margin-top:10px">
+        <button onclick="openEditAsset('${a.id}')" style="flex:1;padding:7px;background:rgba(59,126,248,.1);border:1px solid rgba(59,126,248,.2);border-radius:7px;color:var(--blue);cursor:pointer;font-size:11px;font-weight:600;font-family:'Manrope',sans-serif">✏️ Редагувати</button>
+        <button onclick="cabDelAsset('${a.id}')" style="padding:7px 12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:7px;color:var(--red);cursor:pointer;font-size:14px">🗑</button>
+      </div>`;
     cards.appendChild(card);
   });
   updateCabTotals(totalFV, totalInv, assets, dailyTotal);
