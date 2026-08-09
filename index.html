@@ -3972,6 +3972,7 @@ if(typeof BLOG_ARTICLES !== 'undefined') {
 </script>
 
 
+<script>
 // ===== EDIT ASSET =====
 let currentAssets = []; // cache for local mode
 
@@ -4012,7 +4013,7 @@ async function saveEditAsset() {
   const date_end = document.getElementById('edit-pa-end').value || null;
   const notes = document.getElementById('edit-pa-notes').value || null;
 
-  if(!amount || !rate || !date_start) return showBadgeToast('⚠️ Заповни обов'язкові поля');
+  if(!amount || !rate || !date_start) return showBadgeToast("⚠️ Заповни обов'язкові поля");
 
   if(storageMode === 'local') {
     const assets = getLocalAssets().map(a =>
@@ -4034,6 +4035,7 @@ async function saveEditAsset() {
 document.getElementById('edit-asset-overlay')?.addEventListener('click', function(e) {
   if(e.target === this) closeEditAsset();
 });
+</script>
 
 </body>
 </html>
